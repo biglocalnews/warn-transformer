@@ -10,14 +10,14 @@ import os
 
 from pathlib import Path
 
-# from warn.utils import write_dict_rows_to_csv  # i dunno how to properly import warn
 from utils import write_dict_rows_to_csv
 
 USER_HOME = os.path.expanduser('~')
 DEFAULT_HOME = str(Path(USER_HOME, '.warn-scraper'))
 ETL_DIR = os.environ.get('WARN_ETL_DIR', DEFAULT_HOME)
 WARN_DATA_PATH = str(Path(ETL_DIR, 'exports'))
-OUTPUT_DIR = DEFAULT_HOME
+WARN_ANALYSIS_PATH = str(Path(ETL_DIR, 'analysis'))
+OUTPUT_DIR = WARN_ANALYSIS_PATH
 
 # standardize formatting of our field name lists
 # this allows us to type neat-looking names that will
