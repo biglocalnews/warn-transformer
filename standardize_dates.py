@@ -1,0 +1,2 @@
+# datasets from some states contain different date formats within themselves (eg: MO, DC) and possibly different conventions for documenting updates.
+# A thorough date format standardization can be done to all of the states at some point.
