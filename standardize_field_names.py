@@ -19,11 +19,10 @@ WARN_DATA_PATH = str(Path(ETL_DIR, 'exports'))
 WARN_ANALYSIS_PATH = str(Path(ETL_DIR, 'analysis'))
 OUTPUT_DIR = WARN_ANALYSIS_PATH
 
-# standardize formatting of our field name lists
-# this allows us to type neat-looking names that will
-# still match the desired fields
+# standardize formatting of our field name lists so we can write pretty
+# normalize case, remove underscores, strip spaces
 def format_list(list):
-    return [x.lower().replace(" ", "") for x in list]
+    return [x.lower().replace(" ", "").replace("_", "") for x in list]
 
 
 # standardize_header() is coded based on the order of this list
@@ -31,7 +30,7 @@ STANDARDIZED_FIELD_NAMES = ['state', 'employer', 'number_affected', 'date_receiv
 # Replace these field names
 EMPLOYER_FIELDS = format_list(['company name', 'company'])
 NUMBER_AFFECTED_FIELDS = format_list(['employees affected', 'affected empoyees', 'employees', 'workforce affected', 'planned#affectedemployees'])
-DATE_RECEIVED_FIELDS = format_list(['initial report date', 'notice date', 'state notification date'])
+DATE_RECEIVED_FIELDS = format_list(['initial report date', 'notice date', 'state notification date', 'warn date'])
 DATE_EFFECTIVE_FIELDS = format_list(['layoff date', 'effective date', 'planned starting date'])
 INDUSTRY_FIELDS = format_list(['industry'])
 LOCATION_FIELDS = format_list(['city', 'address', 'location'])  # TODO what do we want our city/address approach to look like?
