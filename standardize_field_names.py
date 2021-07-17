@@ -28,13 +28,14 @@ def format_list(list):
 # standardize_header() is coded based on the order of this list
 STANDARDIZED_FIELD_NAMES = ['state', 'employer', 'number_affected', 'date_received', 'date_effective', 'location', 'industry', 'notes']
 # Replace these field names
-EMPLOYER_FIELDS = format_list(['company name', 'company'])
-NUMBER_AFFECTED_FIELDS = format_list(['employees affected', 'affected empoyees', 'employees', 'workforce affected', 'planned#affectedemployees'])
+EMPLOYER_FIELDS = format_list(['company name', 'company', 'Organization Name'])
+NUMBER_AFFECTED_FIELDS = format_list(['employees affected', 'affected empoyees', 'employees', 'workforce affected', 'planned#affectedemployees', 'Number toEmployees Affected', '# of workers', 'AffectedWorkers'])
 DATE_RECEIVED_FIELDS = format_list(['initial report date', 'notice date', 'state notification date', 'warn date'])
-DATE_EFFECTIVE_FIELDS = format_list(['layoff date', 'effective date', 'planned starting date'])
-INDUSTRY_FIELDS = format_list(['industry'])
-LOCATION_FIELDS = format_list(['city', 'address', 'location'])  # TODO what do we want our city/address approach to look like?
+DATE_EFFECTIVE_FIELDS = format_list(['layoff date', 'LayoffBeginDate', 'layoff start date', 'effective date', 'planned starting date','effective layoff date','LO/CL date', 'impact date'])
+INDUSTRY_FIELDS = format_list(['industry','description of work','NAICSDescription','NAICS'])
+LOCATION_FIELDS = format_list(['city', 'address', 'location', 'company address', 'company address - 2','city/town', 'zip', 'location city', 'region', 'county'])  # TODO what do we want our city/address approach to look like?
 NOTES_FIELDS = format_list(['notes', 'misc'])
+# CLOSING_OR_LAYOFF_FIELDS = format_list(['Notice Type', 'Code Type', 'Closure Layoff'])
 AMBIGUOUS_FIELDS = format_list(['date'])  # require state-by-state approach
 
 def main():

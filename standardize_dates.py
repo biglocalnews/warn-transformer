@@ -1,6 +1,11 @@
 # datasets from some states contain different date formats within themselves (eg: MO, DC) and possibly different conventions for documenting updates.
 # A thorough date format standardization can be done to all of the states at some point.
 
+# examples of cases we've seen:
+# September 15, 2020 and March 18, 2020
+# 12/1/20 (MM/D/YY)
+# 10/24/2016 (MM/DD/YYY)
+# December 25, and Feb - Jun 2021
 
 import calendar
 import csv
@@ -65,6 +70,8 @@ def numeric_date(date):
     # then, convert dashes between D/M/Y into slashes
     # content_between_dashes = date.split("-")
     # if the dashes are separating D/M/Y, then convert them to slashes
+    # convert , to /
+    # .replace(',', '/')
 
     # now that we've preserved all important text, let's leave only preferred chars
     newstring = ''
