@@ -19,24 +19,25 @@ WARN_DATA_PATH = str(Path(ETL_DIR, 'exports'))
 WARN_ANALYSIS_PATH = str(Path(ETL_DIR, 'analysis'))
 OUTPUT_DIR = WARN_ANALYSIS_PATH
 
-# standardize formatting of our field name lists so we can write pretty
-# normalize case, remove underscores, strip spaces
+# standardize formatting of our field map lists so we can write pretty
+# remove spaces, normalize case, remove underscores
 def format_list(list):
     return [x.lower().replace(" ", "").replace("_", "") for x in list]
 
 
-# standardize_header() is coded based on the order of this list
-STANDARDIZED_FIELD_NAMES = ['state', 'employer', 'number_affected', 'date_received', 'date_effective', 'location', 'industry', 'notes']
-# Replace these field names
-EMPLOYER_FIELDS = format_list(['company name', 'company', 'Organization Name'])
-NUMBER_AFFECTED_FIELDS = format_list(['employees affected', 'affected empoyees', 'employees', 'workforce affected', 'planned#affectedemployees', 'Number toEmployees Affected', '# of workers', 'AffectedWorkers'])
-DATE_RECEIVED_FIELDS = format_list(['initial report date', 'notice date', 'state notification date', 'warn date'])
-DATE_EFFECTIVE_FIELDS = format_list(['layoff date', 'LayoffBeginDate', 'layoff start date', 'effective date', 'planned starting date','effective layoff date','LO/CL date', 'impact date'])
-INDUSTRY_FIELDS = format_list(['industry','description of work','NAICSDescription','NAICS'])
-LOCATION_FIELDS = format_list(['city', 'address', 'location', 'company address', 'company address - 2','city/town', 'zip', 'location city', 'region', 'county'])  # TODO what do we want our city/address approach to look like?
-NOTES_FIELDS = format_list(['notes', 'misc'])
-# CLOSING_OR_LAYOFF_FIELDS = format_list(['Notice Type', 'Code Type', 'Closure Layoff'])
-AMBIGUOUS_FIELDS = format_list(['date'])  # require state-by-state approach
+# Let's make a list of the fields we want each state to map onto:
+# note that the order of this list is sensitive to standardize_header() func
+STANDARDIZED_FIELD_NAMES = ['state', 'employer', 'number_affected', 'date_received', 'date_effective', 'location', 'industry', 'notes', 'layoff_type']
+# Replace these field names with standardize field names
+EMPLOYER_MAP = format_list(['company name', 'company', 'Organization Name', 'employer'])
+NUMBER_AFFECTED_MAP = format_list(['employees affected', 'affected empoyees', 'employees', 'workforce affected', 'planned#affectedemployees', 'Number toEmployees Affected', '# of workers', 'AffectedWorkers', '# Affected', 'number_of_employees_affected'])
+DATE_RECEIVED_MAP = format_list(['initial report date', 'notice_date', 'notice date', 'state notification date', 'warn date', 'date received'])
+DATE_EFFECTIVE_MAP = format_list(['layoff date', 'LayoffBeginDate', 'layoff start date', 'effective date', 'planned starting date', 'effective layoff date', 'LO/CL date', 'impact date'])
+INDUSTRY_MAP = format_list(['industry', 'description of work', 'NAICSDescription', 'NAICS'])
+LOCATION_MAP = format_list(['city', 'address', 'location', 'company address', 'company address - 2', 'city/town', 'zip', 'location city', 'region', 'county', 'lwib_area'])  # TODO make sure that multiple maps results in appending
+NOTES_MAP = format_list(['notes', 'misc'])
+LAYOFF_TYPE_MAP = format_list(['Type', 'Notice Type', 'Code Type', 'Closure Layoff'])
+AMBIGUOUS_MAP = format_list(['date'])  # require state-by-state approach
 
 def main():
     output_csv = '{}/standardize_field_names.csv'.format(OUTPUT_DIR)
@@ -45,7 +46,8 @@ def main():
     # open each state's output file from exports/ directory.
     for filename in os.listdir(WARN_DATA_PATH):
         print(f'Processing state {filename}...')
-        with open(f"{WARN_DATA_PATH}\\{filename}", newline='') as f:
+        source_file = str(Path(WARN_DATA_PATH).joinpath(filename))
+        with open(source_file, encoding='utf-8') as f:
             state_rows = []
             state_csv = csv.reader(f)
             state_postal = filename.split(".")[0].upper()
@@ -60,7 +62,16 @@ def main():
 
         state_fields = state_rows[0]
         state_rows = state_rows[1:]
-        # transfer individual state data to standardized dict list
+        # run state-specific standardizations like column-merging
+        state_rows = standardize_state(state_rows, state_postal)
+        ''' 
+        transfer the current state's data to standardized dict list
+        eg. state_rows_as_dicts = [
+        { "company": "ABC Wood Systems", "WARN date": 12/01/1999, "Employees Affected": 56, },
+        { "company": "Wood Emporium", "WARN date": 12/02/1999, "Employees Affected": 7 } ,
+        ...
+        ]
+        '''
         state_rows_as_dicts = [dict(zip(state_fields, row)) for row in state_rows]
         output_rows.extend(state_rows_as_dicts)
     # once output_rows is full of all states, generate the final csv
@@ -74,21 +85,23 @@ def standardize_header(header_row, FIELD, state):
     header_row.append(FIELD[0])
     for field_idx, field_name in enumerate(header_row):
         field_name = field_name.lower().replace(" ", "")  # standardize strings to lowercase and no whitespace
-        if field_name in EMPLOYER_FIELDS:
+        if field_name in EMPLOYER_MAP:
             field_name = FIELD[1]
-        elif field_name in NUMBER_AFFECTED_FIELDS:
+        elif field_name in NUMBER_AFFECTED_MAP:
             field_name = FIELD[2]
-        elif field_name in DATE_RECEIVED_FIELDS:
+        elif field_name in DATE_RECEIVED_MAP:
             field_name = FIELD[3]
-        elif field_name in DATE_EFFECTIVE_FIELDS:
+        elif field_name in DATE_EFFECTIVE_MAP:
             field_name = FIELD[4]
-        elif field_name in LOCATION_FIELDS:
+        elif field_name in LOCATION_MAP:
             field_name = FIELD[5]
-        elif field_name in INDUSTRY_FIELDS:
+        elif field_name in INDUSTRY_MAP:
             field_name = FIELD[6]
-        elif field_name in NOTES_FIELDS:
+        elif field_name in NOTES_MAP:
             field_name = FIELD[7]
-        elif field_name in AMBIGUOUS_FIELDS:  # determine per-state
+        elif field_name in LAYOFF_TYPE_MAP:
+            field_name = FIELD[8]
+        elif field_name in AMBIGUOUS_MAP:  # determine per-state
             if state == "sd":
                 if field_name == "date":
                     # TODO check and report on SD date field
@@ -101,6 +114,34 @@ def standardize_header(header_row, FIELD, state):
             print(f"Unhandled field {field_name} in {state}.csv")
         header_row[field_idx] = field_name
     return header_row
+
+# input/output: a list of state rows
+def standardize_state(state_rows, state):
+    if state == 'VA':
+        return standardize_VA(state_rows)
+
+
+# additively merge "closure" and "Layoff" columns into "layoff type" column:
+#   "closure: Yes", "Layoff: No" => "Layoff Type: Closure"
+# input/output: list of rows from state
+def standardize_VA(state_rows, state="VA"):
+    # add field
+    state_rows[0].append("Layoff Type")
+    for row in state_rows:
+        # extract data
+        closure = row[14].strip().lower() == 'yes'
+        layoff = row[15].strip().lower() == 'yes'
+        layoff_type = ''
+        if not closure and not layoff:
+            layoff_type = 'None'
+        elif not closure and layoff:
+            layoff_type = 'Layoff'
+        elif closure and not layoff:
+            layoff_type = 'Closure'
+        else:
+            layoff_type = 'Both'
+        row.append(layoff_type)
+    return state_rows
 
 
 if __name__ == '__main__':
