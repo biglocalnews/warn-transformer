@@ -1,3 +1,7 @@
+# TODO location city for virginia
+# TODO raw date1 raw date2
+# TODO investigate WI data for strange muckery
+# TODO implement python pendulum library for dates; feed it a date
 # Input: files in exports/ directory
 # Output: a single CSV that merges all states
 
@@ -20,12 +24,13 @@ INPUT_DIR = WARN_DATA_PATH
 WARN_ANALYSIS_PATH = str(Path(ETL_DIR, 'analysis'))
 OUTPUT_DIR = WARN_ANALYSIS_PATH
 
-# standardize formatting of our field map lists so we can write pretty
+
 # remove spaces, normalize case, remove underscores
 def format_str(str):
     return str.lower().replace(" ", "").replace("_", "")
 
 
+# standardize formatting of our field map lists so we can write pretty
 def format_list(list):
     return [format_str(x) for x in list]
 
@@ -53,39 +58,53 @@ def main():
     for filename in os.listdir(INPUT_DIR):
         print(f'Processing state {filename}...')
         source_file = str(Path(INPUT_DIR).joinpath(filename))
-        with open(source_file, newline='') as f:  # , encoding='utf-8'
-            state_rows = []
-            state_csv = csv.reader(f)
-            state_postal = filename.split(".")[0].upper()
-            # store state's rows
-            for row_idx, row in enumerate(state_csv):
-                # ignore blank rows
-                if row:
-                    if row_idx == 0:
-                        # standardize fields in the header!
-                        row = standardize_header(row, STANDARDIZED_FIELD_NAMES, state_postal)
-                    else:
-                        row.append(state_postal)  # store 'state' field in body
-                    state_rows.append(row)
+        state_postal = filename.split(".")[0].upper()
+        # encoding bug fix
+        try:
+            state_rows = process_file(source_file, filename, state_postal)
+        except UnicodeDecodeError:
+            state_rows = process_file(source_file, filename, state_postal, encoding="utf-8")
 
         # run state-specific standardizations like column-merging
         state_rows = standardize_state(state_rows, state_postal)
         ''' 
-        transfer the current state's data to standardized dict list state_rows_as_dicts
+        transfer the current state's data to dict list with non-standardized headers
         eg. state_rows_as_dicts = [
-            { "company": "ABC Wood Systems", "WARN date": 12/01/1999, "Employees Affected": 56, },
-            { "company": "Wood Emporium", "WARN date": 12/02/1999, "Employees Affected": 7 },
+            { "company": "ABC Wood Systems", "SomeUnwantedField" : "...", "OtherUnwantedField": "...", ...},
              ...
             ]
         '''
         state_rows_header = state_rows[0]
         state_rows_body = state_rows[1:]
         state_rows_as_dicts = [dict(zip(state_rows_header, row)) for row in state_rows_body]
+        # move each state's list of dicts into output_rows
         output_rows.extend(state_rows_as_dicts)
-    # once output_rows is full of all states, generate the final csv
-    write_dict_rows_to_csv(output_csv, STANDARDIZED_FIELD_NAMES, output_rows)
+    # once output_rows full of all states' rows of dicts, generate the final csv
+    # the extrasaction='ignore' flag allows us to drop each state's idiosyncratic fields
+    # and keep only fields and keys mapped to STANDARDIZED_FIELD_NAMES
+    write_dict_rows_to_csv(output_csv, STANDARDIZED_FIELD_NAMES, output_rows, extrasaction='ignore')
     print(f"standardized_field_names.csv generated successfully.")
 
+
+# return state_rows list of lists
+def process_file(source_file, filename, state_postal, encoding=""):
+    kwargs = {"newline": "", }
+    if encoding:
+        kwargs["encoding"] = encoding
+    with open(source_file, **kwargs) as f:
+        state_rows = []
+        state_csv = csv.reader(f)
+        # store state's rows
+        for row_idx, row in enumerate(state_csv):
+            # ignore blank rows
+            if row:
+                if row_idx == 0:
+                    # standardize fields in the header!
+                    row = standardize_header(row, STANDARDIZED_FIELD_NAMES, state_postal)
+                else:
+                    row.append(state_postal)  # store 'state' field in body
+                state_rows.append(row)
+    return state_rows
 
 # replace field names in-place with standardized versions
 def standardize_header(header_row, FIELD, state):
