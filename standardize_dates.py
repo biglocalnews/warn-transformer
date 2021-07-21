@@ -1,3 +1,5 @@
+# TODO implement python pendulum library for dates; feed it a date
+
 # input: standardized_field_names.csv
 # output: standardized_dates.csv
 # datasets from some states contain different date formats within themselves (eg: MO, DC) and possibly different conventions for documenting updates.
