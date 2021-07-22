@@ -1,7 +1,7 @@
 # TODO CT missing employers/employees
 
-# Input: files in .warn-scraper/exports/ directory
-# Output: a single CSVin .warn-scraper/analysis/ directory that merges all states
+# Input: state .csv files in .warn-scraper/exports/ directory
+# Output: a single CSV in .warn-scraper/analysis/ directory that merges all states
 
 # For each state, it should map a subset of fields to some minimal set of standardized fields
 # (e.g. Company Name -> employer, Number of Employees Affected -> number_affected, etc.).
@@ -36,14 +36,14 @@ def format_list(list):
 STANDARDIZED_FIELD_NAMES = ['state', 'employer', 'number_affected', 'date_received_raw', 'date_effective_raw', 'location', 'industry', 'notes', 'layoff_type']
 # Replace these field names with standardize field names
 EMPLOYER_MAP = format_list(['employer', 'company name', 'company', 'Organization Name'])
-NUMBER_AFFECTED_MAP = format_list(['number affected', 'employees affected', 'affected empoyees', 'employees', 'workforce affected', 'planned#affectedemployees', 'Number toEmployees Affected', '# of workers', 'AffectedWorkers', '# Affected', 'number_of_employees_affected'])
-DATE_RECEIVED_MAP = format_list(['date received', 'initial report date', 'notice_date', 'notice date', 'state notification date', 'warn date'])
-DATE_EFFECTIVE_MAP = format_list(['date effective', 'layoff date', 'LayoffBeginDate', 'layoff start date', 'effective date', 'planned starting date', 'effective layoff date', 'LO/CL date', 'impact date'])
+NUMBER_AFFECTED_MAP = format_list(['number affected', 'employees affected', 'affected empoyees', 'employees', 'workforce affected', 'planned#affectedemployees', 'Number toEmployees Affected', '# of workers', 'AffectedWorkers', '# Affected', 'number_of_employees_affected', 'jobs affected', 'total employees'])
+DATE_RECEIVED_MAP = format_list(['date received', 'initial report date', 'date of notice', 'notice date', 'state notification date', 'warn date', 'noticercvd', 'received date'])
+DATE_EFFECTIVE_MAP = format_list(['date effective', 'layoff date', 'LayoffBeginDate', 'layoff start date', 'effective date', 'planned starting date', 'effective layoff date', 'LO/CL date', 'impact date', 'typeoflayoff'])
 INDUSTRY_MAP = format_list(['industry', 'description of work', 'NAICSDescription'])
 # TODO make sure that having multiple columns that map to the same column results in appending not replacing
-LOCATION_MAP = format_list(['location', 'city', 'address', 'zip', 'location city', 'region', 'county', 'lwib_area'])  # removed from VA: , 'company address', 'company address - 2', 'city/town',
+LOCATION_MAP = format_list(['location', 'city', 'address', 'zip', 'location city', 'region', 'county', 'lwib_area', 'location of layoffs'])  # removed from VA: , 'company address', 'company address - 2', 'city/town',
 NOTES_MAP = format_list(['notes', 'misc'])
-LAYOFF_TYPE_MAP = format_list(['layoff type', 'Type', 'Notice Type', 'Code Type', 'Closure Layoff'])
+LAYOFF_TYPE_MAP = format_list(['layoff type', 'Type', 'Notice Type', 'Code Type', 'Closure Layoff', 'type code', 'warn type'])
 AMBIGUOUS_MAP = format_list(['date'])  # require state-by-state approach
 
 def main():
@@ -63,10 +63,11 @@ def main():
         except UnicodeDecodeError:
             state_rows = process_file(source_file, filename, state_postal, encoding="utf-8")
 
+        # smooth out lengths of rows and columns to prevent data errors
+        state_rows = standardize_rows_columns(state_rows, state_postal)
+        state_rows = add_state_field(state_rows, STANDARDIZED_FIELD_NAMES, state_postal)
         # run state-specific standardizations such as data cleaning, restructuring
         state_rows = standardize_state(state_rows, state_postal)
-        # run general standardizations applying to every state
-        state_rows = standardize_generalized(state_rows, state_postal)
         # convert data to a list of dicts, and merge redundant columns non-destructively
         state_rows_as_dicts = merge_to_dict(state_rows)
         output_rows.extend(state_rows_as_dicts)
@@ -92,15 +93,12 @@ def process_file(source_file, filename, state_postal, encoding=""):
                 if row_idx == 0:
                     # standardize fields in the header!
                     row = standardize_header(row, STANDARDIZED_FIELD_NAMES, state_postal)
-                else:
-                    row.append(state_postal)  # store 'state' field in body
+                # add row to the list
                 state_rows.append(row)
     return state_rows
 
 # replace field names in-place with standardized versions
 def standardize_header(header_row, FIELD, state):
-    # add 'state' field to header
-    header_row.append(FIELD[0])
     for field_idx, field_name in enumerate(header_row):
         field_name = format_str(field_name)  # standardize strings to lowercase and no whitespace
         if field_name in EMPLOYER_MAP:
@@ -128,23 +126,39 @@ def standardize_header(header_row, FIELD, state):
         else:
             # make no changes to other fields
             print(f"Info: Unhandled field {field_name} in {state}.csv")
+        # replace the field
         header_row[field_idx] = field_name
     return header_row
 
 
-# run general data processing that applies to all states
-# input/output: a list of state rows (including header)
-def standardize_generalized(state_rows, state):
+# match row length with header length
+# input: list of state rows
+# output: same, but with headers and fields added to even out data symmetry
+def standardize_rows_columns(state_rows, state):
     state_rows_header = state_rows[0]
     state_rows_body = state_rows[1:]
-    # processing step: make sure all columns in use have a column header
+    # make sure all columns with data have a column header
     for row_idx, row in enumerate(state_rows_body):
         while len(state_rows_header) < len(row):
             print(f"Warning: Found more values than headers in {state}.csv, line {row_idx}. Adding header for unknown field...")
             field_identifier = len(state_rows_body[0]) - len(state_rows_header)
             # adds column header so the state can be processed w/o error
-            # note that this is pass-by-reference, editing state_rows itself
             state_rows_header.append(f"UnknownField{field_identifier}")
+    # make sure all fields with a column header have enough fields of data
+    for row_idx, row in enumerate(state_rows_body):
+        while len(row) < len(state_rows_header):
+            print(f"Warning: Found more headers than fields in {state}.csv, line {row_idx}. Adding blank string to field...")
+            row.append('')
+    return state_rows
+
+# this step is the counterpart of the step above;
+#
+# input/output: state rows list
+def add_state_field(state_rows, FIELD, state):
+    # add 'state' field to header
+    state_rows[0].append(FIELD[0])
+    for row in state_rows:
+        row.append(state)  # store 'state' field in body
     return state_rows
 
 # run state-specific processing
@@ -152,8 +166,6 @@ def standardize_generalized(state_rows, state):
 def standardize_state(state_rows, state):
     if state == 'VA':
         return standardize_VA(state_rows)
-    elif state == 'WI':
-        return standardize_WI(state_rows)
     else:
         pass
     return state_rows
@@ -182,13 +194,10 @@ def merge_to_dict(state_rows):
         for col in row:
             key = col[0]
             val = col[1]
-            if not newdict.get(key):
-                newdict[key] = val
-            else:
-                # add previous value to col
+            if newdict.get(key):
+                # merge repeating columns
+                # strategy: combine into one column, insert newline between
                 val += f"{os.linesep} {newdict.get(key)}"
-                newdict[key] += val
-
             newdict.update({key: val})
         state_rows_as_dicts.append(newdict)
     return state_rows_as_dicts
@@ -215,11 +224,6 @@ def standardize_VA(state_rows, state="VA"):
                 layoff_type = 'Both'
             # add value for Layoff Type field
             row.append(layoff_type)
-    return state_rows
-
-# input/output: list of state's rows including header
-def standardize_WI(state_rows, state="WI"):
-    # state_rows[0].append("Y")  # add field--and tell it like it is. it's the "Y" field!!
     return state_rows
 
 
