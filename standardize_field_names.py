@@ -1,4 +1,3 @@
-# TODO drop any columns that have no header!! (remember that we append state on afterwards
 # TODO CT missing employers/employees
 
 # Input: files in .warn-scraper/exports/ directory
@@ -63,12 +62,14 @@ def main():
         except UnicodeDecodeError:
             state_rows = process_file(source_file, filename, state_postal, encoding="utf-8")
 
-        # run state-specific standardizations like column-merging
+        # run general standardizations like redundant column merging 
+        state_rows = standardize_generalized(state_rows, state_postal)
+        # run state-specific standardizations like more complex column refactoring
         state_rows = standardize_state(state_rows, state_postal)
         ''' 
         transfer the current state's data to dict list (still preserving all the idiosyncratic fields)
         eg. state_rows_as_dicts = [
-            { "company": "ABC Wood Systems", "SomeUnwantedField" : "...", "OtherUnwantedField": "...", ...},
+            { "company": "ABC Wood Systems", "SomeUnwantedField" : "(123) 456-7890", "OtherUnwantedField": "...", ...},
              ...
             ]
         '''
@@ -135,7 +136,7 @@ def standardize_header(header_row, FIELD, state):
                     # field_name = FIELD[3]
                     pass
         elif field_name == 'state':
-            # we created this field, no standardization necessary
+            # we created this field, so no standardization necessary
             pass
         else:
             # make no changes to undesired field
@@ -143,6 +144,31 @@ def standardize_header(header_row, FIELD, state):
         header_row[field_idx] = field_name
     return header_row
 
+
+# run general data processing that applies to all states
+# input/output: a list of state rows (including header)
+def standardize_generalized(state_rows, state):
+    state_rows_header = state_rows[0]
+    state_rows_body = state_rows[1:]
+    # processing step: make sure all columns in use have a column header
+    for row_idx, row in enumerate(state_rows_body):
+        while len(state_rows_header) < len(row):
+            print(f"Error: Found more values than headers in {state}.csv, line {row_idx}. Adding header for unknown field...")
+            field_identifier = len(state_rows_body[0]) - len(state_rows_header)
+            state_rows_header.append(f"UnknownField{field_identifier}")
+    # processing step: additively merge redundant columns (default behavior is keep only last col)
+    # TODO make this work
+    # for label in header:
+    #     if labels are the same:
+    #         labelindexesthatarethesame = []
+    # for row in rows:
+    #     if index is labelindexesthatarethesame[-1]:
+    #         for other_index in labelindexesthatarethesame[:-1]:
+    #             row.append(rows[other_index])
+    state_rows = state_rows_header.extend(state_rows_body)  # re-merge
+    return state_rows
+
+# run state-specific processing
 # input/output: a list of state rows (including header)
 def standardize_state(state_rows, state):
     if state == 'VA':
@@ -179,7 +205,7 @@ def standardize_VA(state_rows, state="VA"):
 
 # input/output: list of state's rows including header
 def standardize_WI(state_rows, state="WI"):
-    state_rows[0].append("Y")  # add field--and tell it like it is. it's the "Y" field!!
+    # state_rows[0].append("Y")  # add field--and tell it like it is. it's the "Y" field!!
     return state_rows
 
 
