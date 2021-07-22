@@ -35,15 +35,15 @@ def format_list(list):
 # note that the order of this list is sensitive to standardize_header() func
 STANDARDIZED_FIELD_NAMES = ['state', 'employer', 'number_affected', 'date_received_raw', 'date_effective_raw', 'location', 'industry', 'notes', 'layoff_type']
 # Replace these field names with standardize field names
-EMPLOYER_MAP = format_list(['company name', 'company', 'Organization Name', 'employer'])
-NUMBER_AFFECTED_MAP = format_list(['employees affected', 'affected empoyees', 'employees', 'workforce affected', 'planned#affectedemployees', 'Number toEmployees Affected', '# of workers', 'AffectedWorkers', '# Affected', 'number_of_employees_affected'])
-DATE_RECEIVED_MAP = format_list(['initial report date', 'notice_date', 'notice date', 'state notification date', 'warn date', 'date received'])
-DATE_EFFECTIVE_MAP = format_list(['layoff date', 'LayoffBeginDate', 'layoff start date', 'effective date', 'planned starting date', 'effective layoff date', 'LO/CL date', 'impact date'])
+EMPLOYER_MAP = format_list(['employer', 'company name', 'company', 'Organization Name'])
+NUMBER_AFFECTED_MAP = format_list(['number affected', 'employees affected', 'affected empoyees', 'employees', 'workforce affected', 'planned#affectedemployees', 'Number toEmployees Affected', '# of workers', 'AffectedWorkers', '# Affected', 'number_of_employees_affected'])
+DATE_RECEIVED_MAP = format_list(['date received', 'initial report date', 'notice_date', 'notice date', 'state notification date', 'warn date'])
+DATE_EFFECTIVE_MAP = format_list(['date effective', 'layoff date', 'LayoffBeginDate', 'layoff start date', 'effective date', 'planned starting date', 'effective layoff date', 'LO/CL date', 'impact date'])
 INDUSTRY_MAP = format_list(['industry', 'description of work', 'NAICSDescription'])
 # TODO make sure that having multiple columns that map to the same column results in appending not replacing
-LOCATION_MAP = format_list(['city', 'address', 'location', 'zip', 'location city', 'region', 'county', 'lwib_area'])  # removed from VA: , 'company address', 'company address - 2', 'city/town',
+LOCATION_MAP = format_list(['location', 'city', 'address', 'zip', 'location city', 'region', 'county', 'lwib_area'])  # removed from VA: , 'company address', 'company address - 2', 'city/town',
 NOTES_MAP = format_list(['notes', 'misc'])
-LAYOFF_TYPE_MAP = format_list(['Type', 'Notice Type', 'Code Type', 'Closure Layoff'])
+LAYOFF_TYPE_MAP = format_list(['layoff type', 'Type', 'Notice Type', 'Code Type', 'Closure Layoff'])
 AMBIGUOUS_MAP = format_list(['date'])  # require state-by-state approach
 
 def main():
@@ -56,32 +56,22 @@ def main():
         print(f'Processing state {filename}...')
         source_file = str(Path(INPUT_DIR).joinpath(filename))
         state_postal = filename.split(".")[0].upper()
-        # encoding bug fix
+        # process_file converts csv to list-of-rows, while also
+        # replacing idiosyncratic headers w standardized counterparts!
         try:
             state_rows = process_file(source_file, filename, state_postal)
         except UnicodeDecodeError:
             state_rows = process_file(source_file, filename, state_postal, encoding="utf-8")
 
-        # run general standardizations like redundant column merging 
-        state_rows = standardize_generalized(state_rows, state_postal)
-        # run state-specific standardizations like more complex column refactoring
+        # run state-specific standardizations such as data cleaning, restructuring
         state_rows = standardize_state(state_rows, state_postal)
-        ''' 
-        transfer the current state's data to dict list (still preserving all the idiosyncratic fields)
-        eg. state_rows_as_dicts = [
-            { "company": "ABC Wood Systems", "SomeUnwantedField" : "(123) 456-7890", "OtherUnwantedField": "...", ...},
-             ...
-            ]
-        '''
-        state_rows_header = state_rows[0]
-        state_rows_body = state_rows[1:]
-        # TODO make dict() into non-destructive func so we append the values of redundant keys in the final dict list
-        state_rows_as_dicts = [dict(zip(state_rows_header, row)) for row in state_rows_body]
-        # move each state's list of dicts into output_rows
+        # run general standardizations applying to every state
+        state_rows = standardize_generalized(state_rows, state_postal)
+        # convert data to a list of dicts, and merge redundant columns non-destructively
+        state_rows_as_dicts = merge_to_dict(state_rows)
         output_rows.extend(state_rows_as_dicts)
     # once output_rows full of all states' rows of dicts, generate the final csv
-    # the extrasaction='ignore' flag allows us to drop each state's idiosyncratic fields
-    # and keep only fields and keys mapped to STANDARDIZED_FIELD_NAMES
+    # extrasaction='ignore' flag keeps only fields mapped to STANDARDIZED_FIELD_NAMES
     write_dict_rows_to_csv(output_csv, STANDARDIZED_FIELD_NAMES, output_rows, extrasaction='ignore')
     print(f"standardized_field_names.csv generated successfully.")
 
@@ -135,12 +125,9 @@ def standardize_header(header_row, FIELD, state):
                     # TODO check and report on SD date field
                     # field_name = FIELD[3]
                     pass
-        elif field_name == 'state':
-            # we created this field, so no standardization necessary
-            pass
         else:
-            # make no changes to undesired field
-            print(f"Unhandled field {field_name} in {state}.csv")
+            # make no changes to other fields
+            print(f"Info: Unhandled field {field_name} in {state}.csv")
         header_row[field_idx] = field_name
     return header_row
 
@@ -153,19 +140,11 @@ def standardize_generalized(state_rows, state):
     # processing step: make sure all columns in use have a column header
     for row_idx, row in enumerate(state_rows_body):
         while len(state_rows_header) < len(row):
-            print(f"Error: Found more values than headers in {state}.csv, line {row_idx}. Adding header for unknown field...")
+            print(f"Warning: Found more values than headers in {state}.csv, line {row_idx}. Adding header for unknown field...")
             field_identifier = len(state_rows_body[0]) - len(state_rows_header)
+            # adds column header so the state can be processed w/o error
+            # note that this is pass-by-reference, editing state_rows itself
             state_rows_header.append(f"UnknownField{field_identifier}")
-    # processing step: additively merge redundant columns (default behavior is keep only last col)
-    # TODO make this work
-    # for label in header:
-    #     if labels are the same:
-    #         labelindexesthatarethesame = []
-    # for row in rows:
-    #     if index is labelindexesthatarethesame[-1]:
-    #         for other_index in labelindexesthatarethesame[:-1]:
-    #             row.append(rows[other_index])
-    state_rows = state_rows_header.extend(state_rows_body)  # re-merge
     return state_rows
 
 # run state-specific processing
@@ -178,6 +157,41 @@ def standardize_state(state_rows, state):
     else:
         pass
     return state_rows
+
+
+# the goal of this function is to merge columns non-destructively while converting to dict
+# (e.g, if two source columns map to 'location', let's combine them for maximum fidelity)
+# input: a list of rows
+# output: a list of dicts
+def merge_to_dict(state_rows):
+    '''
+    transfer the current state's data to dict list, preserving unwanted fields
+    eg. state_rows_as_dicts = [
+        { "company": "ABC Wood Systems", "SomeUnwantedField" : "(123) 456-7890", "OtherUnwantedField": "...", ...},
+         ...
+        ]
+    '''
+    state_rows_header = state_rows[0]
+    state_rows_body = state_rows[1:]
+    # tuples: {('employer', {'ABC business', 'GFE corp', ...}), ('location', {'XYZ town', 'YHG city'}), ... }
+    state_rows_as_tuples = [list(zip(state_rows_header, row)) for row in state_rows_body]
+    # build a list of dicts with non-destructive column merging
+    state_rows_as_dicts = []
+    for row in state_rows_as_tuples:
+        newdict = dict()
+        for col in row:
+            key = col[0]
+            val = col[1]
+            if not newdict.get(key):
+                newdict[key] = val
+            else:
+                # add previous value to col
+                val += f"{os.linesep} {newdict.get(key)}"
+                newdict[key] += val
+
+            newdict.update({key: val})
+        state_rows_as_dicts.append(newdict)
+    return state_rows_as_dicts
 
 
 # input/output: list of state's rows including header
