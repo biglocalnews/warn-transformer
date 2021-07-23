@@ -63,11 +63,12 @@ def main():
         except UnicodeDecodeError:
             state_rows = process_file(source_file, filename, state_postal, encoding="utf-8")
 
-        # smooth out lengths of rows and columns to prevent data errors
-        state_rows = standardize_rows_columns(state_rows, state_postal)
-        state_rows = add_state_field(state_rows, STANDARDIZED_FIELD_NAMES, state_postal)
         # run state-specific standardizations such as data cleaning, restructuring
         state_rows = standardize_state(state_rows, state_postal)
+        # smooth out lengths of rows and columns to prevent data errors
+        state_rows = standardize_rows_columns(state_rows, state_postal)
+
+        state_rows = add_state_field(state_rows, STANDARDIZED_FIELD_NAMES, state_postal)
         # convert data to a list of dicts, and merge redundant columns non-destructively
         state_rows_as_dicts = merge_to_dict(state_rows)
         output_rows.extend(state_rows_as_dicts)
@@ -166,6 +167,8 @@ def add_state_field(state_rows, FIELD, state):
 def standardize_state(state_rows, state):
     if state == 'VA':
         return standardize_VA(state_rows)
+    elif state == 'WI':
+        return standardize_WI(state_rows)
     elif state == 'CT':
         # im going to put some comments here about a state we might eventually want to alter our strategy for
         # for CT, the mapping merges columns "closing date" and "layoff date" into the "date effective column".
@@ -235,6 +238,14 @@ def standardize_VA(state_rows, state="VA"):
                 layoff_type = 'Both'
             # add value for Layoff Type field
             row.append(layoff_type)
+    return state_rows
+
+# input/output: list of state's rows including header
+def standardize_WI(state_rows, state="WI"):
+    for row in state_rows:
+        if row[-1].strip() is 'Y':
+            # remove unnecessary 'Y' values
+            del row[-1]
     return state_rows
 
 
