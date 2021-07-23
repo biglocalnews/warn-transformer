@@ -25,29 +25,45 @@ WARN_ANALYSIS_PATH = str(Path(ETL_DIR, 'analysis'))
 INPUT_DIR = WARN_ANALYSIS_PATH
 OUTPUT_DIR = WARN_ANALYSIS_PATH
 
-DATE_COLS = [3, 4]  # columns of standardize_field_names.csv from which we will read dates
+# date_received_raw, date_effective_raw from standardize_field_names.csv
+DATE_COLS = [3, 4]
 
 def main():
     Path(WARN_ANALYSIS_PATH).mkdir(parents=True, exist_ok=True)
     input_csv = '{}/standardize_field_names.csv'.format(INPUT_DIR)
     output_csv = '{}/standardize_dates.csv'.format(OUTPUT_DIR)
-    output_rows = []
-    print(f'Processing {input_csv}...')
     source_file = str(Path(INPUT_DIR).joinpath(input_csv))
-    with open(source_file, newline='', encoding='utf-8') as f:
-        file = csv.reader(f)
-        for row_idx, row in enumerate(file):
-            if row_idx == 1:
-                # add new column headers
-                row.append("date_received_cleaned")
-                row.append("date_effective_cleaned")
-            for col_idx, col in enumerate(row):
-                # standardize any date input
-                if col_idx in DATE_COLS:
-                    row.append(standardize_date(col))
-            output_rows.append(row)
+    print(f'Processing {input_csv}...')
+    # convert file into list of rows
+    try:
+        rows = open_file(source_file, input_csv)
+    except UnicodeDecodeError:
+        rows = open_file(source_file, input_csv, encoding="utf-8")
+    # add new column headers
+    rows[0].append("date_received_cleaned")
+    rows[0].append("date_effective_cleaned")
+    output_rows = []
+    for row_idx, row in rows:
+        for col_idx, col in enumerate(row):
+            # standardize any date input
+            if col_idx in DATE_COLS:
+                # note: these fields are expected to add in order of the column headers we added
+                row.append(standardize_date(col))
+        output_rows.append(row)
     write_rows_to_csv(output_rows, output_csv)
 
+
+def open_file(source_file, filename, encoding=''):
+    kwargs = {"newline": "", }
+    # work-around for encoding differences between states
+    if encoding:
+        kwargs["encoding"] = encoding
+    output_rows = []
+    with open(source_file, **kwargs) as f:
+        file = csv.reader(f)
+        for row in file:
+            output_rows.append(row)
+    return output_rows
 
 # take a date field and standardize the formatting
 def standardize_date(date):
