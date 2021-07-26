@@ -7,4 +7,4 @@ This file is the first in the data cleaning process for WARN exports. It takes a
 ### `standardize_dates.py`
 This file continues the data cleaning process, taking in the output from the previous file, `standardize_field_names.csv`, abd outputting a version with a standardized date formatting.
 
-**TODO**: determine a consistent date standard (how about DD-MM-YYYY?)
+**TODO**: determine a consistent date standard (how about DD/MM/YYYY?)
