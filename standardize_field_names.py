@@ -149,10 +149,10 @@ def standardize_rows_columns(state_rows, state):
     state_rows_body = state_rows[1:]
     # make sure all columns with data have a column header
     for row_idx, row in enumerate(state_rows_body):
-        if not row:
-            del(row)
-        if len(state_rows_header) < len(row):
-            print(f"Info: Found more values than headers in {state}.csv, line {row_idx}: {row}. Adding header for unknown field...")
+        if row == [] or not row:
+            state_rows_body.pop(row_idx)
+        elif len(state_rows_header) < len(row):
+            print(f"Info: Found more values than headers in {state}.csv, line {row_idx}. Adding header for unknown field...")
             while len(state_rows_header) < len(row):
                 field_identifier = len(state_rows_body[0]) - len(state_rows_header)
                 # adds column header so the state can be processed w/o error
@@ -160,7 +160,7 @@ def standardize_rows_columns(state_rows, state):
     # make sure all fields with a column header have enough fields of data
     for row_idx, row in enumerate(state_rows_body):
         if len(row) < len(state_rows_header):
-            print(f"Info: Found more headers than fields in {state}.csv, line {row_idx}: {row} Adding blank string to field...")
+            print(f"Info: Found more headers than fields in {state}.csv, line {row_idx}. Adding blank string to field...")
             while len(row) < len(state_rows_header):
                 row.append('')
     return state_rows
@@ -179,6 +179,8 @@ def add_state_field(state_rows, FIELD, state):
 def standardize_state(state_rows, state):
     if state == 'VA':
         return standardize_VA(state_rows)
+    elif state == 'WI':
+        return standardize_WI(state_rows)
     elif state == 'CT':
         # TODO: im going to put some comments here about a state we might eventually want to alter our strategy for
         # for CT, the mapping merges columns "closing date" and "layoff date" into the "date effective column".
@@ -251,6 +253,27 @@ def standardize_VA(state_rows, state="VA"):
                 layoff_type = 'Both'
             # add value for Layoff Type field
             row.append(layoff_type)
+    return state_rows
+
+
+# input/output: list of state's rows including header
+def standardize_WI(state_rows, state="WI"):
+    indexes_to_pop = []
+    for row_idx, row in enumerate(state_rows):
+        if not row_idx == 0:
+            current_company_field = row[0]
+            if 'Revision' in current_company_field:
+                # if the current row is a revision, drop the previous row
+                indexes_to_pop.append(row_idx - 1)
+                # and remove the revision text from company name
+                current_company_field = current_company_field.split(" - Revision")[0]
+                print(f"{current_company_field}, {row_idx}")
+            row[0] = current_company_field
+    popped = 0
+    # remove rows after looping to prevent looping bugs
+    for i in indexes_to_pop:
+        state_rows.pop(i - popped)
+        popped += 1
     return state_rows
 
 
