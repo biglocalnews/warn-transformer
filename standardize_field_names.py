@@ -4,6 +4,7 @@
 # For each state, it should map a subset of fields to some minimal set of standardized fields
 # (e.g. Company Name -> employer, Number of Employees Affected -> number_affected, etc.).
 import csv
+import re
 import os
 
 from pathlib import Path
@@ -49,7 +50,7 @@ def main():
     output_csv = '{}/standardize_field_names.csv'.format(OUTPUT_DIR)
     # we will put our dict rows here
     output_rows = []
-    # open each state's output file from exports/ directory.
+    # extract each state's .csv from exports/ directory.
     for filename in os.listdir(INPUT_DIR):
         print(f'Processing state {filename}...')
         source_file = str(Path(INPUT_DIR).joinpath(filename))
@@ -61,10 +62,10 @@ def main():
         except UnicodeDecodeError:
             state_rows = process_file(source_file, filename, state_postal, encoding="utf-8")
 
-        # run state-specific standardizations such as data cleaning, restructuring
-        state_rows = standardize_state(state_rows, state_postal)
         # smooth out lengths of rows and columns to prevent data errors
         state_rows = standardize_rows_columns(state_rows, state_postal)
+        # run state-specific standardizations such as data cleaning, restructuring
+        state_rows = standardize_state(state_rows, state_postal)
 
         state_rows = add_state_field(state_rows, STANDARDIZED_FIELD_NAMES, state_postal)
         # convert data to a list of dicts, and merge redundant columns non-destructively
@@ -121,7 +122,8 @@ def standardize_header(header_row, FIELD, state):
             field_name = FIELD[8]
         elif field_name in LAYOFF_TYPE_MAP:
             field_name = FIELD[9]
-        elif field_name in AMBIGUOUS_MAP:  # determine per-state
+        elif field_name in AMBIGUOUS_MAP:
+            # here we use a precise touch to replace header names per-state when we know what they *should* be
             field_name = standardize_header_for_state(field_name, FIELD, state)
         else:
             # make no changes to other fields
@@ -182,6 +184,7 @@ def standardize_state(state_rows, state):
     elif state == 'WI':
         return standardize_WI(state_rows)
     elif state == 'CT':
+        return standardize_CT(state_rows)
         # TODO: im going to put some comments here about a state we might eventually want to alter our strategy for
         # for CT, the mapping merges columns "closing date" and "layoff date" into the "date effective column".
         # CT has a pretty weird system where the dates are the same for the most part but sometimes they're not;
@@ -191,6 +194,8 @@ def standardize_state(state_rows, state):
         pass
     else:
         pass
+    # run this cleaning code again to make doubly sure any data updates didnt cause asymmetry in the data
+    state_rows = standardize_rows_columns(state_rows, state)
     return state_rows
 
 # the goal of this function is to convert to dict
@@ -267,13 +272,33 @@ def standardize_WI(state_rows, state="WI"):
                 indexes_to_pop.append(row_idx - 1)
                 # and remove the revision text from company name
                 current_company_field = current_company_field.split(" - Revision")[0]
-                print(f"{current_company_field}, {row_idx}")
             row[0] = current_company_field
     popped = 0
     # remove rows after looping to prevent looping bugs
     for i in indexes_to_pop:
         state_rows.pop(i - popped)
         popped += 1
+    return state_rows
+
+    # input/output: list of state's rows including header
+def standardize_CT(state_rows, state="CT"):
+    # use a precise touch to convert closure:"yes" and "no" into layoff data
+    state_rows[0].append("layoff_type")  # add field
+    for row_idx, row in enumerate(state_rows):
+        if not row_idx == 0:
+            # extract data
+            closure_str = format_str(row[5])
+            layoff_type = ''
+            if closure_str.startswith(format_str('yes')):
+                layoff_type = 'closure'
+            elif closure_str.startswith(format_str('no')):
+                layoff_type = 'Layoff'
+            else:
+                layoff_type = ''
+            # add value for Layoff Type field
+            row.append(layoff_type)
+            state_rows[row_idx] = row
+
     return state_rows
 
 
