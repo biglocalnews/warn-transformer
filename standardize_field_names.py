@@ -20,7 +20,7 @@ WARN_ANALYSIS_PATH = str(Path(ETL_DIR, 'analysis'))
 OUTPUT_DIR = WARN_ANALYSIS_PATH
 
 
-# remove spaces, normalize case, remove underscores
+# remove spaces, normalize to lowercase, remove underscores
 def format_str(str):
     return str.lower().replace(" ", "").replace("_", "")
 
@@ -30,20 +30,21 @@ def format_list(list):
     return [format_str(x) for x in list]
 
 
-# Let's make a list of the fields we want each state to map onto:
-# NOTE: any alternation to the length/ order of this list should also alter the standardize_header() func
-STANDARDIZED_FIELD_NAMES = ['state', 'employer', 'number_affected', 'date_received_raw', 'date_effective_raw', 'location', 'parent_location', 'industry', 'notes', 'layoff_type']
+# Let's make a list of the fields we want each state to map onto (case-, whitespace-, underscore-insensitive):
+# NOTE: any alteration to the length/ order of this list should also check every instance of STANDARDIZED_FIELD_NAMES
+STANDARDIZED_FIELD_NAMES = ['state', 'employer', 'number_affected', 'date_received_raw', 'date_layoff_raw', 'date_closure_raw', 'location', 'parent_location', 'industry', 'notes', 'layoff_type']
 # Replace these field names with standardized field names
 EMPLOYER_MAP = format_list(['employer', 'company name', 'company', 'Organization Name', 'affected company'])
 NUMBER_AFFECTED_MAP = format_list(['number affected', 'employees affected', 'affected empoyees', 'employees', 'workforce affected', 'planned#affectedemployees', 'Number toEmployees Affected', '# of workers', 'AffectedWorkers', '# Affected', 'number_of_employees_affected', 'jobs affected', 'total employees', 'number workers'])
 DATE_RECEIVED_MAP = format_list(['date received', 'initial report date', 'date of notice', 'notice date', 'state notification date', 'warn date', 'noticercvd', 'received date'])
-DATE_EFFECTIVE_MAP = format_list(['date effective', 'layoff date', 'closing date', 'LayoffBeginDate', 'layoff start date', 'effective date', 'planned starting date', 'effective layoff date', 'LO/CL date', 'impact date', 'typeoflayoff'])
+DATE_LAYOFF_MAP = format_list(['layoff date', 'LayoffBeginDate', 'layoff start date', 'effective layoff date'])
+DATE_CLOSURE_MAP = format_list(['closing date'])
 INDUSTRY_MAP = format_list(['industry', 'description of work', 'NAICSDescription'])
 LOCATION_MAP = format_list(['location', 'location city', 'region', 'county', 'city', 'address', 'zip', 'zipcode', 'lwib_area', 'location of layoffs', 'layoff location'])
 PARENT_LOCATION_MAP = format_list(['company address', 'company address - 2', 'city/town'])
 NOTES_MAP = format_list(['notes', 'misc'])
-LAYOFF_TYPE_MAP = format_list(['layoff type', 'Type', 'Notice Type', 'Code Type', 'Closure Layoff', 'type code', 'warn type'])
-AMBIGUOUS_MAP = format_list(['date', 'state'])  # require state-by-state approach
+LAYOFF_TYPE_MAP = format_list(['layoff type', 'Type', 'Notice Type', 'Code Type', 'Closure Layoff', 'type code', 'warn type', 'typeoflayoff', 'Closing or Layoff'])  # refers to closing vs layoff (CL/LO)
+AMBIGUOUS_MAP = format_list(['date', 'date effective', 'effective date', 'LO/CL date', 'impact date', 'planned starting date', 'state'])  # require state-by-state approach
 
 def main():
     Path(OUTPUT_DIR).mkdir(parents=True, exist_ok=True)
@@ -62,12 +63,14 @@ def main():
         except UnicodeDecodeError:
             state_rows = process_file(source_file, filename, state_postal, encoding="utf-8")
 
-        # smooth out lengths of rows and columns to prevent data errors
+        # this function will smooth out lengths of rows and columns to prevent data errors
         state_rows = standardize_rows_columns(state_rows, state_postal)
         # run state-specific standardizations such as data cleaning, restructuring
         state_rows = standardize_state(state_rows, state_postal)
-
+        state_rows = standardize_rows_columns(state_rows, state_postal)
+        # add state field
         state_rows = add_state_field(state_rows, STANDARDIZED_FIELD_NAMES, state_postal)
+        state_rows = standardize_rows_columns(state_rows, state_postal)
         # convert data to a list of dicts, and merge redundant columns non-destructively
         # for example, two fields that map to 'location' with be combined into one field,
         # separated by newlines
@@ -101,30 +104,32 @@ def process_file(source_file, filename, state_postal, encoding=""):
 
 # replace field names that match our map
 # also make state-by-state header changes using standardize_header_For_state()
-def standardize_header(header_row, FIELD, state):
+def standardize_header(header_row, STANDARDIZED_FIELD_NAMES, state):
     for field_idx, field_name in enumerate(header_row):
         field_name = format_str(field_name)  # standardize strings to lowercase and no whitespace
         if field_name in EMPLOYER_MAP:
-            field_name = FIELD[1]
+            field_name = STANDARDIZED_FIELD_NAMES[1]
         elif field_name in NUMBER_AFFECTED_MAP:
-            field_name = FIELD[2]
+            field_name = STANDARDIZED_FIELD_NAMES[2]
         elif field_name in DATE_RECEIVED_MAP:
-            field_name = FIELD[3]
-        elif field_name in DATE_EFFECTIVE_MAP:
-            field_name = FIELD[4]
+            field_name = STANDARDIZED_FIELD_NAMES[3]
+        elif field_name in DATE_LAYOFF_MAP:
+            field_name = STANDARDIZED_FIELD_NAMES[4]
+        elif field_name in DATE_CLOSURE_MAP:
+            field_name = STANDARDIZED_FIELD_NAMES[5]
         elif field_name in LOCATION_MAP:
-            field_name = FIELD[5]
+            field_name = STANDARDIZED_FIELD_NAMES[6]
         elif field_name in PARENT_LOCATION_MAP:
-            field_name = FIELD[6]
+            field_name = STANDARDIZED_FIELD_NAMES[7]
         elif field_name in INDUSTRY_MAP:
-            field_name = FIELD[7]
+            field_name = STANDARDIZED_FIELD_NAMES[8]
         elif field_name in NOTES_MAP:
-            field_name = FIELD[8]
+            field_name = STANDARDIZED_FIELD_NAMES[9]
         elif field_name in LAYOFF_TYPE_MAP:
-            field_name = FIELD[9]
+            field_name = STANDARDIZED_FIELD_NAMES[10]
         elif field_name in AMBIGUOUS_MAP:
             # here we use a precise touch to replace header names per-state when we know what they *should* be
-            field_name = standardize_header_for_state(field_name, FIELD, state)
+            field_name = standardize_header_for_state(field_name, STANDARDIZED_FIELD_NAMES, state)
         else:
             # make no changes to other fields
             print(f"Info: Unhandled field {field_name} in {state}.csv")
@@ -133,15 +138,22 @@ def standardize_header(header_row, FIELD, state):
     return header_row
 
 
-def standardize_header_for_state(field_name, FIELD, state):
-    if state == "sd":
+def standardize_header_for_state(field_name, STANDARDIZED_FIELD_NAMES, state):
+    if state == "SD":
         if field_name == "date":
             # map date field to WARN notice received date
-            field_name = FIELD[3]
+            field_name = STANDARDIZED_FIELD_NAMES[3]
     elif state == 'VA':
         if field_name == 'state':
             # map parent company state to 'parent_location' field
-            field_name = FIELD[6]
+            field_name = STANDARDIZED_FIELD_NAMES[7]
+    elif state == 'AL':
+        if field_name == 'planned starting date':
+            # since each row varies between closing and layoff for the same column,
+            # we will take care of this field-by-field in standardize_AL()
+            pass
+    else:
+        print(f"Info: Unhandled header field standardization {field_name} for {state}.csv")
 
 # match row length with header length
 # input: list of state rows
@@ -154,7 +166,7 @@ def standardize_rows_columns(state_rows, state):
         if row == [] or not row:
             state_rows_body.pop(row_idx)
         elif len(state_rows_header) < len(row):
-            print(f"Info: Found more values than headers in {state}.csv, line {row_idx}. Adding header for unknown field...")
+            # print(f"Info: Found more values than headers in {state}.csv, line {row_idx}. Adding header for unknown field...")
             while len(state_rows_header) < len(row):
                 field_identifier = len(state_rows_body[0]) - len(state_rows_header)
                 # adds column header so the state can be processed w/o error
@@ -162,16 +174,16 @@ def standardize_rows_columns(state_rows, state):
     # make sure all fields with a column header have enough fields of data
     for row_idx, row in enumerate(state_rows_body):
         if len(row) < len(state_rows_header):
-            print(f"Info: Found more headers than fields in {state}.csv, line {row_idx}. Adding blank string to field...")
+            # print(f"Info: Found more headers than fields in {state}.csv, line {row_idx}. Adding blank string to field...")
             while len(row) < len(state_rows_header):
                 row.append('')
     return state_rows
 
 # this step is the counterpart of the step above;
 # input/output: state rows list
-def add_state_field(state_rows, FIELD, state):
+def add_state_field(state_rows, STANDARDIZED_FIELD_NAMES, state):
     # add 'state' field to header
-    state_rows[0].append(FIELD[0])
+    state_rows[0].append(STANDARDIZED_FIELD_NAMES[0])
     for row in state_rows:
         row.append(state)  # store 'state' field in body
     return state_rows
@@ -179,12 +191,14 @@ def add_state_field(state_rows, FIELD, state):
 # run state-specific processing
 # input/output: a list of state rows (including header)
 def standardize_state(state_rows, state):
-    if state == 'VA':
-        return standardize_VA(state_rows)
+    if state == 'AL':
+        return standardize_AL(state_rows, state)
+    elif state == 'VA':
+        return standardize_VA(state_rows, state)
     elif state == 'WI':
-        return standardize_WI(state_rows)
+        return standardize_WI(state_rows, state)
     elif state == 'CT':
-        return standardize_CT(state_rows)
+        return standardize_CT(state_rows, state)
         # TODO: im going to put some comments here about a state we might eventually want to alter our strategy for
         # for CT, the mapping merges columns "closing date" and "layoff date" into the "date effective column".
         # CT has a pretty weird system where the dates are the same for the most part but sometimes they're not;
@@ -194,8 +208,6 @@ def standardize_state(state_rows, state):
         pass
     else:
         pass
-    # run this cleaning code again to make doubly sure any data updates didnt cause asymmetry in the data
-    state_rows = standardize_rows_columns(state_rows, state)
     return state_rows
 
 # the goal of this function is to convert to dict
@@ -236,12 +248,47 @@ def merge_to_dict(state_rows):
         state_rows_as_dicts.append(newdict)
     return state_rows_as_dicts
 
+# input/output: list of state's rows including header
+def standardize_AL(state_rows, state):
+    # create date_closure_raw and date_layoff_raw fields,
+    # and for each row sort the date into one of those two
+    if not "date_layoff_raw" in state_rows[0]:
+        state_rows[0].append("date_layoff_raw")  # add field to header
+    if not "date_closure_raw" in state_rows[0]:
+        state_rows[0].append("date_closure_raw")  # add field to header
+    layoff_index = state_rows[0].index("date_layoff_raw")
+    closure_index = state_rows[0].index("date_closure_raw")
+
+    state_rows[0].append("date_closure_raw")  # add field to header
+    for row_idx, row in enumerate(state_rows):
+        if not row_idx == 0:
+            # first, standardize the closure/layoff text for higher-quality data
+            closure_layoff_str = row[0]
+            closure_layoff_str = format_str(closure_layoff_str)
+            closure_layoff_str = ''.join(char for char in closure_layoff_str if char.isalnum())  # remove non-alphanumeric chars (*)
+            if closure_layoff_str == 'closing':
+                closure_layoff_str = 'closure'
+            state_rows[row_idx][0] = closure_layoff_str
+
+            # extract CL/LO boolean value
+            is_closing = False
+            if closure_layoff_str.startswith('c'):
+                is_closing = True
+            # add date into correct row depending on CL/LO boolean
+            date = row[2]
+            if not is_closing:
+                row.insert(closure_index, '')
+                row.insert(layoff_index, date)  # add to date_layoff col
+            elif is_closing:
+                row.insert(layoff_index, '')
+                row.insert(closure_index, date)  # add to date_closure col
+    return state_rows
 
 # input/output: list of state's rows including header
-def standardize_VA(state_rows, state="VA"):
+def standardize_VA(state_rows, state):
     # special merge "closure" and "Layoff" columns into "layoff type" column:
     #   "closure: Yes", "Layoff: No" => "Layoff Type: Closure"
-    state_rows[0].append("Layoff Type")  # add field
+    state_rows[0].append("layoff_type")  # add field to header
     for row_idx, row in enumerate(state_rows):
         if not row_idx == 0:
             # extract data
@@ -262,7 +309,7 @@ def standardize_VA(state_rows, state="VA"):
 
 
 # input/output: list of state's rows including header
-def standardize_WI(state_rows, state="WI"):
+def standardize_WI(state_rows, state):
     indexes_to_pop = []
     for row_idx, row in enumerate(state_rows):
         if not row_idx == 0:
@@ -281,9 +328,9 @@ def standardize_WI(state_rows, state="WI"):
     return state_rows
 
     # input/output: list of state's rows including header
-def standardize_CT(state_rows, state="CT"):
+def standardize_CT(state_rows, state):
     # use a precise touch to convert closure:"yes" and "no" into layoff data
-    state_rows[0].append("layoff_type")  # add field
+    state_rows[0].append("layoff_type")  # add field to header
     for row_idx, row in enumerate(state_rows):
         if not row_idx == 0:
             # extract data
