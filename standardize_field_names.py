@@ -252,9 +252,9 @@ def merge_to_dict(state_rows):
 def standardize_AL(state_rows, state):
     # create date_closure_raw and date_layoff_raw fields,
     # and for each row sort the date into one of those two
-    if not "date_layoff_raw" in state_rows[0]:
+    if "date_layoff_raw" not in state_rows[0]:
         state_rows[0].append("date_layoff_raw")  # add field to header
-    if not "date_closure_raw" in state_rows[0]:
+    if "date_closure_raw" not in state_rows[0]:
         state_rows[0].append("date_closure_raw")  # add field to header
     layoff_index = state_rows[0].index("date_layoff_raw")
     closure_index = state_rows[0].index("date_closure_raw")
