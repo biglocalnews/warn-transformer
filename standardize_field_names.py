@@ -34,7 +34,7 @@ def format_list(list):
 # NOTE: any alteration to the length/ order of this list should also check every instance of STANDARDIZED_FIELD_NAMES
 STANDARDIZED_FIELD_NAMES = ['state', 'employer', 'number_affected', 'date_received_raw', 'date_layoff_raw', 'date_closure_raw', 'location', 'parent_location', 'industry', 'notes', 'layoff_type']
 # Replace these field names with standardized field names
-EMPLOYER_MAP = format_list(['employer', 'company name', 'company', 'Organization Name', 'affected company'])
+EMPLOYER_MAP = format_list(['employer', 'company name', 'company', 'Organization Name', 'affected company', 'name of company'])
 NUMBER_AFFECTED_MAP = format_list(['number affected', 'employees affected', 'affected empoyees', 'employees', 'workforce affected', 'planned#affectedemployees', 'Number toEmployees Affected', '# of workers', 'AffectedWorkers', '# Affected', 'number_of_employees_affected', 'jobs affected', 'total employees', 'number workers'])
 DATE_RECEIVED_MAP = format_list(['date received', 'initial report date', 'date of notice', 'notice date', 'state notification date', 'warn date', 'noticercvd', 'received date'])
 DATE_LAYOFF_MAP = format_list(['layoff date', 'LayoffBeginDate', 'layoff start date', 'effective layoff date'])
@@ -44,7 +44,7 @@ LOCATION_MAP = format_list(['location', 'location city', 'region', 'county', 'ci
 PARENT_LOCATION_MAP = format_list(['company address', 'company address - 2', 'city/town'])
 NOTES_MAP = format_list(['notes', 'misc'])
 LAYOFF_TYPE_MAP = format_list(['layoff type', 'Type', 'Notice Type', 'Code Type', 'Closure Layoff', 'type code', 'warn type', 'typeoflayoff', 'Closing or Layoff'])  # refers to closing vs layoff (CL/LO)
-AMBIGUOUS_MAP = format_list(['date', 'date effective', 'effective date', 'LO/CL date', 'impact date', 'planned starting date', 'state'])  # require state-by-state approach
+AMBIGUOUS_MAP = format_list(['date', 'date effective', 'effective date', 'LO/CL date', 'impact date', 'date of impact', 'planned starting date', 'state'])  # require state-by-state approach
 
 def main():
     Path(OUTPUT_DIR).mkdir(parents=True, exist_ok=True)
@@ -94,7 +94,7 @@ def process_file(source_file, filename, state_postal, encoding=""):
         # store state's rows
         for row_idx, row in enumerate(state_csv):
             # ignore blank rows
-            if row:
+            if row and row.count('') != len(row):
                 if row_idx == 0:
                     # standardize fields in the header!
                     row = standardize_header(row, STANDARDIZED_FIELD_NAMES, state_postal)
@@ -106,7 +106,7 @@ def process_file(source_file, filename, state_postal, encoding=""):
 # also make state-by-state header changes using standardize_header_For_state()
 def standardize_header(header_row, STANDARDIZED_FIELD_NAMES, state):
     for field_idx, field_name in enumerate(header_row):
-        field_name = format_str(field_name)  # standardize strings to lowercase and no whitespace
+        field_name = format_str(field_name)  # standardize strings to lowercase, no space, and no whitespace
         if field_name in EMPLOYER_MAP:
             field_name = STANDARDIZED_FIELD_NAMES[1]
         elif field_name in NUMBER_AFFECTED_MAP:
@@ -137,23 +137,29 @@ def standardize_header(header_row, STANDARDIZED_FIELD_NAMES, state):
         header_row[field_idx] = field_name
     return header_row
 
-
+# called by standardize_header() to make state-specific header mappings for ambiguous fields
+# for example, the field 'date' could mean different things in different states. for SD, it means WARN date.
 def standardize_header_for_state(field_name, STANDARDIZED_FIELD_NAMES, state):
     if state == "SD":
-        if field_name == "date":
+        if field_name == format_str("date"):
             # map date field to WARN notice received date
             field_name = STANDARDIZED_FIELD_NAMES[3]
     elif state == 'VA':
-        if field_name == 'state':
+        if field_name == format_str('state'):
             # map parent company state to 'parent_location' field
             field_name = STANDARDIZED_FIELD_NAMES[7]
     elif state == 'AL':
-        if field_name == 'planned starting date':
-            # since each row varies between closing and layoff for the same column,
-            # we will take care of this field-by-field in standardize_AL()
+        if field_name == format_str('planned starting date'):
+            # since each row varies between closing and layoff for the same date column,
+            # we will sort into 'closing' and 'layoff' field-by-field in standardize_AL()
             pass
+    elif state == 'MT':
+        if field_name == format_str('date of impact'):
+            # map date field to layoff date
+            field_name = STANDARDIZED_FIELD_NAMES[4]
     else:
         print(f"Info: Unhandled header field standardization {field_name} for {state}.csv")
+    return field_name
 
 # match row length with header length
 # input: list of state rows
