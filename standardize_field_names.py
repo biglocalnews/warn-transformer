@@ -137,28 +137,29 @@ def standardize_header(header_row, STANDARDIZED_FIELD_NAMES, state):
         header_row[field_idx] = field_name
     return header_row
 
-
+# called by standardize_header() to make state-specific header mappings for ambiguous fields
+# for example, the field 'date' could mean different things in different states. for SD, it means WARN date.
 def standardize_header_for_state(field_name, STANDARDIZED_FIELD_NAMES, state):
     if state == "SD":
-        if field_name == "date":
+        if field_name == format_str("date"):
             # map date field to WARN notice received date
             field_name = STANDARDIZED_FIELD_NAMES[3]
     elif state == 'VA':
-        if field_name == 'state':
+        if field_name == format_str('state'):
             # map parent company state to 'parent_location' field
             field_name = STANDARDIZED_FIELD_NAMES[7]
     elif state == 'AL':
-        if field_name == 'plannedstartingdate':
-            # since each row varies between closing and layoff for the same column,
-            # we will take care of this field-by-field in standardize_AL()
+        if field_name == format_str('planned starting date'):
+            # since each row varies between closing and layoff for the same date column,
+            # we will sort into 'closing' and 'layoff' field-by-field in standardize_AL()
             pass
     elif state == 'MT':
-        if field_name == 'dateofimpact':
+        if field_name == format_str('date of impact'):
             # map date field to layoff date
             field_name = STANDARDIZED_FIELD_NAMES[4]
-            pass
     else:
         print(f"Info: Unhandled header field standardization {field_name} for {state}.csv")
+    return field_name
 
 # match row length with header length
 # input: list of state rows
