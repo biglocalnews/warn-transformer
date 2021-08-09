@@ -199,6 +199,8 @@ def add_state_field(state_rows, STANDARDIZED_FIELD_NAMES, state):
 def standardize_state(state_rows, state):
     if state == 'AL':
         return standardize_AL(state_rows, state)
+    elif state == 'DC':
+        return standardize_DC(state_rows, state)
     elif state == 'VA':
         return standardize_VA(state_rows, state)
     elif state == 'WI':
@@ -265,7 +267,6 @@ def standardize_AL(state_rows, state):
     layoff_index = state_rows[0].index("date_layoff_raw")
     closure_index = state_rows[0].index("date_closure_raw")
 
-    state_rows[0].append("date_closure_raw")  # add field to header
     for row_idx, row in enumerate(state_rows):
         if not row_idx == 0:
             # first, standardize the closure/layoff text for higher-quality data
@@ -282,6 +283,34 @@ def standardize_AL(state_rows, state):
                 is_closing = True
             # add date into correct row depending on CL/LO boolean
             date = row[2]
+            if not is_closing:
+                row.insert(closure_index, '')
+                row.insert(layoff_index, date)  # add to date_layoff col
+            elif is_closing:
+                row.insert(layoff_index, '')
+                row.insert(closure_index, date)  # add to date_closure col
+    return state_rows
+
+# input/output: list of state's rows including header
+def standardize_DC(state_rows, state):
+    # create date_closure_raw and date_layoff_raw fields,
+    # and for each row sort the date into one of those two
+    if "date_layoff_raw" not in state_rows[0]:
+        state_rows[0].append("date_layoff_raw")  # add field to header
+    if "date_closure_raw" not in state_rows[0]:
+        state_rows[0].append("date_closure_raw")  # add field to header
+    layoff_index = state_rows[0].index("date_layoff_raw")
+    closure_index = state_rows[0].index("date_closure_raw")
+
+    # use "code type" column to sort "effective layoff date" into closing vs layoff date
+    # Code Type: 1=Layoff, 2=Permanent Closures
+    for row_idx, row in enumerate(state_rows):
+        if not row_idx == 0:
+            # extract CL/LO boolean value
+            closure_layoff_str = str(row[4])  # extract "code type" col in dc.csv
+            is_closing = closure_layoff_str.contains('2')
+            # add date into correct row depending on CL/LO boolean
+            date = str(row[3])  # extract "effective layoff date" col
             if not is_closing:
                 row.insert(closure_index, '')
                 row.insert(layoff_index, date)  # add to date_layoff col
