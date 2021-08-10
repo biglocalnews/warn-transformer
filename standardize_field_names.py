@@ -201,6 +201,8 @@ def standardize_state(state_rows, state):
         return standardize_AL(state_rows, state)
     elif state == 'DC':
         return standardize_DC(state_rows, state)
+    elif state == 'IN':
+        return standardize_IN(state_rows, state)
     elif state == 'VA':
         return standardize_VA(state_rows, state)
     elif state == 'WI':
@@ -258,14 +260,8 @@ def merge_to_dict(state_rows):
 
 # input/output: list of state's rows including header
 def standardize_AL(state_rows, state):
-    # create date_closure_raw and date_layoff_raw fields,
-    # and for each row sort the date into one of those two
-    if "date_layoff_raw" not in state_rows[0]:
-        state_rows[0].append("date_layoff_raw")  # add field to header
-    if "date_closure_raw" not in state_rows[0]:
-        state_rows[0].append("date_closure_raw")  # add field to header
-    layoff_index = state_rows[0].index("date_layoff_raw")
-    closure_index = state_rows[0].index("date_closure_raw")
+    # create new columns and get their indices
+    state_rows, layoff_index, closure_index = create_layoff_closure_date_fields(state_rows)
 
     for row_idx, row in enumerate(state_rows):
         if not row_idx == 0:
@@ -278,45 +274,46 @@ def standardize_AL(state_rows, state):
             state_rows[row_idx][0] = closure_layoff_str
 
             # extract CL/LO boolean value
-            is_closing = False
-            if closure_layoff_str.startswith('c'):
-                is_closing = True
+            is_closing = is_closing_str(closure_layoff_str)
             # add date into correct row depending on CL/LO boolean
             date = row[2]
-            if not is_closing:
-                row.insert(closure_index, '')
-                row.insert(layoff_index, date)  # add to date_layoff col
-            elif is_closing:
-                row.insert(layoff_index, '')
-                row.insert(closure_index, date)  # add to date_closure col
+            row = add_lo_cl_date_for_row(row, date, is_closing, layoff_index, closure_index)
     return state_rows
 
 # input/output: list of state's rows including header
 def standardize_DC(state_rows, state):
-    # create date_closure_raw and date_layoff_raw fields,
-    # and for each row sort the date into one of those two
-    if "date_layoff_raw" not in state_rows[0]:
-        state_rows[0].append("date_layoff_raw")  # add field to header
-    if "date_closure_raw" not in state_rows[0]:
-        state_rows[0].append("date_closure_raw")  # add field to header
-    layoff_index = state_rows[0].index("date_layoff_raw")
-    closure_index = state_rows[0].index("date_closure_raw")
-
+    # create new columns and get their indices
+    state_rows, layoff_index, closure_index = create_layoff_closure_date_fields(state_rows)
     # use "code type" column to sort "effective layoff date" into closing vs layoff date
     # Code Type: 1=Layoff, 2=Permanent Closures
+    lo_cl_col = 4  # extract "code type" col
+    lo_cl_date_col = 3  # extract 'effective layoff date' col
     for row_idx, row in enumerate(state_rows):
         if not row_idx == 0:
             # extract CL/LO boolean value
-            closure_layoff_str = str(row[4])  # extract "code type" col in dc.csv
-            is_closing = closure_layoff_str.contains('2')
-            # add date into correct row depending on CL/LO boolean
-            date = str(row[3])  # extract "effective layoff date" col
-            if not is_closing:
-                row.insert(closure_index, '')
-                row.insert(layoff_index, date)  # add to date_layoff col
-            elif is_closing:
-                row.insert(layoff_index, '')
-                row.insert(closure_index, date)  # add to date_closure col
+            closure_layoff_str = str(row[lo_cl_col])
+            is_closing = is_closing_str(closure_layoff_str, '2')
+            # add date into correct col depending on CL/LO boolean
+            date_to_add = str(row[lo_cl_date_col])  # extract "effective layoff date" col
+            row = add_lo_cl_date_for_row(row, date_to_add, is_closing, layoff_index, closure_index)
+    return state_rows
+
+# input/output: list of state's rows including header
+def standardize_IN(state_rows, state):
+    # create new columns and get their indices
+    state_rows, layoff_index, closure_index = create_layoff_closure_date_fields(state_rows)
+    # use "notice type" column to sort "effective layoff date" into closing vs layoff date
+    # Code Type: LO=Layoff, CL=Closure
+    lo_cl_col = 7  # extract "notice type" col
+    lo_cl_date_col = 4  # extract 'LO/CL date' col
+    for row_idx, row in enumerate(state_rows):
+        if not row_idx == 0:
+            # extract LO/CL boolean value
+            closure_layoff_str = str(row[lo_cl_col])
+            is_closing = is_closing_str(closure_layoff_str, 'cl')
+            # add date into correct col depending on CL/LO boolean
+            date_to_add = str(lo_cl_date_col)
+            row = add_lo_cl_date_for_row(row, date_to_add, is_closing, layoff_index, closure_index)
     return state_rows
 
 # input/output: list of state's rows including header
@@ -327,17 +324,12 @@ def standardize_VA(state_rows, state):
     for row_idx, row in enumerate(state_rows):
         if not row_idx == 0:
             # extract data
-            closure = format_str(row[14]) == 'yes'
-            layoff = format_str(row[15]) == 'yes'
+            is_closing = is_closing_str(row[14], 'yes')
             layoff_type = ''
-            if not closure and not layoff:
-                layoff_type = 'None'
-            elif not closure and layoff:
-                layoff_type = 'Layoff'
-            elif closure and not layoff:
+            if is_closing:
                 layoff_type = 'Closure'
             else:
-                layoff_type = 'Both'
+                layoff_type = 'Layoff'
             # add value for Layoff Type field
             row.append(layoff_type)
     return state_rows
@@ -362,7 +354,7 @@ def standardize_WI(state_rows, state):
         popped += 1
     return state_rows
 
-    # input/output: list of state's rows including header
+# input/output: list of state's rows including header
 def standardize_CT(state_rows, state):
     # use a precise touch to convert closure:"yes" and "no" into layoff data
     state_rows[0].append("layoff_type")  # add field to header
@@ -382,6 +374,37 @@ def standardize_CT(state_rows, state):
             state_rows[row_idx] = row
 
     return state_rows
+
+
+# create date_layoff_raw and date_closure_raw fields if not already existing
+# and return the new data + the corresponding index of each of those fields
+def create_layoff_closure_date_fields(state_rows):
+    if "date_layoff_raw" not in state_rows[0]:
+        state_rows[0].append("date_layoff_raw")  # add field to header
+    if "date_closure_raw" not in state_rows[0]:
+        state_rows[0].append("date_closure_raw")  # add field to header
+    layoff_index = state_rows[0].index("date_layoff_raw")
+    closure_index = state_rows[0].index("date_closure_raw")
+    return state_rows, layoff_index, closure_index
+
+
+# returns boolean of whether or not a given string indicates a closing
+# any string containing the text in "key" will be considered to denote a closing
+def is_closing_str(string_to_check, key='cl'):
+    is_closing = False
+    if key in format_str(string_to_check):
+        is_closing = True
+    return is_closing
+
+
+def add_lo_cl_date_for_row(row, date, is_closing, layoff_index, closure_index):
+    if not is_closing:
+        row.insert(closure_index, '')
+        row.insert(layoff_index, date)  # add to date_layoff col
+    elif is_closing:
+        row.insert(layoff_index, '')
+        row.insert(closure_index, date)  # add to date_closure col
+    return row
 
 
 if __name__ == '__main__':
