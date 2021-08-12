@@ -37,8 +37,10 @@ STANDARDIZED_FIELD_NAMES = ['state', 'employer', 'number_affected', 'date_receiv
 EMPLOYER_MAP = format_list(['employer', 'company name', 'company', 'Organization Name', 'affected company', 'name of company'])
 NUMBER_AFFECTED_MAP = format_list(['number affected', 'employees affected', 'affected empoyees', 'employees', 'workforce affected', 'planned#affectedemployees', 'Number toEmployees Affected', '# of workers', 'AffectedWorkers', '# Affected', 'number_of_employees_affected', 'jobs affected', 'total employees', 'number workers'])
 DATE_RECEIVED_MAP = format_list(['NoticeRcvd', 'date received', 'initial report date', 'date of notice', 'notice date', 'state notification date', 'warn date', 'noticercvd', 'received date'])
+# each state that maps to LAYOFF_MAP will unequivocally indicate a "layoff date" (and not a "closing date").
+# see "ambiguous map" and make a custom approach if the mapping varies from row to row.
 DATE_LAYOFF_MAP = format_list(['layoff date', 'layoff start date'])
-DATE_CLOSURE_MAP = format_list(['closing date'])
+DATE_CLOSURE_MAP = format_list(['closing_date'])
 INDUSTRY_MAP = format_list(['industry', 'description of work', 'NAICSDescription'])
 LOCATION_MAP = format_list(['location', 'location city', 'region', 'county', 'city', 'address', 'zip', 'zipcode', 'lwib_area', 'location of layoffs', 'layoff location'])
 PARENT_LOCATION_MAP = format_list(['company address', 'company address - 2', 'city/town'])
@@ -260,15 +262,6 @@ def standardize_state(state_rows, state):
         return standardize_WA(state_rows, state)
     elif state == 'MO':
         return standardize_MO(state_rows, state)
-    elif state == 'CT':
-        return standardize_CT(state_rows, state)
-        # TODO: im going to put some comments here about a state we might eventually want to alter our strategy for
-        # for CT, the mapping merges columns "closing date" and "layoff date" into the "date effective column".
-        # CT has a pretty weird system where the dates are the same for the most part but sometimes they're not;
-        # in those cases, you'll have two dates listed under date_effective and there's no explanation in the data.
-        # we might want to create a new column for data to map to, in case this data is considered substatial or worthwhile.
-        # would require some looking into, maybe speaking with CT about it.
-        pass
     else:
         pass
     return state_rows
@@ -428,14 +421,6 @@ def standardize_WI(state_rows, state):
         else:
             row = sort_lo_cl_date(row, layoff_index, closure_index, lo_cl_col, date_col, closing_str)
     return state_rows
-
-# input/output: list of state's rows including header
-# def standardize_CT(state_rows, state):
-#     closing_str = 'yes'  # if the value in lo_cl_col contains closing_str, the row is a closing
-#     lo_cl_col = 6  # "type" col
-#     date_col = 7  # "layoff date" col
-#     state_rows = standardize_closing_layoff(state_rows, closing_str, lo_cl_col, date_col)
-#     return state_rows
 
 
 # input/output: list of state's rows including header
