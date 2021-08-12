@@ -36,17 +36,18 @@ STANDARDIZED_FIELD_NAMES = ['state', 'employer', 'number_affected', 'date_receiv
 # Replace these field names with standardized field names
 EMPLOYER_MAP = format_list(['employer', 'company name', 'company', 'Organization Name', 'affected company', 'name of company'])
 NUMBER_AFFECTED_MAP = format_list(['number affected', 'employees affected', 'affected empoyees', 'employees', 'workforce affected', 'planned#affectedemployees', 'Number toEmployees Affected', '# of workers', 'AffectedWorkers', '# Affected', 'number_of_employees_affected', 'jobs affected', 'total employees', 'number workers'])
-DATE_RECEIVED_MAP = format_list(['NoticeRcvd', 'date received', 'initial report date', 'date of notice', 'notice date', 'state notification date', 'warn date', 'noticercvd', 'received date'])
+DATE_RECEIVED_MAP = format_list(['NoticeRcvd', 'date received', 'initial report date', 'date of notice', 'notice date', 'state notification date', 'warn date', 'noticercvd', 'received date', 'notification date'])
 # each state that maps to LAYOFF_MAP will unequivocally indicate a "layoff date" (and not a "closing date").
 # see "ambiguous map" and make a custom approach if the mapping varies from row to row.
-DATE_LAYOFF_MAP = format_list(['layoff date', 'layoff start date'])
+# Note: may add duplicate entires from ambiguous map in case we want all closing dates to have pairing layoff dates (since all closings are layoffs)
+DATE_LAYOFF_MAP = format_list(['layoff date'])
 DATE_CLOSURE_MAP = format_list(['closing_date'])
 INDUSTRY_MAP = format_list(['industry', 'description of work', 'NAICSDescription'])
-LOCATION_MAP = format_list(['location', 'location city', 'region', 'county', 'city', 'address', 'zip', 'zipcode', 'lwib_area', 'location of layoffs', 'layoff location'])
+LOCATION_MAP = format_list(['location', 'location city', 'region', 'county', 'city', 'address', 'zip', 'zipcode', 'lwib_area', 'location of layoffs', 'layoff location', 'address line 1'])
 PARENT_LOCATION_MAP = format_list(['company address', 'company address - 2', 'city/town'])
 NOTES_MAP = format_list(['notes', 'misc'])
 LAYOFF_TYPE_MAP = format_list(['layoff type', 'Type', 'Notice Type', 'Code Type', 'Closure Layoff', 'type code', 'warn type', 'typeoflayoff', 'Closing or Layoff', 'cl/lo', 'lo/cl', 'closing yes/no'])  # refers to closing vs layoff (CL/LO)
-AMBIGUOUS_MAP = format_list(['date', 'date effective', 'LayoffBeginDate', 'effective date', 'LO/CL date', 'impact date', 'date of impact', 'planned starting date', 'state', 'effective layoff date'])  # require state-by-state approach
+AMBIGUOUS_MAP = format_list(['date', 'date effective', 'LayoffBeginDate', 'effective date', 'LO/CL date', 'impact date', 'date of impact', 'planned starting date', 'state', 'effective layoff date', 'layoff start date'])  # require state-by-state approach
 
 def main():
     Path(OUTPUT_DIR).mkdir(parents=True, exist_ok=True)
@@ -407,13 +408,14 @@ def standardize_WA(state_rows, state):
     state_rows = standardize_closing_layoff(state_rows, closing_str, lo_cl_col, date_col)
     return state_rows
 
-# use a layoff type column to sort date into date_layoff_raw vs date_closing_raw
+# use a layoff type column to sort an effective date into date_layoff_raw vs date_closing_raw
 def standardize_closing_layoff(state_rows, closing_str, lo_cl_col, date_col):
     for row_idx, row in enumerate(state_rows):
         if row_idx == 0:
-            # create new columns in header and get their indices
+            # create new columns in header (if necessary), and return their indices
             state_rows, layoff_index, closure_index = create_layoff_closure_date_fields(state_rows)
         else:
+            # sort ambiguous date columns like "effective date" into "layoff date" and "closing date" columns
             row = sort_lo_cl_date(row, layoff_index, closure_index, lo_cl_col, date_col, closing_str)
     return state_rows
 
