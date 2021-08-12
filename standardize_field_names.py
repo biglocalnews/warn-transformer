@@ -36,15 +36,15 @@ STANDARDIZED_FIELD_NAMES = ['state', 'employer', 'number_affected', 'date_receiv
 # Replace these field names with standardized field names
 EMPLOYER_MAP = format_list(['employer', 'company name', 'company', 'Organization Name', 'affected company', 'name of company'])
 NUMBER_AFFECTED_MAP = format_list(['number affected', 'employees affected', 'affected empoyees', 'employees', 'workforce affected', 'planned#affectedemployees', 'Number toEmployees Affected', '# of workers', 'AffectedWorkers', '# Affected', 'number_of_employees_affected', 'jobs affected', 'total employees', 'number workers'])
-DATE_RECEIVED_MAP = format_list(['date received', 'initial report date', 'date of notice', 'notice date', 'state notification date', 'warn date', 'noticercvd', 'received date'])
-DATE_LAYOFF_MAP = format_list(['layoff date', 'LayoffBeginDate', 'layoff start date'])
+DATE_RECEIVED_MAP = format_list(['NoticeRcvd','date received', 'initial report date', 'date of notice', 'notice date', 'state notification date', 'warn date', 'noticercvd', 'received date'])
+DATE_LAYOFF_MAP = format_list(['layoff date', 'layoff start date'])
 DATE_CLOSURE_MAP = format_list(['closing date'])
 INDUSTRY_MAP = format_list(['industry', 'description of work', 'NAICSDescription'])
 LOCATION_MAP = format_list(['location', 'location city', 'region', 'county', 'city', 'address', 'zip', 'zipcode', 'lwib_area', 'location of layoffs', 'layoff location'])
 PARENT_LOCATION_MAP = format_list(['company address', 'company address - 2', 'city/town'])
 NOTES_MAP = format_list(['notes', 'misc'])
-LAYOFF_TYPE_MAP = format_list(['layoff type', 'Type', 'Notice Type', 'Code Type', 'Closure Layoff', 'type code', 'warn type', 'typeoflayoff', 'Closing or Layoff'])  # refers to closing vs layoff (CL/LO)
-AMBIGUOUS_MAP = format_list(['date', 'date effective', 'effective date', 'LO/CL date', 'impact date', 'date of impact', 'planned starting date', 'state', 'effective layoff date'])  # require state-by-state approach
+LAYOFF_TYPE_MAP = format_list(['layoff type', 'Type', 'Notice Type', 'Code Type', 'Closure Layoff', 'type code', 'warn type', 'typeoflayoff', 'Closing or Layoff', 'cl/lo', 'lo/cl', 'closing yes/no'])  # refers to closing vs layoff (CL/LO)
+AMBIGUOUS_MAP = format_list(['date', 'date effective', 'LayoffBeginDate', 'effective date', 'LO/CL date', 'impact date', 'date of impact', 'planned starting date', 'state', 'effective layoff date'])  # require state-by-state approach
 
 def main():
     Path(OUTPUT_DIR).mkdir(parents=True, exist_ok=True)
@@ -145,6 +145,10 @@ def standardize_header_for_state(field_name, STANDARDIZED_FIELD_NAMES, state):
             # map date field to WARN notice received date
             field_name = STANDARDIZED_FIELD_NAMES[3]
     elif state == 'VA':
+        if field_name == format_str('impact date'):
+            # since each row varies between closing and layoff for the same date column,
+            # we will sort into 'closing' and 'layoff' field-by-field in standardize_AL()
+            pass
         if field_name == format_str('state'):
             # map parent company state to 'parent_location' field
             field_name = STANDARDIZED_FIELD_NAMES[7]
@@ -168,9 +172,35 @@ def standardize_header_for_state(field_name, STANDARDIZED_FIELD_NAMES, state):
             # since each row varies between closing and layoff for the same date column,
             # we will sort into 'closing' and 'layoff' field-by-field in standardize_RI()
             pass
+    elif state == 'MO':
+        if field_name == format_str('LAYOFF DATE'):
+            # since each row varies between closing and layoff for the same date column,
+            # we will sort into 'closing' and 'layoff' field-by-field in standardize_MO()
+            pass
+    elif state == 'WI':
+        if field_name == format_str('LayoffBeginDate'):
+            # since each row varies between closing and layoff for the same date column,
+            # we will sort into 'closing' and 'layoff' field-by-field in standardize_WI()
+            pass
+    elif state == 'WA':
+        if field_name == format_str('Layoff Start Date'):
+            # since each row varies between closing and layoff for the same date column,
+            # we will sort into 'closing' and 'layoff' field-by-field in standardize_WA()
+            pass
+    elif state == 'NE':
+        if field_name == format_str('date'):
+            # this field represents the date of WARN notice being received
+            # effective date is missing from the data and would need to be scraped from WARN notice pdfs themsevles
+            field_name = STANDARDIZED_FIELD_NAMES[3]
+            pass
+    elif state == 'NJ':
+        if field_name == format_str('effective date'):
+            # no 'closing' vs 'layoff' distinction => just put all the dates into date_layoff_raw
+            field_name = STANDARDIZED_FIELD_NAMES[4]
+            pass
     elif state == 'MT':
         if field_name == format_str('date of impact'):
-            # map date field to layoff date
+            # no 'closing' vs 'layoff' distinction => just put all the dates into date_layoff_raw
             field_name = STANDARDIZED_FIELD_NAMES[4]
     else:
         print(f"Info: Unhandled header field standardization {field_name} for {state}.csv")
@@ -224,8 +254,14 @@ def standardize_state(state_rows, state):
         return standardize_RI(state_rows, state)
     elif state == 'VA':
         return standardize_VA(state_rows, state)
+    elif state == 'NE':
+        return standardize_NE(state_rows, state)
     elif state == 'WI':
         return standardize_WI(state_rows, state)
+    elif state == 'WA':
+        return standardize_WA(state_rows, state)
+    elif state == 'MO':
+        return standardize_MO(state_rows, state)
     elif state == 'CT':
         return standardize_CT(state_rows, state)
         # TODO: im going to put some comments here about a state we might eventually want to alter our strategy for
@@ -279,100 +315,127 @@ def merge_to_dict(state_rows):
 
 # input/output: list of state's rows including header
 def standardize_AL(state_rows, state):
-
-    lo_cl_col = 0  # extract "Closing or layoff" col
-    date_col = 2  # extract 'Planned Starting Date' col
-    string_to_match = 'cl'  # if the string matches for lo_cl_col, the row is a closing
+# use a layoff type column to sort date into date_layoff_raw vs date_closing_raw
+    ambiguous_lo_cl_field = 'Closing or Layoff'
+    ambiguous_date_field = 'Planned Starting Date'
+    closing_str = 'cl'  # if the value in lo_cl_col contains closing_str, the row is a closing
+    lo_cl_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff type col for extraction
+    date_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff date col for extraction
+    
     for row_idx, row in enumerate(state_rows):
         if row_idx == 0:
             # create new columns in header and get their indices
             state_rows, layoff_index, closure_index = create_layoff_closure_date_fields(state_rows)
         else:
-            row = sort_lo_cl_date(row, layoff_index, closure_index, lo_cl_col, date_col, string_to_match)
+            row = sort_lo_cl_date(row, layoff_index, closure_index, lo_cl_col, date_col, closing_str)
     return state_rows
 
-# TODO why are "1"s part of the output for each null row for closing_date_raw???? and only for DC.
 # input/output: list of state's rows including header
 def standardize_DC(state_rows, state):
-    # use "code type" column to sort "effective layoff date" into closing vs layoff date
+    # use a layoff type column to sort date into date_layoff_raw vs date_closing_raw
     # Code Type: 1=Layoff, 2=Permanent Closures
-    lo_cl_col = 4  # extract "code type" col
-    date_col = 3  # extract 'effective layoff date' col
-    string_to_match = '2'  # if the string matches for lo_cl_col, the row is a closing
+    ambiguous_lo_cl_field = 'Code Type'
+    ambiguous_date_field = 'Effective Layoff Date'
+    closing_str = '2'  # if the value in lo_cl_col contains closing_str, the row is a closing
+    lo_cl_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff type col for extraction
+    date_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff date col for extraction
+    
     for row_idx, row in enumerate(state_rows):
         if row_idx == 0:
             # create new columns in header and get their indices
             state_rows, layoff_index, closure_index = create_layoff_closure_date_fields(state_rows)
         else:
-            row = sort_lo_cl_date(row, layoff_index, closure_index, lo_cl_col, date_col, string_to_match)
+            row = sort_lo_cl_date(row, layoff_index, closure_index, lo_cl_col, date_col, closing_str)
     return state_rows
 
 # input/output: list of state's rows including header
 def standardize_IN(state_rows, state):
-    # use "notice type" column to sort "effective layoff date" into closing vs layoff date
+    # use a layoff type column to sort date into date_layoff_raw vs date_closing_raw
     # Code Type: LO=Layoff, CL=Closure
-    lo_cl_col = 7  # extract "notice type" col
-    date_col = 4  # extract 'LO/CL date' col
-    string_to_match = 'cl'  # if the string matches for lo_cl_col, the row is a closing
+    ambiguous_lo_cl_field = 'Notice Type'
+    ambiguous_date_field = 'LO/CL Date'
+    closing_str = 'cl'  # if the value in lo_cl_col contains closing_str, the row is a closing
+    lo_cl_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff type col for extraction
+    date_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff date col for extraction
+    
     for row_idx, row in enumerate(state_rows):
         if row_idx == 0:
             # create new columns in header and get their indices
             state_rows, layoff_index, closure_index = create_layoff_closure_date_fields(state_rows)
         else:
-            row = sort_lo_cl_date(row, layoff_index, closure_index, lo_cl_col, date_col, string_to_match)
+            row = sort_lo_cl_date(row, layoff_index, closure_index, lo_cl_col, date_col, closing_str)
     return state_rows
 # input/output: list of state's rows including header
 def standardize_MD(state_rows, state):
-    # use "type code" column to sort "effective date" into closing vs layoff date
+    # use a layoff type column to sort date into date_layoff_raw vs date_closing_raw
     # Code Type: 1=closure, 2=layoff (this is different from most states)
-    lo_cl_col = 7  # extract "type code" col
-    date_col = 6  # extract 'effective date' col
-    string_to_match = '1'  # if the string matches for lo_cl_col, the row is a closing
+    ambiguous_lo_cl_field = 'Type Code'
+    ambiguous_date_field = 'Effective Date'
+    closing_str = '1'  # if the value in lo_cl_col contains closing_str, the row is a closing
+    lo_cl_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff type col for extraction
+    date_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff date col for extraction
+    
     for row_idx, row in enumerate(state_rows):
         if row_idx == 0:
             # create new columns in header and get their indices
             state_rows, layoff_index, closure_index = create_layoff_closure_date_fields(state_rows)
         else:
-            row = sort_lo_cl_date(row, layoff_index, closure_index, lo_cl_col, date_col, string_to_match)
+            row = sort_lo_cl_date(row, layoff_index, closure_index, lo_cl_col, date_col, closing_str)
     return state_rows
 
 
 # input/output: list of state's rows including header
 def standardize_RI(state_rows, state):
-    # use "type code" column to sort "effective date" into closing vs layoff date
-    # Code Type: 1=closure, 2=layoff (this is different from most states)
-    lo_cl_col = 6  # extract "closing yes/no" col
-    date_col = 5  # extract 'effective date' col
-    string_to_match = 'yes'  # if the string matches for lo_cl_col, the row is a closing
+    # use a layoff type column to sort date into date_layoff_raw vs date_closing_raw
+    ambiguous_lo_cl_field = 'CLosing Yes/NO'
+    ambiguous_date_field = 'Effective Date'
+    closing_str = 'yes'  # if the value in lo_cl_col contains closing_str, the row is a closing
+    lo_cl_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff type col for extraction
+    date_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff date col for extraction
+    
     for row_idx, row in enumerate(state_rows):
         if row_idx == 0:
             # create new columns in header and get their indices
             state_rows, layoff_index, closure_index = create_layoff_closure_date_fields(state_rows)
         else:
-            row = sort_lo_cl_date(row, layoff_index, closure_index, lo_cl_col, date_col, string_to_match)
+            row = sort_lo_cl_date(row, layoff_index, closure_index, lo_cl_col, date_col, closing_str)
     return state_rows
 
 # input/output: list of state's rows including header
 def standardize_VA(state_rows, state):
-    # special merge "closure" and "Layoff" columns into "layoff type" column:
-    #   "closure: Yes", "Layoff: No" => "Layoff Type: Closure"
-    state_rows[0].append("layoff_type")  # add field to header
+    # # special merge "closure" and "Layoff" columns into "layoff type" column:
+    # #   "closure: Yes", "Layoff: No" => "Layoff Type: Closure"
+    # state_rows[0].append("layoff_type")  # add field to header
+    # for row_idx, row in enumerate(state_rows):
+    #     if not row_idx == 0:
+    #         # extract data
+    #         is_closing = is_closing_str(row[14], 'yes')
+    #         layoff_type = ''
+    #         if is_closing:
+    #             layoff_type = 'Closure'
+    #         else:
+    #             layoff_type = 'Layoff'
+    #         # add value for Layoff Type field
+    #         row.append(layoff_type)
+
+    # use a layoff type column to sort date into date_layoff_raw vs date_closing_raw
+    ambiguous_lo_cl_field = 'type code'
+    ambiguous_date_field = 'impact date'
+    closing_str = 'cl'  # if the value in lo_cl_col contains closing_str, the row is a closing
+    lo_cl_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff type col for extraction
+    date_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff date col for extraction
     for row_idx, row in enumerate(state_rows):
-        if not row_idx == 0:
-            # extract data
-            is_closing = is_closing_str(row[14], 'yes')
-            layoff_type = ''
-            if is_closing:
-                layoff_type = 'Closure'
-            else:
-                layoff_type = 'Layoff'
-            # add value for Layoff Type field
-            row.append(layoff_type)
+        if row_idx == 0:
+            # create new columns in header and get their indices
+            state_rows, layoff_index, closure_index = create_layoff_closure_date_fields(state_rows)
+        else:
+            row = sort_lo_cl_date(row, layoff_index, closure_index, lo_cl_col, date_col, closing_str)
     return state_rows
 
 
 # input/output: list of state's rows including header
 def standardize_WI(state_rows, state):
+    # drop revision text
     indexes_to_pop = []
     for row_idx, row in enumerate(state_rows):
         if not row_idx == 0:
@@ -388,6 +451,18 @@ def standardize_WI(state_rows, state):
     for i in indexes_to_pop:
         state_rows.pop(i - popped)
         popped += 1
+    # use a layoff type column to sort date into date_layoff_raw vs date_closing_raw
+    ambiguous_lo_cl_field = 'Notice Type'
+    ambiguous_date_field = 'LayoffBeginDate'
+    closing_str = 'cl'  # if the value in lo_cl_col contains closing_str, the row is a closing
+    lo_cl_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff type col for extraction
+    date_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff date col for extraction
+    for row_idx, row in enumerate(state_rows):
+        if row_idx == 0:
+            # create new columns in header and get their indices
+            state_rows, layoff_index, closure_index = create_layoff_closure_date_fields(state_rows)
+        else:
+            row = sort_lo_cl_date(row, layoff_index, closure_index, lo_cl_col, date_col, closing_str)
     return state_rows
 
 # input/output: list of state's rows including header
@@ -412,11 +487,44 @@ def standardize_CT(state_rows, state):
     return state_rows
 
 
+# input/output: list of state's rows including header
+def standardize_MO(state_rows, state):
+    # use a layoff type column to sort date into date_layoff_raw vs date_closing_raw
+    ambiguous_lo_cl_field = 'type'
+    ambiguous_date_field = 'layoff date'
+    closing_str = 'cl'  # if the value in lo_cl_col contains closing_str, the row is a closing
+    lo_cl_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff type col for extraction
+    date_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff date col for extraction
+    for row_idx, row in enumerate(state_rows):
+        if row_idx == 0:
+            # create new columns in header and get their indices
+            state_rows, layoff_index, closure_index = create_layoff_closure_date_fields(state_rows)
+        else:
+            row = sort_lo_cl_date(row, layoff_index, closure_index, lo_cl_col, date_col, closing_str)
+    return state_rows
+
+
+# input/output: list of state's rows including header
+def standardize_WA(state_rows, state):
+    # use a layoff type column to sort date into date_layoff_raw vs date_closing_raw
+    ambiguous_lo_cl_field = 'Closure Layoff'
+    ambiguous_date_field = 'Layoff Start Date'
+    closing_str = 'cl'  # if the value in lo_cl_col contains closing_str, the row is a closing
+    lo_cl_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff type col for extraction
+    date_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff date col for extraction
+    for row_idx, row in enumerate(state_rows):
+        if row_idx == 0:
+            # create new columns in header and get their indices
+            state_rows, layoff_index, closure_index = create_layoff_closure_date_fields(state_rows)
+        else:
+            row = sort_lo_cl_date(row, layoff_index, closure_index, lo_cl_col, date_col, closing_str)
+    return state_rows
+
 # sort ambiguous date columns like "effective date" into "layoff date" and "closing date" columns
-def sort_lo_cl_date(row, layoff_index, closure_index, lo_cl_col, date_col, string_to_match):
+def sort_lo_cl_date(row, layoff_index, closure_index, lo_cl_col, date_col, closing_str):
     # extract boolean for whether or not plant is closing
     closure_layoff_str = str(row[lo_cl_col])
-    is_closing = is_closing_str(closure_layoff_str, string_to_match)
+    is_closing = is_closing_str(closure_layoff_str, closing_str)
     # add date into correct col depending on whether is_closing is true
     date_to_add = str(row[date_col])
     row = add_lo_cl_date_for_row(row, date_to_add, is_closing, layoff_index, closure_index)
