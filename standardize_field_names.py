@@ -319,7 +319,7 @@ def standardize_AL(state_rows, state):
     ambiguous_lo_cl_field = 'Closing or Layoff'
     ambiguous_date_field = 'Planned Starting Date'
     closing_str = 'cl'  # if the value in lo_cl_col contains closing_str, the row is a closing
-    lo_cl_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff type col for extraction
+    lo_cl_col = state_rows[0].index(format_str(ambiguous_lo_cl_field))  # designate ambiguous layoff type col for extraction
     date_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff date col for extraction
     
     for row_idx, row in enumerate(state_rows):
@@ -337,7 +337,7 @@ def standardize_DC(state_rows, state):
     ambiguous_lo_cl_field = 'Code Type'
     ambiguous_date_field = 'Effective Layoff Date'
     closing_str = '2'  # if the value in lo_cl_col contains closing_str, the row is a closing
-    lo_cl_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff type col for extraction
+    lo_cl_col = state_rows[0].index(format_str(ambiguous_lo_cl_field))  # designate ambiguous layoff type col for extraction
     date_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff date col for extraction
     
     for row_idx, row in enumerate(state_rows):
@@ -355,7 +355,7 @@ def standardize_IN(state_rows, state):
     ambiguous_lo_cl_field = 'Notice Type'
     ambiguous_date_field = 'LO/CL Date'
     closing_str = 'cl'  # if the value in lo_cl_col contains closing_str, the row is a closing
-    lo_cl_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff type col for extraction
+    lo_cl_col = state_rows[0].index(format_str(ambiguous_lo_cl_field))  # designate ambiguous layoff type col for extraction
     date_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff date col for extraction
     
     for row_idx, row in enumerate(state_rows):
@@ -372,7 +372,7 @@ def standardize_MD(state_rows, state):
     ambiguous_lo_cl_field = 'Type Code'
     ambiguous_date_field = 'Effective Date'
     closing_str = '1'  # if the value in lo_cl_col contains closing_str, the row is a closing
-    lo_cl_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff type col for extraction
+    lo_cl_col = state_rows[0].index(format_str(ambiguous_lo_cl_field))  # designate ambiguous layoff type col for extraction
     date_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff date col for extraction
     
     for row_idx, row in enumerate(state_rows):
@@ -390,7 +390,7 @@ def standardize_RI(state_rows, state):
     ambiguous_lo_cl_field = 'CLosing Yes/NO'
     ambiguous_date_field = 'Effective Date'
     closing_str = 'yes'  # if the value in lo_cl_col contains closing_str, the row is a closing
-    lo_cl_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff type col for extraction
+    lo_cl_col = state_rows[0].index(format_str(ambiguous_lo_cl_field))  # designate ambiguous layoff type col for extraction
     date_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff date col for extraction
     
     for row_idx, row in enumerate(state_rows):
@@ -422,7 +422,7 @@ def standardize_VA(state_rows, state):
     ambiguous_lo_cl_field = 'type code'
     ambiguous_date_field = 'impact date'
     closing_str = 'cl'  # if the value in lo_cl_col contains closing_str, the row is a closing
-    lo_cl_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff type col for extraction
+    lo_cl_col = state_rows[0].index(format_str(ambiguous_lo_cl_field))  # designate ambiguous layoff type col for extraction
     date_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff date col for extraction
     for row_idx, row in enumerate(state_rows):
         if row_idx == 0:
@@ -455,7 +455,7 @@ def standardize_WI(state_rows, state):
     ambiguous_lo_cl_field = 'Notice Type'
     ambiguous_date_field = 'LayoffBeginDate'
     closing_str = 'cl'  # if the value in lo_cl_col contains closing_str, the row is a closing
-    lo_cl_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff type col for extraction
+    lo_cl_col = state_rows[0].index(format_str(ambiguous_lo_cl_field))  # designate ambiguous layoff type col for extraction
     date_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff date col for extraction
     for row_idx, row in enumerate(state_rows):
         if row_idx == 0:
@@ -493,7 +493,7 @@ def standardize_MO(state_rows, state):
     ambiguous_lo_cl_field = 'type'
     ambiguous_date_field = 'layoff date'
     closing_str = 'cl'  # if the value in lo_cl_col contains closing_str, the row is a closing
-    lo_cl_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff type col for extraction
+    lo_cl_col = state_rows[0].index(format_str(ambiguous_lo_cl_field))  # designate ambiguous layoff type col for extraction
     date_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff date col for extraction
     for row_idx, row in enumerate(state_rows):
         if row_idx == 0:
@@ -510,7 +510,7 @@ def standardize_WA(state_rows, state):
     ambiguous_lo_cl_field = 'Closure Layoff'
     ambiguous_date_field = 'Layoff Start Date'
     closing_str = 'cl'  # if the value in lo_cl_col contains closing_str, the row is a closing
-    lo_cl_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff type col for extraction
+    lo_cl_col = state_rows[0].index(format_str(ambiguous_lo_cl_field))  # designate ambiguous layoff type col for extraction
     date_col = state_rows[0].index(format_str(ambiguous_date_field))  # designate ambiguous layoff date col for extraction
     for row_idx, row in enumerate(state_rows):
         if row_idx == 0:
