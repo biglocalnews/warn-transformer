@@ -310,12 +310,7 @@ def standardize_AL(state_rows, state):
     lo_cl_col = 0  # extract "Closing or layoff" col
     date_col = 2  # extract 'Planned Starting Date' col
     closing_str = 'cl'  # if the value in lo_cl_col contains closing_str, the row is a closing
-    for row_idx, row in enumerate(state_rows):
-        if row_idx == 0:
-            # create new columns in header and get their indices
-            state_rows, layoff_index, closure_index = create_layoff_closure_date_fields(state_rows)
-        else:
-            row = sort_lo_cl_date(row, layoff_index, closure_index, lo_cl_col, date_col, closing_str)
+    state_rows = standardize_closing_layoff(state_rows, closing_str, lo_cl_col, date_col)
     return state_rows
 
 # input/output: list of state's rows including header
@@ -325,12 +320,7 @@ def standardize_DC(state_rows, state):
     lo_cl_col = 4  # extract "code type" col
     date_col = 3  # extract 'effective layoff date' col
     closing_str = '2'  # if the value in lo_cl_col contains closing_str, the row is a closing
-    for row_idx, row in enumerate(state_rows):
-        if row_idx == 0:
-            # create new columns in header and get their indices
-            state_rows, layoff_index, closure_index = create_layoff_closure_date_fields(state_rows)
-        else:
-            row = sort_lo_cl_date(row, layoff_index, closure_index, lo_cl_col, date_col, closing_str)
+    state_rows = standardize_closing_layoff(state_rows, closing_str, lo_cl_col, date_col)
     return state_rows
 
 # input/output: list of state's rows including header
@@ -340,12 +330,7 @@ def standardize_IN(state_rows, state):
     lo_cl_col = 7  # extract "notice type" col
     date_col = 4  # extract 'LO/CL date' col
     closing_str = 'cl'  # if the value in lo_cl_col contains closing_str, the row is a closing
-    for row_idx, row in enumerate(state_rows):
-        if row_idx == 0:
-            # create new columns in header and get their indices
-            state_rows, layoff_index, closure_index = create_layoff_closure_date_fields(state_rows)
-        else:
-            row = sort_lo_cl_date(row, layoff_index, closure_index, lo_cl_col, date_col, closing_str)
+    state_rows = standardize_closing_layoff(state_rows, closing_str, lo_cl_col, date_col)
     return state_rows
 # input/output: list of state's rows including header
 def standardize_MD(state_rows, state):
@@ -354,12 +339,7 @@ def standardize_MD(state_rows, state):
     lo_cl_col = 7  # extract "type code" col
     date_col = 6  # extract 'effective date' col
     closing_str = '1'  # if the value in lo_cl_col contains closing_str, the row is a closing
-    for row_idx, row in enumerate(state_rows):
-        if row_idx == 0:
-            # create new columns in header and get their indices
-            state_rows, layoff_index, closure_index = create_layoff_closure_date_fields(state_rows)
-        else:
-            row = sort_lo_cl_date(row, layoff_index, closure_index, lo_cl_col, date_col, closing_str)
+    state_rows = standardize_closing_layoff(state_rows, closing_str, lo_cl_col, date_col)
     return state_rows
 
 
@@ -369,12 +349,7 @@ def standardize_RI(state_rows, state):
     lo_cl_col = 6  # extract "closing yes/no" col
     date_col = 5  # extract 'effective date' col
     closing_str = 'yes'  # if the value in lo_cl_col contains closing_str, the row is a closing
-    for row_idx, row in enumerate(state_rows):
-        if row_idx == 0:
-            # create new columns in header and get their indices
-            state_rows, layoff_index, closure_index = create_layoff_closure_date_fields(state_rows)
-        else:
-            row = sort_lo_cl_date(row, layoff_index, closure_index, lo_cl_col, date_col, closing_str)
+    state_rows = standardize_closing_layoff(state_rows, closing_str, lo_cl_col, date_col)
     return state_rows
 
 # input/output: list of state's rows including header
@@ -382,44 +357,36 @@ def standardize_VA(state_rows, state):
     # use a layoff type column to sort date into date_layoff_raw vs date_closing_raw
     lo_cl_col = 15  # "Closure" col
     date_col = 12  # "Impact Date" col
-    closing_str = 'cl'  # if the value in lo_cl_col contains closing_str, the row is a closingfor row_idx, row in enumerate(state_rows):
-    for row_idx, row in enumerate(state_rows):
-        if row_idx == 0:
-            # create new columns in header and get their indices
-            state_rows, layoff_index, closure_index = create_layoff_closure_date_fields(state_rows)
-        else:
-            row = sort_lo_cl_date(row, layoff_index, closure_index, lo_cl_col, date_col, closing_str)
+    closing_str = 'yes'  # if the value in lo_cl_col contains closing_str, the row is a closing
+    state_rows = standardize_closing_layoff(state_rows, closing_str, lo_cl_col, date_col)
     return state_rows
 
 
 # input/output: list of state's rows including header
 def standardize_WI(state_rows, state):
-    # drop revision text
-    indexes_to_pop = []
-    for row_idx, row in enumerate(state_rows):
-        if not row_idx == 0:
-            current_company_field = row[0]
-            if 'Revision' in current_company_field:
-                # if the current row is a revision, drop the previous row
-                indexes_to_pop.append(row_idx - 1)
-                # and remove the revision text from company name
-                current_company_field = current_company_field.split(" - Revision")[0]
-            row[0] = current_company_field
-    popped = 0
-    # remove rows after looping to prevent looping bugs
-    for i in indexes_to_pop:
-        state_rows.pop(i - popped)
-        popped += 1
+    # the below text will be useful for future corporate name standardization...removing text like "revision 2"
+    #
+    # # drop revision text
+    # indexes_to_pop = []
+    # for row_idx, row in enumerate(state_rows):
+    #     if not row_idx == 0:
+    #         current_company_field = row[0]
+    #         if 'Revision' in current_company_field:
+    #             # if the current row is a revision, drop the previous row
+    #             indexes_to_pop.append(row_idx - 1)
+    #             # and remove the revision text from company name
+    #             current_company_field = current_company_field.split(" - Revision")[0]
+    #         row[0] = current_company_field
+    # popped = 0
+    # # remove rows after looping to prevent looping bugs
+    # for i in indexes_to_pop:
+    #     state_rows.pop(i - popped)
+    #     popped += 1
     # use a layoff type column to sort date into date_layoff_raw vs date_closing_raw
     closing_str = 'cl'  # if the value in lo_cl_col contains closing_str, the row is a closing
     lo_cl_col = 4  # "NoticeType" col
     date_col = 5  # "LayoffBegins" col
-    for row_idx, row in enumerate(state_rows):
-        if row_idx == 0:
-            # create new columns in header and get their indices
-            state_rows, layoff_index, closure_index = create_layoff_closure_date_fields(state_rows)
-        else:
-            row = sort_lo_cl_date(row, layoff_index, closure_index, lo_cl_col, date_col, closing_str)
+    state_rows = standardize_closing_layoff(state_rows, closing_str, lo_cl_col, date_col)
     return state_rows
 
 
