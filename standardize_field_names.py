@@ -150,7 +150,7 @@ def standardize_header_for_state(field_name, STANDARDIZED_FIELD_NAMES, state):
     elif state == 'VA':
         if field_name == format_str('impact date'):
             # since each row varies between closing and layoff for the same date column,
-            # we will sort into 'closing' and 'layoff' field-by-field in standardize_AL()
+            # we will sort into 'closing' and 'layoff' field-by-field in standardize_VA()
             pass
         if field_name == format_str('state'):
             # map parent company state to 'parent_location' field
@@ -159,6 +159,21 @@ def standardize_header_for_state(field_name, STANDARDIZED_FIELD_NAMES, state):
         if field_name == format_str('planned starting date'):
             # since each row varies between closing and layoff for the same date column,
             # we will sort into 'closing' and 'layoff' field-by-field in standardize_AL()
+            pass
+    elif state == 'AK':
+        if field_name == format_str('impact date'):
+            # since each row varies between closing and layoff for the same date column,
+            # we will sort into 'closing' and 'layoff' field-by-field in standardize_AK()
+            pass
+    elif state == 'CO':
+        if field_name == format_str('impact date'):
+            # since each row varies between closing and layoff for the same date column,
+            # we will sort into 'closing' and 'layoff' field-by-field in standardize_CO()
+            pass
+    elif state == 'IA':
+        if field_name == format_str('impact date'):
+            # since each row varies between closing and layoff for the same date column,
+            # we will sort into 'closing' and 'layoff' field-by-field in standardize_IA()
             pass
     elif state == 'DC':
         if field_name == format_str('effective layoff date'):
@@ -263,6 +278,12 @@ def standardize_state(state_rows, state):
         return standardize_WA(state_rows, state)
     elif state == 'MO':
         return standardize_MO(state_rows, state)
+    elif state == 'AK':
+        return standardize_AK(state_rows, state)
+    elif state == 'CO':
+        return standardize_CO(state_rows, state)
+    elif state == 'IA':
+        return standardize_IA(state_rows, state)
     else:
         pass
     return state_rows
@@ -407,6 +428,34 @@ def standardize_WA(state_rows, state):
     date_col = 2  # "received date" col
     state_rows = standardize_closing_layoff(state_rows, closing_str, lo_cl_col, date_col)
     return state_rows
+
+
+# input/output: list of state's rows including header
+def standardize_AK(state_rows, state):
+    closing_str = 'clos'  # if the value in lo_cl_col contains closing_str, the row is a closing
+    lo_cl_col = 5  # "closure layoff" col
+    date_col = 3  # "received date" col
+    state_rows = standardize_closing_layoff(state_rows, closing_str, lo_cl_col, date_col)
+    return state_rows
+
+
+# input/output: list of state's rows including header
+def standardize_CO(state_rows, state):
+    closing_str = 'clos'  # if the value in lo_cl_col contains closing_str, the row is a closing
+    lo_cl_col = 7  # "closure layoff" col
+    date_col = 6  # "received date" col
+    state_rows = standardize_closing_layoff(state_rows, closing_str, lo_cl_col, date_col)
+    return state_rows
+
+
+# input/output: list of state's rows including header
+def standardize_IA(state_rows, state):
+    closing_str = 'clos'  # if the value in lo_cl_col contains closing_str, the row is a closing
+    lo_cl_col = 6  # "closure layoff" col
+    date_col = 9  # "received date" col
+    state_rows = standardize_closing_layoff(state_rows, closing_str, lo_cl_col, date_col)
+    return state_rows
+
 
 # use a layoff type column to sort an effective date into date_layoff_raw vs date_closing_raw
 def standardize_closing_layoff(state_rows, closing_str, lo_cl_col, date_col):
