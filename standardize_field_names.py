@@ -38,8 +38,7 @@ EMPLOYER_MAP = format_list(['employer', 'company name', 'company', 'Organization
 NUMBER_AFFECTED_MAP = format_list(['number affected', 'employees affected', 'affected empoyees', 'employees', 'workforce affected', 'planned#affectedemployees', 'Number toEmployees Affected', '# of workers', 'AffectedWorkers', '# Affected', 'number_of_employees_affected', 'jobs affected', 'total employees', 'number workers'])
 DATE_RECEIVED_MAP = format_list(['NoticeRcvd', 'date received', 'initial report date', 'date of notice', 'notice date', 'state notification date', 'warn date', 'noticercvd', 'received date', 'notification date'])
 # each state that maps to LAYOFF_MAP will unequivocally indicate a "layoff date" (and not a "closing date").
-# see "ambiguous map" and make a custom approach if the mapping varies from row to row.
-# Note: may add duplicate entires from ambiguous map in case we want all closing dates to have pairing layoff dates (since all closings are layoffs)
+# use "ambiguous map" and make a custom approach if the mapping varies from row to row.
 DATE_LAYOFF_MAP = format_list(['layoff date'])
 DATE_CLOSURE_MAP = format_list(['closing_date'])
 INDUSTRY_MAP = format_list(['industry', 'description of work', 'NAICSDescription'])
@@ -48,6 +47,7 @@ PARENT_LOCATION_MAP = format_list(['company address', 'company address - 2', 'ci
 NOTES_MAP = format_list(['notes', 'misc'])
 LAYOFF_TYPE_MAP = format_list(['layoff type', 'Type', 'Notice Type', 'Code Type', 'Closure Layoff', 'type code', 'warn type', 'typeoflayoff', 'Closing or Layoff', 'cl/lo', 'lo/cl', 'closing yes/no'])  # refers to closing vs layoff (CL/LO)
 AMBIGUOUS_MAP = format_list(['date', 'date effective', 'LayoffBeginDate', 'effective date', 'LO/CL date', 'impact date', 'date of impact', 'planned starting date', 'state', 'effective layoff date', 'layoff start date'])  # require state-by-state approach
+
 
 def main():
     Path(OUTPUT_DIR).mkdir(parents=True, exist_ok=True)
@@ -104,6 +104,7 @@ def process_file(source_file, filename, state_postal, encoding=""):
                 # add row to the list
                 state_rows.append(row)
     return state_rows
+
 
 # replace field names that match our map
 # also make state-by-state header changes using standardize_header_For_state()
@@ -326,6 +327,7 @@ def merge_to_dict(state_rows):
         state_rows_as_dicts.append(newdict)
     return state_rows_as_dicts
 
+
 # input/output: list of state's rows including header
 def standardize_AL(state_rows, state):
     # use a layoff type column to sort date into date_layoff_raw vs date_closing_raw
@@ -334,6 +336,7 @@ def standardize_AL(state_rows, state):
     closing_str = 'cl'  # if the value in lo_cl_col contains closing_str, the row is a closing
     state_rows = standardize_closing_layoff(state_rows, closing_str, lo_cl_col, date_col)
     return state_rows
+
 
 # input/output: list of state's rows including header
 def standardize_DC(state_rows, state):
@@ -345,6 +348,7 @@ def standardize_DC(state_rows, state):
     state_rows = standardize_closing_layoff(state_rows, closing_str, lo_cl_col, date_col)
     return state_rows
 
+
 # input/output: list of state's rows including header
 def standardize_IN(state_rows, state):
     # use a layoff type column to sort date into date_layoff_raw vs date_closing_raw
@@ -354,6 +358,8 @@ def standardize_IN(state_rows, state):
     closing_str = 'cl'  # if the value in lo_cl_col contains closing_str, the row is a closing
     state_rows = standardize_closing_layoff(state_rows, closing_str, lo_cl_col, date_col)
     return state_rows
+
+
 # input/output: list of state's rows including header
 def standardize_MD(state_rows, state):
     # use a layoff type column to sort date into date_layoff_raw vs date_closing_raw
@@ -373,6 +379,7 @@ def standardize_RI(state_rows, state):
     closing_str = 'yes'  # if the value in lo_cl_col contains closing_str, the row is a closing
     state_rows = standardize_closing_layoff(state_rows, closing_str, lo_cl_col, date_col)
     return state_rows
+
 
 # input/output: list of state's rows including header
 def standardize_VA(state_rows, state):
@@ -467,6 +474,7 @@ def standardize_closing_layoff(state_rows, closing_str, lo_cl_col, date_col):
             # sort ambiguous date columns like "effective date" into "layoff date" and "closing date" columns
             row = sort_lo_cl_date(row, layoff_index, closure_index, lo_cl_col, date_col, closing_str)
     return state_rows
+
 
 # sort ambiguous date columns like "effective date" into "layoff date" and "closing date" columns
 def sort_lo_cl_date(row, layoff_index, closure_index, lo_cl_col, date_col, closing_str):
