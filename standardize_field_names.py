@@ -34,15 +34,15 @@ def format_list(list):
 # NOTE: any alteration to the length/ order of this list should also check every instance of STANDARDIZED_FIELD_NAMES
 STANDARDIZED_FIELD_NAMES = ['state', 'employer', 'number_affected', 'date_received_raw', 'date_layoff_raw', 'date_closure_raw', 'location', 'parent_location', 'industry', 'notes', 'layoff_type']
 # Replace these field names with standardized field names
-EMPLOYER_MAP = format_list(['employer', 'company name', 'company', 'Organization Name', 'affected company', 'name of company'])
-NUMBER_AFFECTED_MAP = format_list(['number affected', 'employees affected', 'affected empoyees', 'employees', 'workforce affected', 'planned#affectedemployees', 'Number toEmployees Affected', '# of workers', 'AffectedWorkers', '# Affected', 'number_of_employees_affected', 'jobs affected', 'total employees', 'number workers'])
+EMPLOYER_MAP = format_list(['employer', 'company name', 'company', 'Organization Name', 'affected company', 'name of company', 'JOB_SITE_NAME'])
+NUMBER_AFFECTED_MAP = format_list(['number affected', 'employees affected', 'TOTAL_LAYOFF_NUMBER', 'affected empoyees', 'employees', 'workforce affected', 'planned#affectedemployees', 'Number toEmployees Affected', '# of workers', 'AffectedWorkers', '# Affected', 'number_of_employees_affected', 'jobs affected', 'total employees', 'number workers'])
 DATE_RECEIVED_MAP = format_list(['NoticeRcvd', 'date received', 'initial report date', 'date of notice', 'notice date', 'state notification date', 'warn date', 'noticercvd', 'received date', 'notification date'])
 # each state that maps to LAYOFF_MAP will unequivocally indicate a "layoff date" (and not a "closing date").
 # use "ambiguous map" and make a custom approach if the mapping varies from row to row.
 DATE_LAYOFF_MAP = format_list(['layoff date'])
 DATE_CLOSURE_MAP = format_list(['closing_date'])
 INDUSTRY_MAP = format_list(['industry', 'description of work', 'NAICSDescription'])
-LOCATION_MAP = format_list(['location', 'location city', 'region', 'county', 'city', 'address', 'zip', 'zipcode', 'lwib_area', 'location of layoffs', 'layoff location', 'address line 1'])
+LOCATION_MAP = format_list(['location', 'location city', 'region', 'county', 'COUNTY_NAME', 'WDA_NAME', 'CITY_NAME', 'city', 'address', 'zip', 'zipcode', 'lwib_area', 'location of layoffs', 'layoff location', 'address line 1'])
 PARENT_LOCATION_MAP = format_list(['company address', 'company address - 2', 'city/town'])
 NOTES_MAP = format_list(['notes', 'misc'])
 LAYOFF_TYPE_MAP = format_list(['layoff type', 'Type', 'Notice Type', 'Code Type', 'Closure Layoff', 'type code', 'warn type', 'typeoflayoff', 'Closing or Layoff', 'cl/lo', 'lo/cl', 'closing yes/no'])  # refers to closing vs layoff (CL/LO)
@@ -131,7 +131,9 @@ def standardize_header(header_row, STANDARDIZED_FIELD_NAMES, state):
             field_name = STANDARDIZED_FIELD_NAMES[9]
         elif field_name in LAYOFF_TYPE_MAP:
             field_name = STANDARDIZED_FIELD_NAMES[10]
-        elif field_name in AMBIGUOUS_MAP:
+        # a field can be in ambiguous_map and a different map, in case there's only
+        # a few states where we want a custom approach to override the mapping.
+        if field_name in AMBIGUOUS_MAP:
             # here we use a precise touch to replace header names per-state when we know what they *should* be
             field_name = standardize_header_for_state(field_name, STANDARDIZED_FIELD_NAMES, state)
         else:

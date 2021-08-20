@@ -43,7 +43,9 @@ def main():
     rows[0].append("date_received_cleaned")
     rows[0].append("date_effective_cleaned")
     output_rows = []
-    for row_idx, row in rows:
+    for row_idx, row in enumerate(rows):
+        if row_idx == 0:
+            continue
         for col_idx, col in enumerate(row):
             # standardize any date input
             if col_idx in DATE_COLS:
