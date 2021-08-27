@@ -1,4 +1,14 @@
 import csv
+import requests
+
+from os.path import join, expanduser
+
+
+def default_user_home():
+    return join(
+        expanduser('~'),
+        '.warn-scraper'
+    )
 
 def write_rows_to_csv(rows, output_path, mode='w'):
     with open(output_path, mode, newline='') as outfile:
@@ -13,3 +23,13 @@ def write_dict_rows_to_csv(path, headers, rows, mode='w', extrasaction='raise'):
             writer.writeheader()
         for row in rows:
             writer.writerow(row)
+
+
+def download_file(url, auth=None, local_path=None):
+    with requests.get(url, auth=auth, stream=True) as r:
+        if r.encoding is None:
+            r.encoding = 'utf-8'
+        with open(local_path, 'wb') as f:
+            for chunk in r.iter_content(chunk_size=8192):
+                f.write(chunk)
+    return local_path

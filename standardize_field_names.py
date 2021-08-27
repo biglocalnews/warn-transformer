@@ -67,6 +67,7 @@ def main():
             state_rows = process_file(source_file, filename, state_postal, encoding="utf-8")
 
         # this function will smooth out lengths of rows and columns to prevent data errors
+        # better to do this as often as possible after each data edit
         state_rows = fill_rows_columns(state_rows)
         # run state-specific standardizations such as data cleaning, restructuring
         state_rows = standardize_state(state_rows, state_postal)
@@ -395,24 +396,22 @@ def standardize_VA(state_rows, state):
 
 # input/output: list of state's rows including header
 def standardize_WI(state_rows, state):
-    # the below text will be useful for future corporate name standardization...removing text like "revision 2"
-    #
-    # # drop revision text
-    # indexes_to_pop = []
-    # for row_idx, row in enumerate(state_rows):
-    #     if not row_idx == 0:
-    #         current_company_field = row[0]
-    #         if 'Revision' in current_company_field:
-    #             # if the current row is a revision, drop the previous row
-    #             indexes_to_pop.append(row_idx - 1)
-    #             # and remove the revision text from company name
-    #             current_company_field = current_company_field.split(" - Revision")[0]
-    #         row[0] = current_company_field
-    # popped = 0
-    # # remove rows after looping to prevent looping bugs
-    # for i in indexes_to_pop:
-    #     state_rows.pop(i - popped)
-    #     popped += 1
+    # drop revision text & duplicate rows
+    indexes_to_pop = []
+    for row_idx, row in enumerate(state_rows):
+        if not row_idx == 0:
+            current_company_field = row[0]
+            if 'Revision' in current_company_field:
+                # remove duplicate 'revision' entries
+                indexes_to_pop.append(row_idx - 1)
+                # and remove the revision text from company name
+                current_company_field = current_company_field.split(" - Revision")[0]
+            row[0] = current_company_field
+    popped = 0
+    # remove rows after looping to prevent looping bugs
+    for i in indexes_to_pop:
+        state_rows.pop(i - popped)
+        popped += 1
     # use a layoff type column to sort date into date_layoff_raw vs date_closing_raw
     closing_str = 'cl'  # if the value in lo_cl_col contains closing_str, the row is a closing
     lo_cl_col = 4  # "NoticeType" col
