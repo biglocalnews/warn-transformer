@@ -1,19 +1,22 @@
 # input: standardized_field_names.csv
-# output: standardized_dates.csv
-# datasets from some states contain different date formats within themselves (eg: MO, DC) and possibly different conventions for documenting updates.
+# reads 3 'raw' date columns:
+# (1) date_received_raw
+# (2) date_layoff_raw
+# (3) date_closure_raw
 
-# examples of cases we've seen:
-# September 15, 2020 and March 18, 2020
-# 12/1/20 (MM/D/YY)
-# 10/24/2016 (MM/DD/YYY)
-# December 25, and Feb - Jun 2021
+# output: standardized_dates.csv
+# adds 4 'cleaned' columns:
+# (1) date_received_cleaned
+# (2) date_received_year
+# (3) date_layoff_cleaned
+# (4) date_closing_cleaned
 
 #-----METHODS-----
 # (1) dateutil.parser.parse() is best at making sense out of messy strings
 # (2) pendulum.parse() is a last-ditch effort
 # (3) datetime.strptime() with hard-coded regex checks for specific tricky dates(?):
 #   d = datetime.datetime.strptime('Mon Feb 15 2020', '%a %b %d %Y').strftime('%d/%m/%Y')
-#
+
 import csv
 import datetime
 import re
@@ -51,7 +54,7 @@ def main():
         rows = open_file(source_file, input_csv, encoding="utf-8")
     # add new column headers
     rows[0].append("date_received_cleaned")
-    rows[0].append("WARN_year")
+    rows[0].append("date_received_year")
     rows[0].append("date_layoff_cleaned")
     rows[0].append("date_closure_cleaned")
     output_rows = []
