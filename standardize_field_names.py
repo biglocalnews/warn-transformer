@@ -41,7 +41,7 @@ DATE_RECEIVED_MAP = format_list(['NoticeRcvd', 'date received', 'initial report 
 # use "ambiguous map" and make a custom approach if the mapping varies from row to row.
 DATE_LAYOFF_MAP = format_list(['layoff date'])
 DATE_CLOSURE_MAP = format_list(['closing_date'])
-INDUSTRY_MAP = format_list(['industry', 'description of work', 'NAICSDescription'])
+INDUSTRY_MAP = format_list(['industry', 'description of work', 'NAICSDescription', 'NAICS Code', 'NAICS'])
 LOCATION_MAP = format_list(['location', 'location city', 'region', 'county', 'COUNTY_NAME', 'WDA_NAME', 'CITY_NAME', 'city', 'address', 'zip', 'zipcode', 'lwib_area', 'location of layoffs', 'layoff location', 'address line 1'])
 PARENT_LOCATION_MAP = format_list(['company address', 'company address - 2', 'city/town'])
 NOTES_MAP = format_list(['notes', 'misc'])
