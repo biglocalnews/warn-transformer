@@ -5,11 +5,12 @@
 # (3) date_closure_raw
 
 # output: standardized_dates.csv
-# adds 4 'cleaned' columns:
+# appends 5 'cleaned' columns:
 # (1) date_received_cleaned
 # (2) date_received_year
-# (3) date_layoff_cleaned
-# (4) date_closing_cleaned
+# (3) date_received_month
+# (4) date_layoff_cleaned
+# (5) date_closing_cleaned
 
 #-----METHODS-----
 # (1) dateutil.parser.parse() is best at making sense out of messy strings
@@ -37,7 +38,7 @@ INPUT_DIR = WARN_ANALYSIS_PATH
 OUTPUT_DIR = WARN_ANALYSIS_PATH
 
 # date_received_raw, date_layoff_raw, date_closure_raw from standardize_field_names.csv
-DATE_COLS = [3, 4, 5]
+INPUT_COLS = [3, 4, 5]
 
 
 def main():
@@ -55,6 +56,7 @@ def main():
     # add new column headers
     rows[0].append("date_received_cleaned")
     rows[0].append("date_received_year")
+    rows[0].append("date_received_month")
     rows[0].append("date_layoff_cleaned")
     rows[0].append("date_closure_cleaned")
     output_rows = []
@@ -66,13 +68,22 @@ def main():
             output_rows.append(row)
             continue
         for col_idx, col in enumerate(row):
-            # if the column is a date column, let's standardize it
-            if col_idx in DATE_COLS:
+            # if the column is the date_received column, clean & extract it
+            if col_idx == INPUT_COLS[0]:
                 date = col
                 date = clean_date(date)
-                date, year_str = standardize_date(date)
-                row.append(date)
+                date_str, year_str, month_str = standardize_date(date)
+                # add cleaned date data to our output data
+                row.append(date_str)
                 row.append(year_str)
+                row.append(month_str)
+            # for all other input columns, just clean it and append
+            elif col_idx in INPUT_COLS:
+                date = col
+                date = clean_date(date)
+                date_str, year_str, month_str = standardize_date(date)
+                # add cleaned date data to our output data
+                row.append(date_str)
         output_rows.append(row)
 
     write_rows_to_csv(output_rows, output_csv)
@@ -96,11 +107,13 @@ def standardize_date(date):
     standardized_date = ""
     date_str = ""
     year_str = ""
+    month_str = ""
     try:
         # using dateutil's parse() function
         standardized_date = parse(date)
         date_str = standardized_date.strftime('%m/%d/%Y')
         year_str = standardized_date.strftime('%Y')
+        month_str = standardized_date.strftime('%m')
         # TODO if year before 1989, raise Warning
     except (Exception) as e:
         pass
@@ -118,7 +131,7 @@ def standardize_date(date):
 
     # print(standardized_date)
 
-    return date_str, year_str
+    return date_str, year_str, month_str
 
 # get a single date from a range of dates
 # because we preserve original date in data,
