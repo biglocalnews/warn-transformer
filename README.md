@@ -7,11 +7,14 @@ Then run merge_warn_ppp.ipny if you would like WARN x PPP analysis.
 
 ### `standardize_field_names.py`
 Input: each state's WARN data `.csv` files from the `.warnscraper\exports\` directory
+
 Output: `standardize_field_names.csv`, a single standardized & merged `.csv` file of all scraped states
 
 ### `standardize_dates.py`
 Input: `standardize_field_names.csv`
+
 Output: `standardize_dates.csv`
+
 This program adds 5 additional columns to the data: 
 + (1) date_received_cleaned
 + (2) date_received_year
@@ -21,5 +24,9 @@ This program adds 5 additional columns to the data:
 
 ### `merge_warn_ppp.ipny`
 Input: `standardize_dates.csv`
+
 Output: `merge_warn_ppp.csv`, an inner merge of WARN & PPP datasets
+
+Please note this merge is not perfect and there are likely to be repeated entries in the data.
+
 
