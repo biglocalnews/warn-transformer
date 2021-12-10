@@ -2,6 +2,7 @@
 Analysis and data quality checks related to WARN data
 
 As of 12/2021, this is the order that files should be run in for analysis: standardize_field_names.py => standardize_dates.py
+
 Then run merge_warn_ppp.ipny if you would like WARN x PPP analysis.
 
 ### `standardize_field_names.py`
@@ -22,5 +23,3 @@ This program adds 5 additional columns to the data:
 Input: `standardize_dates.csv`
 Output: `merge_warn_ppp.csv`, an inner merge of WARN & PPP datasets
 
-### `standardize_company_names.py`
-This program is not finished, but is meant to add an additional columns detailing a list of possible corporate entities that could be a match for the company name.
