@@ -1,10 +1,23 @@
 # warn-analysis
 Analysis and data quality checks related to WARN data
 
+As of 12/2021, this is the order that files should be run in for analysis: standardize_field_names.py => standardize_dates.py
+
 ### `standardize_field_names.py`
-This file is the first in the data cleaning process for WARN exports. It takes as input each state's WARN data `.csv` files from the `.warnscraper\exports\` directory and outputs a single field-standardized `.csv` file in the `.warnscraper\` directory, `standardize_field_names.csv`. This effectively merges all the state data into one nation-wide WARN database. 
+Input: each state's WARN data `.csv` files from the `.warnscraper\exports\` directory
+Output: `standardize_field_names.csv`, a single standardized & merged `.csv` file of all scraped states
 
 ### `standardize_dates.py`
-This file continues the data cleaning process, taking in the output from the previous file, `standardize_field_names.csv`, abd outputting a version with a standardized date formatting.
+Input: `standardize_field_names.csv`
+Output: `standardize_dates.csv`
+This program adds 5 additional columns to the data: 
++ (1) date_received_cleaned
++ (2) date_received_year
++ (3) date_received_month
++ (4) date_layoff_cleaned
++ (5) date_closing_cleaned
 
-**TODO**: determine a consistent date standard (how about DD/MM/YYYY?)
+### `merge_warn_ppp.ipny`
+
+### `standardize_company_names.py`
+This program is not finished, but is meant to add an additional columns detailing a list of possible corporate entities that could be a match for the company name.
