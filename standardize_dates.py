@@ -1,10 +1,10 @@
-# input: standardized_field_names.csv
+# input: standardize_field_names.csv
 # reads 3 'raw' date columns:
 # (1) date_received_raw
 # (2) date_layoff_raw
 # (3) date_closure_raw
 
-# output: standardized_dates.csv
+# output: standardize_dates.csv
 # appends 5 'cleaned' columns:
 # (1) date_received_cleaned
 # (2) date_received_year
