@@ -5,9 +5,14 @@ name = "pypi"
 
 [packages]
 bln = "*"
+marshmallow = "*"
 
 [dev-packages]
 pre-commit = "*"
+flake8 = "*"
+black = "*"
+flake8-bugbear = "*"
+flake8-docstrings = "*"
 
 [requires]
 python_version = "3.7"
