@@ -17,10 +17,10 @@ def main():
     c = Client(BLN_API_KEY)
 
     # Get the Warn Act Notices project.
-    p = c.search_projects(lambda x: x['name'] == 'WARN Act Notices')[0]
+    p = c.search_projects(lambda x: x["name"] == "WARN Act Notices")[0]
 
     # Get all the files in the project.
-    file_list = [f['name'] for f in p['files']]
+    file_list = [f["name"] for f in p["files"]]
 
     # Make the download directory, if it doesn't already exist.
     if not utils.OUTPUT_DIR.exists():
