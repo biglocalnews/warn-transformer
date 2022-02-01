@@ -22,14 +22,16 @@ def main():
     # Get all the files in the project.
     file_list = [f["name"] for f in p["files"]]
 
+    download_dir = utils.OUTPUT_DIR / "raw"
+
     # Make the download directory, if it doesn't already exist.
-    if not utils.OUTPUT_DIR.exists():
-        utils.OUTPUT_DIR.mkdir(parents=True)
+    if not download_dir.exists():
+        download_dir.mkdir(parents=True)
 
     # Download all the files.
     for f in file_list:
-        logger.debug(f"Download {f} to {utils.OUTPUT_DIR}")
-        c.download_file(BLN_PROJECT_ID, f, output_dir=utils.OUTPUT_DIR)
+        logger.debug(f"Download {f} to {download_dir}")
+        c.download_file(BLN_PROJECT_ID, f, output_dir=download_dir)
 
 
 if __name__ == "__main__":

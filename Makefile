@@ -66,6 +66,11 @@ PYTHON := $(PIPENV) python -W ignore
 # Commands
 #
 
+consolidate: ## download raw data
+	$(call banner,      🤝 Consolidating data 🤝)
+	$(PIPENV) python -m src.consolidate
+
+
 download: ## download raw data
 	$(call banner,      🔽 Downloading data 🔽)
 	$(PIPENV) python -m src.download

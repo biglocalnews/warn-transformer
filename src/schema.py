@@ -6,5 +6,5 @@ class WarnNoticeSchema(Schema):
 
     state = fields.Str(max_length=2, required=True)
     company = fields.Str(required=True)
-    date = fields.Date(required=True)
-    jobs = fields.Int(required=True)
+    date = fields.Date(allow_none=True)
+    jobs = fields.Int(required=True, allow_none=True)
