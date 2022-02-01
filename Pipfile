@@ -4,10 +4,6 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pendulum = "*"
-jupyterlab = "*"
-pandas = "*"
-python-dateutil = "*"
 
 [dev-packages]
 
