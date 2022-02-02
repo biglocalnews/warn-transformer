@@ -1,0 +1,60 @@
+name: Testing and distribution
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lint-python:
+    name: Lint Python code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - id: install
+        name: Install Python, pipenv and Pipfile packages
+        uses: palewire/install-python-pipenv-pipfile@v2
+        with:
+          python-version: 3.7
+
+      - id: lint
+        name: Lint
+        run: make lint
+
+  mypy-python:
+    name: Static type check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - id: install
+        name: Install Python, pipenv and Pipfile packages
+        uses: palewire/install-python-pipenv-pipfile@v2
+        with:
+          python-version: 3.7
+
+      - id: mypy
+        name: Mypy
+        run: make mypy
+
+  test-python:
+    strategy:
+      matrix:
+        python: ["3.7", "3.8", "3.9", "3.10"]
+    name: Test Python code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - id: install
+        name: Install Python, pipenv and Pipfile packages
+        uses: palewire/install-python-pipenv-pipfile@v2
+        with:
+          python-version: ${{ matrix.python }}
+
+      - id: run
+        name: Run tests
+        run: make test

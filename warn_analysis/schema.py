@@ -8,7 +8,7 @@ import typing
 
 from marshmallow import Schema, fields
 
-from . import utils
+import utils
 
 logger = logging.getLogger(__name__)
 
@@ -27,11 +27,14 @@ class WarnNoticeSchema(Schema):
 class BaseTransformer:
     """Transform a state's raw data for consolidation."""
 
-    schema: Schema = WarnNoticeSchema
+    schema = WarnNoticeSchema
 
-    date_format: str = (
-        "%m/%d/%Y"  # The default date format. It will need to be customized by source.
-    )
+    # The base attributes that need to be defined on all subclasses.
+    postal_code: str = "xx"
+    fields: typing.Dict = dict()
+
+    # The default date format. It will need to be customized by source.
+    date_format: str = "%m/%d/%Y"
 
     def __init__(self, input_dir: Path):
         """Intialize a new instance.
@@ -145,7 +148,7 @@ class BaseTransformer:
         """
         return value.strip()
 
-    def transform_date(self, value: str) -> str:
+    def transform_date(self, value: str) -> typing.Optional[str]:
         """Transform a raw date string into a date object.
 
         Args:
@@ -160,7 +163,7 @@ class BaseTransformer:
             return None
         return str(dt.date())
 
-    def transform_jobs(self, value: str) -> int:
+    def transform_jobs(self, value: str) -> typing.Optional[int]:
         """Transform a raw jobs number into an integer.
 
         Args:

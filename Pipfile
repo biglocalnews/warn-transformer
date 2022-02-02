@@ -13,6 +13,10 @@ flake8 = "*"
 black = "*"
 flake8-bugbear = "*"
 flake8-docstrings = "*"
+pytest = "*"
+pytest-vcr = "*"
+pytest-cov = "*"
+mypy = "*"
 
 [requires]
 python_version = "3.7"

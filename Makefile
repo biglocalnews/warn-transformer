@@ -83,6 +83,16 @@ lint: ## run the linter
 	$(call banner,        💅 Linting code 💅)
 	@$(PIPENV) flake8 -v ./
 
+
+mypy: ## run mypy type checks
+	$(call banner,        🔩 Running mypy 🔩)
+	@$(PIPENV) mypy ./warn_analysis --ignore-missing-imports
+
+
+test: ## run all tests
+	$(call banner,       🤖 Running tests 🤖)
+	@$(PYTHON) setup.py -q test
+
 #
 # Extras
 #
