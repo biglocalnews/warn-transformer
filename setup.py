@@ -14,7 +14,7 @@ def read(file_name):
 
 
 setup(
-    name="warn-analysis",
+    name="warn-transformer",
     description="Consolidate, enrich and analyze the data gathered by warn-scraper",
     long_description=read("README.md"),
     long_description_content_type="text/markdown",
