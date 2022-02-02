@@ -57,9 +57,8 @@ class Transformer(BaseTransformer):
 
         Returns: A date object ready for consolidation. Or, if the date string is invalid, a None.
         """
-        value = value.strip()
         try:
-            dt = datetime.strptime(value, "%m/%d/%y")
+            dt = datetime.strptime(value.strip(), "%m/%d/%y")
         except ValueError:
             return super().transform_date(value)
         return str(dt.date())
