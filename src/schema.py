@@ -43,9 +43,16 @@ class BaseTransformer:
 
     def transform(self):
         """Transform prepared rows into a form that's ready for consolidation."""
+        # Prep the row list for transformation
         row_list = self.prep_row_list(self.raw_data)
+
+        # Transform the row list into dicts that are ready to be submitted for validation
         transformed_list = [self.transform_row(r) for r in row_list]
+
+        # Validate the row list against our schema
         validated_list = [self.schema().load(r) for r in transformed_list]
+
+        # Return the result, which should be ready for consolidation
         return validated_list
 
     def prep_row_list(self, row_list):
