@@ -2,6 +2,17 @@ import os
 from pathlib import Path
 
 USER_DIR = Path(os.path.expanduser("~"))
-DEFAULT_OUTPUT_DIR = USER_DIR / ".warn-analysis"
+DEFAULT_WARN_ANALYSIS_OUTPUT_DIR = USER_DIR / ".warn-analysis"
 
-OUTPUT_DIR = Path(os.environ.get("OUTPUT_DIR", DEFAULT_OUTPUT_DIR))
+WARN_ANALYSIS_OUTPUT_DIR = Path(os.environ.get("WARN_ANALYSIS_OUTPUT_DIR", DEFAULT_WARN_ANALYSIS_OUTPUT_DIR))
+
+
+def get_all_transformers():
+    """Get all the states and territories that have scrapers.
+    Returns: List of lower-case post abbreviations.
+    """
+    this_dir = Path(__file__).parent
+    transformers_dir = this_dir / "transformers"
+    return sorted(
+        p.stem for p in transformers_dir.glob("*.py") if "__init__.py" not in str(p)
+    )

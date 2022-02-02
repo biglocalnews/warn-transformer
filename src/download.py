@@ -13,16 +13,18 @@ logger = logging.getLogger(__name__)
 
 def main():
     """Download all the CSVs in the WARN Notice project on biglocalnews.org."""
+    logging.basicConfig(level="DEBUG", format="%(asctime)s - %(name)s - %(message)s")
+
     # Login to BLN.
     c = Client(BLN_API_KEY)
 
     # Get the Warn Act Notices project.
-    p = c.search_projects(lambda x: x["name"] == "WARN Act Notices")[0]
+    p = c.get_project_by_name("WARN Act Notices")
 
     # Get all the files in the project.
     file_list = [f["name"] for f in p["files"]]
 
-    download_dir = utils.OUTPUT_DIR / "raw"
+    download_dir = utils.WARN_ANALYSIS_OUTPUT_DIR / "raw"
 
     # Make the download directory, if it doesn't already exist.
     if not download_dir.exists():

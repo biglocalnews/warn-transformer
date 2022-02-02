@@ -1,9 +1,12 @@
 import csv
 from datetime import datetime
+import logging
 
 from marshmallow import Schema, fields
 
 from . import utils
+
+logger = logging.getLogger(__name__)
 
 
 class WarnNoticeSchema(Schema):
@@ -34,7 +37,7 @@ class BaseTransformer:
         Returns a list of dictionaries.
         """
         # Get downloaded file
-        raw_path = utils.OUTPUT_DIR / "raw" / f"{self.postal_code.lower()}.csv"
+        raw_path = utils.WARN_ANALYSIS_OUTPUT_DIR / "raw" / f"{self.postal_code.lower()}.csv"
         # Open the csv
         with open(raw_path) as fh:
             reader = csv.DictReader(fh)
@@ -43,6 +46,8 @@ class BaseTransformer:
 
     def transform(self):
         """Transform prepared rows into a form that's ready for consolidation."""
+        logger.debug(f"Transforming {self.postal_code}")
+
         # Prep the row list for transformation
         row_list = self.prep_row_list(self.raw_data)
 
