@@ -1,4 +1,3 @@
-from datetime import datetime
 import typing
 
 from ..schema import BaseTransformer
