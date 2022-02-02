@@ -24,9 +24,8 @@ def main():
     # Get all the files in the project.
     file_list = [f["name"] for f in p["files"]]
 
-    download_dir = utils.WARN_ANALYSIS_OUTPUT_DIR / "raw"
-
     # Make the download directory, if it doesn't already exist.
+    download_dir = utils.WARN_ANALYSIS_OUTPUT_DIR / "raw"
     if not download_dir.exists():
         download_dir.mkdir(parents=True)
 

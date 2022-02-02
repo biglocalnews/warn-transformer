@@ -3,7 +3,6 @@ from importlib import import_module
 import logging
 
 from . import utils
-from .transformers.ia import Transformer
 
 logger = logging.getLogger(__name__)
 
