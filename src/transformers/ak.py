@@ -7,6 +7,7 @@ class Transformer(BaseTransformer):
     postal_code = "AK"
     fields = dict(
         company="Company",
+        location="Location",
         date="Notice Date",
         jobs="Employees Affected",
     )

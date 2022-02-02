@@ -14,7 +14,8 @@ class WarnNoticeSchema(Schema):
 
     postal_code = fields.Str(max_length=2, required=True)
     company = fields.Str(required=True)
-    date = fields.Date(allow_none=True)
+    location = fields.Str(required=True, allow_none=True)
+    date = fields.Date(required=True, allow_none=True)
     jobs = fields.Int(required=True, allow_none=True)
 
 
@@ -87,6 +88,7 @@ class BaseTransformer:
         return dict(
             postal_code=self.postal_code.upper(),
             company=self.transform_company(row[self.fields["company"]]),
+            location=self.transform_location(row[self.fields["location"]]),
             date=self.transform_date(row[self.fields["date"]]),
             jobs=self.transform_jobs(row[self.fields["jobs"]]),
         )
@@ -96,6 +98,16 @@ class BaseTransformer:
 
         Args:
             value (str): The raw company string provided by the source
+
+        Returns: A string object ready for consolidation.
+        """
+        return value.strip()
+
+    def transform_location(self, value):
+        """Transform a raw location.
+
+        Args:
+            value (str): The raw location string provided by the source
 
         Returns: A string object ready for consolidation.
         """
