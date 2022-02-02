@@ -1,14 +1,21 @@
 import csv
 from importlib import import_module
 import logging
+from pathlib import Path
 
 from . import utils
 
 logger = logging.getLogger(__name__)
 
 
-def main():
-    """Consolidate raw data using a common data schema."""
+def run(input_dir: Path = utils.WARN_ANALYSIS_OUTPUT_DIR / "raw") -> Path:
+    """Consolidate raw data using a common data schema.
+
+    Args:
+        input_dir (Path): The directory where our raw data files are stored.
+
+    Returns: The path to our consolidated comma-delimited file.
+    """
     logging.basicConfig(level="DEBUG", format="%(asctime)s - %(name)s - %(message)s")
 
     # Get all of the transformers
@@ -22,7 +29,6 @@ def main():
         module = import_module(f"warn_analysis.transformers.{t}")
 
         # Transform the data
-        input_dir = utils.WARN_ANALYSIS_OUTPUT_DIR / "raw"
         source_list = module.Transformer(input_dir).transform()
 
         # Add it to the master list
@@ -41,6 +47,9 @@ def main():
         writer.writeheader()
         writer.writerows(obj_list)
 
+    # Return the path
+    return consolidated_path
+
 
 if __name__ == "__main__":
-    main()
+    run()
