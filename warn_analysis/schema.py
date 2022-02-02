@@ -8,8 +8,6 @@ import typing
 
 from marshmallow import Schema, fields
 
-import utils
-
 logger = logging.getLogger(__name__)
 
 
@@ -63,7 +61,8 @@ class BaseTransformer:
     def transform(self) -> typing.List[typing.Dict]:
         """Transform prepared rows into a form that's ready for consolidation.
 
-        Returns: A validated list of dictionaries that conform to our schema"""
+        Returns: A validated list of dictionaries that conform to our schema
+        """
         logger.debug(f"Transforming {self.postal_code}")
 
         # Prep the row list for transformation

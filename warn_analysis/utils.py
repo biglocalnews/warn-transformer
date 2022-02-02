@@ -12,6 +12,7 @@ WARN_ANALYSIS_OUTPUT_DIR = Path(
 
 def get_all_transformers() -> typing.List[str]:
     """Get all the states and territories that have scrapers.
+
     Returns: List of lower-case post abbreviations.
     """
     this_dir = Path(__file__).parent

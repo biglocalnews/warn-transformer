@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 """Configure the package for distribution."""
-import distutils.cmd
 import os
-from importlib import import_module
-from pathlib import Path
 
 from setuptools import find_packages, setup
 
@@ -49,5 +46,5 @@ setup(
         "pytest",
         "pytest-vcr",
     ],
-    setup_requires=["pytest-runner",],
+    setup_requires=["pytest-runner"],
 )
