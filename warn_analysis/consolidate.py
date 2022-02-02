@@ -22,7 +22,8 @@ def main():
         module = import_module(f"warn_analysis.transformers.{t}")
 
         # Transform the data
-        source_list = module.Transformer().transform()
+        input_dir = utils.WARN_ANALYSIS_OUTPUT_DIR / "raw"
+        source_list = module.Transformer(input_dir).transform()
 
         # Add it to the master list
         obj_list += source_list

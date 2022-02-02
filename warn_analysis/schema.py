@@ -3,6 +3,7 @@ from datetime import datetime
 import hashlib
 import json
 import logging
+from pathlib import Path
 import typing
 
 from marshmallow import Schema, fields
@@ -32,8 +33,13 @@ class BaseTransformer:
         "%m/%d/%Y"  # The default date format. It will need to be customized by source.
     )
 
-    def __init__(self):
-        """Intialize a new instance."""
+    def __init__(self, input_dir: Path):
+        """Intialize a new instance.
+
+        Args:
+            input_dir (Path): A directory where our raw data is stored
+        """
+        self.input_dir = input_dir
         self.raw_data = self.get_raw_data()
 
     def get_raw_data(self) -> typing.List[typing.Dict]:
@@ -43,7 +49,7 @@ class BaseTransformer:
         """
         # Get downloaded file
         raw_path = (
-            utils.WARN_ANALYSIS_OUTPUT_DIR / "raw" / f"{self.postal_code.lower()}.csv"
+            self.input_dir / f"{self.postal_code.lower()}.csv"
         )
         # Open the csv
         with open(raw_path) as fh:
