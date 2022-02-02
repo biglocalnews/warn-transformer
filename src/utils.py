@@ -1,13 +1,16 @@
 import os
 from pathlib import Path
+import typing
 
 USER_DIR = Path(os.path.expanduser("~"))
 DEFAULT_WARN_ANALYSIS_OUTPUT_DIR = USER_DIR / ".warn-analysis"
 
-WARN_ANALYSIS_OUTPUT_DIR = Path(os.environ.get("WARN_ANALYSIS_OUTPUT_DIR", DEFAULT_WARN_ANALYSIS_OUTPUT_DIR))
+WARN_ANALYSIS_OUTPUT_DIR = Path(
+    os.environ.get("WARN_ANALYSIS_OUTPUT_DIR", DEFAULT_WARN_ANALYSIS_OUTPUT_DIR)
+)
 
 
-def get_all_transformers():
+def get_all_transformers() -> typing.List[str]:
     """Get all the states and territories that have scrapers.
     Returns: List of lower-case post abbreviations.
     """

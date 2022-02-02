@@ -3,6 +3,7 @@ from datetime import datetime
 import hashlib
 import json
 import logging
+import typing
 
 from marshmallow import Schema, fields
 
@@ -25,9 +26,9 @@ class WarnNoticeSchema(Schema):
 class BaseTransformer:
     """Transform a state's raw data for consolidation."""
 
-    schema = WarnNoticeSchema
+    schema: Schema = WarnNoticeSchema
 
-    date_format = (
+    date_format: str = (
         "%m/%d/%Y"  # The default date format. It will need to be customized by source.
     )
 
@@ -35,20 +36,22 @@ class BaseTransformer:
         """Intialize a new instance."""
         self.raw_data = self.get_raw_data()
 
-    def get_raw_data(self):
+    def get_raw_data(self) -> typing.List[typing.Dict]:
         """Get the raw data from our scraper for this source.
 
         Returns: A list of raw rows of data from the source.
         """
         # Get downloaded file
-        raw_path = utils.WARN_ANALYSIS_OUTPUT_DIR / "raw" / f"{self.postal_code.lower()}.csv"
+        raw_path = (
+            utils.WARN_ANALYSIS_OUTPUT_DIR / "raw" / f"{self.postal_code.lower()}.csv"
+        )
         # Open the csv
         with open(raw_path) as fh:
             reader = csv.DictReader(fh)
             # Return it as a list
             return list(reader)
 
-    def transform(self):
+    def transform(self) -> typing.List[typing.Dict]:
         """Transform prepared rows into a form that's ready for consolidation.
 
         Returns: A validated list of dictionaries that conform to our schema"""
@@ -66,7 +69,9 @@ class BaseTransformer:
         # Return the result, which should be ready for consolidation
         return validated_list
 
-    def prep_row_list(self, row_list):
+    def prep_row_list(
+        self, row_list: typing.List[typing.Dict]
+    ) -> typing.List[typing.Dict]:
         """Make necessary transformations to the raw row list prior to transformation.
 
         Args:
@@ -85,7 +90,7 @@ class BaseTransformer:
             prepped_list.append(row)
         return prepped_list
 
-    def transform_row(self, row):
+    def transform_row(self, row: typing.Dict) -> typing.Dict:
         """Transform a row into a form that's ready for consolidation.
 
         Args:
@@ -102,7 +107,7 @@ class BaseTransformer:
             jobs=self.transform_jobs(row[self.fields["jobs"]]),
         )
 
-    def get_hash_id(self, row):
+    def get_hash_id(self, row: typing.Dict) -> str:
         """Convert the row into a unique hexdigest to use as a unique identifier.
 
         Args:
@@ -114,7 +119,7 @@ class BaseTransformer:
         hash_obj = hashlib.sha224(row_string.encode("utf-8"))
         return hash_obj.hexdigest()
 
-    def transform_company(self, value):
+    def transform_company(self, value: str) -> str:
         """Transform a raw company name.
 
         Args:
@@ -124,7 +129,7 @@ class BaseTransformer:
         """
         return value.strip()
 
-    def transform_location(self, value):
+    def transform_location(self, value: str) -> str:
         """Transform a raw location.
 
         Args:
@@ -134,7 +139,7 @@ class BaseTransformer:
         """
         return value.strip()
 
-    def transform_date(self, value):
+    def transform_date(self, value: str) -> str:
         """Transform a raw date string into a date object.
 
         Args:
@@ -149,7 +154,7 @@ class BaseTransformer:
             return None
         return str(dt.date())
 
-    def transform_jobs(self, value):
+    def transform_jobs(self, value: str) -> int:
         """Transform a raw jobs number into an integer.
 
         Args:
