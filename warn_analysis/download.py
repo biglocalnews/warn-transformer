@@ -6,7 +6,7 @@ from bln.client import Client
 from . import utils
 
 BLN_API_KEY = os.getenv("BLN_API_KEY")
-BLN_PROJECT_ID = os.getenv("BLN_PROJECT_ID")
+BLN_PROJECT_ID = "UHJvamVjdDpiZGM5NmU1MS1kMzBhLTRlYTctODY4Yi04ZGI4N2RjMzQ1ODI="
 
 logger = logging.getLogger(__name__)
 
