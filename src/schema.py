@@ -44,7 +44,22 @@ class BaseTransformer:
 
         Returns: A transformed dict that's ready to be loaded into our consolidated schema.
         """
-        raise NotImplementedError("transform_row method not implemented")
+        return dict(
+            state=self.state,
+            company=self.transform_company(row[self.fields["company"]]),
+            date=self.transform_date(row[self.fields["date"]]),
+            jobs=self.transform_jobs(row[self.fields["jobs"]]),
+        )
+
+    def transform_company(self, value):
+        """Transform a raw company name.
+
+        Args:
+            value (str): The raw company string provided by the source
+
+        Returns: A string object ready for consolidation.
+        """
+        return value.strip()
 
     def transform_date(self, value):
         """Transform a raw date string into a date object.

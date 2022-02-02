@@ -4,6 +4,12 @@ from ..schema import BaseTransformer
 class Transformer(BaseTransformer):
     """Transform Iowa raw data for consolidation."""
 
+    state = "IA"
+    fields = dict(
+        company="Company",
+        date="Notice Date",
+        jobs="Emp #",
+    )
     date_format = "%m/%d/%Y"
 
     def prep_row_list(self, row_list):
@@ -23,18 +29,3 @@ class Transformer(BaseTransformer):
 
         # Return what we got
         return prepped_list
-
-    def transform_row(self, row):
-        """Transform a row into a form that's ready for consolidation.
-
-        Args:
-            row (dict): One raw row of data from the source
-
-        Returns: A transformed dict that's ready to be loaded into our consolidated schema.
-        """
-        return dict(
-            state="IA",
-            company=row["Company"],
-            date=self.transform_date(row["Notice Date"]),
-            jobs=self.transform_jobs(row["Emp #"]),
-        )
