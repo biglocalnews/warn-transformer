@@ -7,22 +7,10 @@ from .transformers.ak import Transformer
 
 def main():
     """Consolidate raw data using a common data schema."""
-    # Get downloaded files
-    raw_dir = utils.OUTPUT_DIR / "raw"
-    csv_list = list(raw_dir.glob("*.csv"))
-
-    # For now, pluck out Iowa
-    ak = next(c for c in csv_list if "ak.csv" in str(c))
-
-    # Open the csv
-    with open(ak) as fh:
-        reader = csv.DictReader(fh)
-        raw_data = Transformer(reader)
-
     # Transform the data
-    transformed_data = raw_data.transform()
+    transformed_data = Transformer().transform()
 
-    # Load the records into the schema
+    # Load the records into the schema for validation
     obj_list = []
     for row in transformed_data:
         schema = WarnNoticeSchema()

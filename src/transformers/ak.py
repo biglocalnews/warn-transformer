@@ -4,7 +4,7 @@ from ..schema import BaseTransformer
 class Transformer(BaseTransformer):
     """Transform Alaska raw data for consolidation."""
 
-    state = "AK"
+    postal_code = "AK"
     fields = dict(
         company="Company",
         date="Notice Date",

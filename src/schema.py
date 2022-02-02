@@ -1,12 +1,15 @@
+import csv
 from datetime import datetime
 
 from marshmallow import Schema, fields
+
+from . import utils
 
 
 class WarnNoticeSchema(Schema):
     """An standardized instance of a WARN Act Notice."""
 
-    state = fields.Str(max_length=2, required=True)
+    postal_code = fields.Str(max_length=2, required=True)
     company = fields.Str(required=True)
     date = fields.Date(allow_none=True)
     jobs = fields.Int(required=True, allow_none=True)
@@ -19,13 +22,27 @@ class BaseTransformer:
         "%m/%d/%Y"  # The default date format. It will need to be customized by source.
     )
 
-    def __init__(self, row_list):
-        """Intialize by providing the raw row_list."""
-        self.row_list = self.prep_row_list(row_list)
+    def __init__(self):
+        """Intialize a new instance."""
+        self.raw_data = self.get_raw_data()
+
+    def get_raw_data(self):
+        """Get the raw data from our scraper for this source.
+
+        Returns a list of dictionaries.
+        """
+        # Get downloaded file
+        raw_path = utils.OUTPUT_DIR / "raw" / f"{self.postal_code.lower()}.csv"
+        # Open the csv
+        with open(raw_path) as fh:
+            reader = csv.DictReader(fh)
+            # Return it as a list
+            return list(reader)
 
     def transform(self):
         """Transform prepared rows into a form that's ready for consolidation."""
-        return [self.transform_row(r) for r in self.row_list]
+        row_list = self.prep_row_list(self.raw_data)
+        return [self.transform_row(r) for r in row_list]
 
     def prep_row_list(self, row_list):
         """Make necessary transformations to the raw row list prior to transformation.
@@ -52,7 +69,7 @@ class BaseTransformer:
         Returns: A transformed dict that's ready to be loaded into our consolidated schema.
         """
         return dict(
-            state=self.state,
+            postal_code=self.postal_code.upper(),
             company=self.transform_company(row[self.fields["company"]]),
             date=self.transform_date(row[self.fields["date"]]),
             jobs=self.transform_jobs(row[self.fields["jobs"]]),
