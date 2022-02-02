@@ -19,7 +19,7 @@ def main():
     obj_list = []
     for t in transformer_list:
         # Get the module
-        module = import_module(f"src.transformers.{t}")
+        module = import_module(f"warn_analysis.transformers.{t}")
 
         # Transform the data
         source_list = module.Transformer().transform()

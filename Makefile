@@ -68,12 +68,12 @@ PYTHON := $(PIPENV) python -W ignore
 
 consolidate: ## download raw data
 	$(call banner,      🤝 Consolidating data 🤝)
-	$(PIPENV) python -m src.consolidate
+	$(PIPENV) python -m warn_analysis.consolidate
 
 
 download: ## download raw data
 	$(call banner,      🔽 Downloading data 🔽)
-	$(PIPENV) python -m src.download
+	$(PIPENV) python -m warn_analysis.download
 
 #
 # Tests
