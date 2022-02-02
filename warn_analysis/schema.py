@@ -18,7 +18,7 @@ class WarnNoticeSchema(Schema):
     postal_code = fields.Str(max_length=2, required=True)
     company = fields.Str(required=True)
     location = fields.Str(required=True, allow_none=True)
-    date = fields.Date(required=True, allow_none=True)
+    date = fields.Date(required=True)
     jobs = fields.Int(required=True, allow_none=True)
 
 
@@ -33,6 +33,8 @@ class BaseTransformer:
 
     # The default date format. It will need to be customized by source.
     date_format: str = "%m/%d/%Y"
+    # Manual date corrections for malformed data
+    date_corrections: typing.Dict = {}
 
     def __init__(self, input_dir: Path):
         """Intialize a new instance.
@@ -147,7 +149,7 @@ class BaseTransformer:
         """
         return value.strip()
 
-    def transform_date(self, value: str) -> typing.Optional[str]:
+    def transform_date(self, value: str) -> str:
         """Transform a raw date string into a date object.
 
         Args:
@@ -159,7 +161,8 @@ class BaseTransformer:
         try:
             dt = datetime.strptime(value, self.date_format)
         except ValueError:
-            return None
+            logger.debug(f"Could not parse {value}. Looking up correction")
+            dt = self.date_corrections[value]
         return str(dt.date())
 
     def transform_jobs(self, value: str) -> typing.Optional[int]:

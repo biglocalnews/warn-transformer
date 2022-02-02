@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from ..schema import BaseTransformer
 
 
@@ -12,3 +14,6 @@ class Transformer(BaseTransformer):
         jobs="Employees Affected",
     )
     date_format = "%m/%d/%y"
+    date_corrections = {
+        "9/30/20*": datetime(2020, 9, 30)
+    }
