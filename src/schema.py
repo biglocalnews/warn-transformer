@@ -18,6 +18,8 @@ class WarnNoticeSchema(Schema):
 class BaseTransformer:
     """Transform a state's raw data for consolidation."""
 
+    schema = WarnNoticeSchema
+
     date_format = (
         "%m/%d/%Y"  # The default date format. It will need to be customized by source.
     )
@@ -42,7 +44,9 @@ class BaseTransformer:
     def transform(self):
         """Transform prepared rows into a form that's ready for consolidation."""
         row_list = self.prep_row_list(self.raw_data)
-        return [self.transform_row(r) for r in row_list]
+        transformed_list = [self.transform_row(r) for r in row_list]
+        validated_list = [self.schema().load(r) for r in transformed_list]
+        return validated_list
 
     def prep_row_list(self, row_list):
         """Make necessary transformations to the raw row list prior to transformation.
