@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from warn_analysis import consolidate
+from warn_transformer import consolidate
 
 
 @pytest.mark.vcr()

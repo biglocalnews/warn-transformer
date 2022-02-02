@@ -1,6 +1,6 @@
 import pytest
 
-from warn_analysis import download
+from warn_transformer import download
 
 
 @pytest.mark.vcr()
