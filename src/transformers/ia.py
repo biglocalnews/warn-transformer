@@ -2,6 +2,8 @@ from ..schema import BaseTransformer
 
 
 class Transformer(BaseTransformer):
+    """Transform Iowa raw data for consolidation."""
+
     date_format = "%m/%d/%Y"
 
     def prep_row_list(self, row_list):

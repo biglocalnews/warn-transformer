@@ -20,6 +20,7 @@ class BaseTransformer:
     )
 
     def __init__(self, row_list):
+        """Intialize by providing the raw row_list."""
         self.row_list = self.prep_row_list(row_list)
 
     def transform(self):
@@ -46,7 +47,7 @@ class BaseTransformer:
         raise NotImplementedError("transform_row method not implemented")
 
     def transform_date(self, value):
-        """Transforms a raw date string into a date object.
+        """Transform a raw date string into a date object.
 
         Args:
             value (str): The raw date string provided by the source
@@ -61,7 +62,7 @@ class BaseTransformer:
         return str(dt.date())
 
     def transform_jobs(self, value):
-        """Transforms a raw jobs number into an integer.
+        """Transform a raw jobs number into an integer.
 
         Args:
             value (str): A raw jobs number provided by the source
