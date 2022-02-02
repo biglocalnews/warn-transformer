@@ -51,9 +51,7 @@ class BaseTransformer:
         Returns: A list of raw rows of data from the source.
         """
         # Get downloaded file
-        raw_path = (
-            self.input_dir / f"{self.postal_code.lower()}.csv"
-        )
+        raw_path = self.input_dir / f"{self.postal_code.lower()}.csv"
         # Open the csv
         with open(raw_path) as fh:
             reader = csv.DictReader(fh)

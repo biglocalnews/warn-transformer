@@ -21,7 +21,9 @@ class Transformer(BaseTransformer):
         "3/21/19 (received  3/22/19)": datetime(2019, 3, 21),
         "7/6/19-7/31/19": datetime(2019, 7, 6),
         "7/15/19 (received 7/16/19)": datetime(2019, 7, 15),
-        "11-1-19 received 11/19/19 via Local Area/Suthers office": datetime(2019, 11, 1),
+        "11-1-19 received 11/19/19 via Local Area/Suthers office": datetime(
+            2019, 11, 1
+        ),
         "05/24/19 - 3/20/2020": datetime(2019, 5, 24),
     }
 
