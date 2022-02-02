@@ -17,7 +17,7 @@ class WarnNoticeSchema(Schema):
     hash_id = fields.Str(required=True)
     postal_code = fields.Str(max_length=2, required=True)
     company = fields.Str(required=True)
-    location = fields.Str(required=True, allow_none=True)
+    location = fields.Str(required=False, allow_none=True)
     date = fields.Date(required=True)
     jobs = fields.Int(required=True, allow_none=True)
 
@@ -108,14 +108,19 @@ class BaseTransformer:
 
         Returns: A transformed dict that's ready to be loaded into our consolidated schema.
         """
-        return dict(
+        # Do the required fields
+        data = dict(
             hash_id=self.get_hash_id(row),
             postal_code=self.postal_code.upper(),
             company=self.transform_company(row[self.fields["company"]]),
-            location=self.transform_location(row[self.fields["location"]]),
             date=self.transform_date(row[self.fields["date"]]),
             jobs=self.transform_jobs(row[self.fields["jobs"]]),
         )
+        # If they exist, do the optional fields
+        if "location" in self.fields:
+            data["location"] = self.transform_location(row[self.fields["location"]])
+        # Return the data
+        return data
 
     def get_hash_id(self, row: typing.Dict) -> str:
         """Convert the row into a unique hexdigest to use as a unique identifier.
