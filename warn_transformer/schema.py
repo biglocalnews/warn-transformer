@@ -18,7 +18,7 @@ class WarnNoticeSchema(Schema):
     postal_code = fields.Str(max_length=2, required=True)
     company = fields.Str(required=True)
     location = fields.Str(required=False, allow_none=True)
-    date = fields.Date(required=True)
+    date = fields.Date(required=True, allow_none=True)
     jobs = fields.Int(required=True, allow_none=True)
 
 
@@ -154,7 +154,7 @@ class BaseTransformer:
         """
         return value.strip()
 
-    def transform_date(self, value: str) -> str:
+    def transform_date(self, value: str) -> typing.Optional[str]:
         """Transform a raw date string into a date object.
 
         Args:
@@ -162,12 +162,41 @@ class BaseTransformer:
 
         Returns: A date object ready for consolidation. Or, if the date string is invalid, a None.
         """
+        # Clean up the string
         value = value.strip()
-        try:
-            dt = datetime.strptime(value, self.date_format)
-        except ValueError:
-            logger.debug(f"Could not parse {value}. Looking up correction")
-            dt = self.date_corrections[value]
+
+        # If there's nothing to convert, return None
+        if not value:
+            return None
+
+        # The result, whene we find it
+        dt = None
+
+        # If there's only one date_format, try that
+        if isinstance(self.date_format, str):
+            try:
+                dt = datetime.strptime(value, self.date_format)
+            except ValueError:
+                logger.debug(f"Could not parse {value}. Looking up correction")
+                dt = self.date_corrections[value]
+
+        # If it's a list, try them one by one
+        elif isinstance(self.date_format, list):
+            for f in self.date_format:
+                try:
+                    dt = datetime.strptime(value, f)
+                except ValueError:
+                    continue
+            # If there's nothing at the end of the loop, try the correction
+            if not dt:
+                logger.debug(f"Could not parse {value}. Looking up correction")
+                dt = self.date_corrections[value]
+
+        # If the date parses as None, return that
+        if dt is None:
+            return None
+
+        # If we have a datetime, return the result as a string
         return str(dt.date())
 
     def transform_jobs(self, value: str) -> typing.Optional[int]:

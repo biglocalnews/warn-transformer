@@ -13,7 +13,7 @@ class Transformer(BaseTransformer):
         date="DATE RECEIVED",
         jobs="# AFFECTED",
     )
-    date_format = "%m/%d/%Y"
+    date_format = ("%m/%d/%Y", "%m/%d/%y")
 
     def transform_date(self, value: str) -> str:
         """Transform a raw date string into a date object.
@@ -25,9 +25,4 @@ class Transformer(BaseTransformer):
         """
         # A little custom clean up based on the weird stuff from this source
         value = value.strip().split()[0].strip()
-
-        try:
-            dt = datetime.strptime(value.strip(), "%m/%d/%y")
-        except ValueError:
-            return super().transform_date(value)
-        return str(dt.date())
+        return super().transform_date(value)

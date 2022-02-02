@@ -14,7 +14,7 @@ class Transformer(BaseTransformer):
         date="warn date",
         jobs="layoffs",
     )
-    date_format = "%m/%d/%Y"
+    date_format = ("%m/%d/%Y", "%m/%d/%y")
     date_corrections = {
         "1/7/19 & 4/6/2020": datetime(2019, 1, 7),
         "3/1/19 (received on 3/22/19)": datetime(2019, 3, 1),
@@ -48,17 +48,3 @@ class Transformer(BaseTransformer):
 
         # Return the result
         return prepped_list
-
-    def transform_date(self, value: str) -> str:
-        """Transform a raw date string into a date object.
-
-        Args:
-            value (str): The raw date string provided by the source
-
-        Returns: A date object ready for consolidation. Or, if the date string is invalid, a None.
-        """
-        try:
-            dt = datetime.strptime(value.strip(), "%m/%d/%y")
-        except ValueError:
-            return super().transform_date(value)
-        return str(dt.date())

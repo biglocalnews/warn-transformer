@@ -14,7 +14,7 @@ class Transformer(BaseTransformer):
         date="Notice Date",
         jobs="Affected Workers",
     )
-    date_format = "%m/%d/%Y"
+    date_format = ["%m/%d/%Y", "%m/%d/%y"]
 
     def prep_row_list(
         self, row_list: typing.List[typing.Dict]
@@ -31,17 +31,3 @@ class Transformer(BaseTransformer):
 
         # Cut rows with data-free revisions
         return [r for r in row_list if r["Affected Workers"] != "N/A"]
-
-    def transform_date(self, value: str) -> str:
-        """Transform a raw date string into a date object.
-
-        Args:
-            value (str): The raw date string provided by the source
-
-        Returns: A date object ready for consolidation. Or, if the date string is invalid, a None.
-        """
-        try:
-            dt = datetime.strptime(value.strip(), "%m/%d/%y")
-        except ValueError:
-            return super().transform_date(value)
-        return str(dt.date())
