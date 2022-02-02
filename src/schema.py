@@ -38,7 +38,7 @@ class BaseTransformer:
     def get_raw_data(self):
         """Get the raw data from our scraper for this source.
 
-        Returns a list of dictionaries.
+        Returns: A list of raw rows of data from the source.
         """
         # Get downloaded file
         raw_path = utils.WARN_ANALYSIS_OUTPUT_DIR / "raw" / f"{self.postal_code.lower()}.csv"
@@ -49,7 +49,9 @@ class BaseTransformer:
             return list(reader)
 
     def transform(self):
-        """Transform prepared rows into a form that's ready for consolidation."""
+        """Transform prepared rows into a form that's ready for consolidation.
+
+        Returns: A validated list of dictionaries that conform to our schema"""
         logger.debug(f"Transforming {self.postal_code}")
 
         # Prep the row list for transformation
@@ -67,7 +69,10 @@ class BaseTransformer:
     def prep_row_list(self, row_list):
         """Make necessary transformations to the raw row list prior to transformation.
 
-        Useful for filtering out empty rows.
+        Args:
+            row_list (list): A list of raw rows of data from the source.
+
+        Returns: The row list minus empty records
         """
         prepped_list = []
         for row in row_list:
