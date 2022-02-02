@@ -1,24 +1,8 @@
 import csv
-from datetime import datetime
 
 from . import utils
 from .schema import WarnNoticeSchema
-
-
-def _parse_dates(value):
-    value = value.strip()
-    try:
-        dt = datetime.strptime(value, "%m/%d/%Y")
-    except ValueError:
-        return None
-    return str(dt.date())
-
-
-def _parse_jobs(value):
-    try:
-        return int(value)
-    except ValueError:
-        return None
+from .transformers.ia import Transformer
 
 
 def main():
@@ -33,26 +17,16 @@ def main():
     # Open the csv
     with open(ia) as fh:
         reader = csv.DictReader(fh)
-        row_list = list(reader)
+        raw_data = Transformer(reader)
+
+    # Transform the data
+    transformed_data = raw_data.transform()
 
     # Load the records into the schema
     obj_list = []
-    for row in row_list:
-        # Skip empty rows
-        if not row["Company"]:
-            continue
-
-        # Load data into schema
+    for row in transformed_data:
         schema = WarnNoticeSchema()
-        data = dict(
-            state="IA",
-            company=row["Company"],
-            date=_parse_dates(row["Notice Date"]),
-            jobs=_parse_jobs(row["Emp #"]),
-        )
-        obj = schema.load(data)
-
-        # Add standardized record to list
+        obj = schema.load(row)
         obj_list.append(obj)
 
     # Output what we got
