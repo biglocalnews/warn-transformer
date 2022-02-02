@@ -26,7 +26,7 @@ def run(input_dir: Path = utils.WARN_ANALYSIS_OUTPUT_DIR / "raw") -> Path:
     obj_list = []
     for t in transformer_list:
         # Get the module
-        module = import_module(f"warn_analysis.transformers.{t}")
+        module = import_module(f"warn_transformer.transformers.{t}")
 
         # Transform the data
         source_list = module.Transformer(input_dir).transform()

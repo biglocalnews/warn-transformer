@@ -68,12 +68,12 @@ PYTHON := $(PIPENV) python -W ignore
 
 consolidate: ## download raw data
 	$(call banner,      🤝 Consolidating data 🤝)
-	$(PIPENV) python -m warn_analysis.consolidate
+	$(PIPENV) python -m warn_transformer.consolidate
 
 
 download: ## download raw data
 	$(call banner,      🔽 Downloading data 🔽)
-	$(PIPENV) python -m warn_analysis.download
+	$(PIPENV) python -m warn_transformer.download
 
 #
 # Tests
@@ -86,7 +86,7 @@ lint: ## run the linter
 
 mypy: ## run mypy type checks
 	$(call banner,        🔩 Running mypy 🔩)
-	@$(PIPENV) mypy ./warn_analysis --ignore-missing-imports
+	@$(PIPENV) mypy ./warn_transformer --ignore-missing-imports
 
 
 test: ## run all tests
