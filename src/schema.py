@@ -32,9 +32,16 @@ class BaseTransformer:
 
         Useful for filtering out empty rows.
         """
-        # By default it does nothing.
-        # Override in your subclass if you need to do something.
-        return row_list
+        prepped_list = []
+        for row in row_list:
+            # Skip empty rows
+            try:
+                # A list with only empty cell will throw an error
+                next(v for v in row.values() if v.strip())
+            except StopIteration:
+                continue
+            prepped_list.append(row)
+        return prepped_list
 
     def transform_row(self, row):
         """Transform a row into a form that's ready for consolidation.
