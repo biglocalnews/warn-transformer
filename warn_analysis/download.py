@@ -11,8 +11,12 @@ BLN_PROJECT_ID = os.getenv("BLN_PROJECT_ID")
 logger = logging.getLogger(__name__)
 
 
-def main():
-    """Download all the CSVs in the WARN Notice project on biglocalnews.org."""
+def run(download_dir: Path = utils.WARN_ANALYSIS_OUTPUT_DIR / "raw"):
+    """Download all the CSVs in the WARN Notice project on biglocalnews.org.
+
+    Args:
+        download_dir (Path): The directory where files will be downloaded.
+    """
     logging.basicConfig(level="DEBUG", format="%(asctime)s - %(name)s - %(message)s")
 
     # Login to BLN.
@@ -25,7 +29,6 @@ def main():
     file_list = [f["name"] for f in p["files"]]
 
     # Make the download directory, if it doesn't already exist.
-    download_dir = utils.WARN_ANALYSIS_OUTPUT_DIR / "raw"
     if not download_dir.exists():
         download_dir.mkdir(parents=True)
 
@@ -36,4 +39,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    run()
