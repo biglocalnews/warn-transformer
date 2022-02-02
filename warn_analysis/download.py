@@ -4,7 +4,7 @@ from pathlib import Path
 
 from bln.client import Client
 
-import utils
+from . import utils
 
 BLN_API_KEY = os.getenv("BLN_API_KEY")
 BLN_PROJECT_ID = "UHJvamVjdDpiZGM5NmU1MS1kMzBhLTRlYTctODY4Yi04ZGI4N2RjMzQ1ODI="

@@ -3,7 +3,7 @@ from importlib import import_module
 import logging
 from pathlib import Path
 
-import utils
+from . import utils
 
 logger = logging.getLogger(__name__)
 
