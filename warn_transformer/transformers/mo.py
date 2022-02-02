@@ -1,3 +1,5 @@
+import typing
+
 from ..schema import BaseTransformer
 
 
@@ -13,7 +15,7 @@ class Transformer(BaseTransformer):
     )
     date_format = ("%m/%d/%Y", "%m/%d/%y")
 
-    def transform_date(self, value: str) -> str:
+    def transform_date(self, value: str) -> typing.Optional[str]:
         """Transform a raw date string into a date object.
 
         Args:

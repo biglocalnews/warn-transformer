@@ -32,7 +32,7 @@ class BaseTransformer:
     fields: typing.Dict = dict()
 
     # The default date format. It will need to be customized by source.
-    date_format: str = "%m/%d/%Y"
+    date_format: typing.Any = "%m/%d/%Y"
     # Manual date corrections for malformed data
     date_corrections: typing.Dict = {}
 

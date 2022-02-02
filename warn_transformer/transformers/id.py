@@ -1,4 +1,5 @@
 from datetime import datetime
+import typing
 
 from ..schema import BaseTransformer
 
@@ -18,7 +19,7 @@ class Transformer(BaseTransformer):
         "2/19/219": datetime(2019, 2, 19),
     }
 
-    def transform_date(self, value: str) -> str:
+    def transform_date(self, value: str) -> typing.Optional[str]:
         """Transform a raw date string into a date object.
 
         Args:
