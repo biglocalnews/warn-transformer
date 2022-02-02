@@ -2,7 +2,7 @@ import csv
 
 from . import utils
 from .schema import WarnNoticeSchema
-from .transformers.ia import Transformer
+from .transformers.ak import Transformer
 
 
 def main():
@@ -12,10 +12,10 @@ def main():
     csv_list = list(raw_dir.glob("*.csv"))
 
     # For now, pluck out Iowa
-    ia = next(c for c in csv_list if "ia.csv" in str(c))
+    ak = next(c for c in csv_list if "ak.csv" in str(c))
 
     # Open the csv
-    with open(ia) as fh:
+    with open(ak) as fh:
         reader = csv.DictReader(fh)
         raw_data = Transformer(reader)
 
