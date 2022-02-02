@@ -1,5 +1,7 @@
 import csv
 from datetime import datetime
+import hashlib
+import json
 import logging
 
 from marshmallow import Schema, fields
@@ -12,6 +14,7 @@ logger = logging.getLogger(__name__)
 class WarnNoticeSchema(Schema):
     """An standardized instance of a WARN Act Notice."""
 
+    hash_id = fields.Str(required=True)
     postal_code = fields.Str(max_length=2, required=True)
     company = fields.Str(required=True)
     location = fields.Str(required=True, allow_none=True)
@@ -86,6 +89,7 @@ class BaseTransformer:
         Returns: A transformed dict that's ready to be loaded into our consolidated schema.
         """
         return dict(
+            hash_id=hashlib.sha224(json.dumps(row).encode("utf-8")).hexdigest(),
             postal_code=self.postal_code.upper(),
             company=self.transform_company(row[self.fields["company"]]),
             location=self.transform_location(row[self.fields["location"]]),

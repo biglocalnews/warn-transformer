@@ -17,12 +17,16 @@ def main():
     logger.info(f"Consolidating {len(transformer_list)} sources")
 
     # Loop through them
+    obj_list = []
     for t in transformer_list:
         # Get the module
         module = import_module(f"src.transformers.{t}")
 
         # Transform the data
-        obj_list = module.Transformer().transform()
+        source_list = module.Transformer().transform()
+
+        # Add it to the master list
+        obj_list += source_list
 
     # Get the output directory
     processed_dir = utils.WARN_ANALYSIS_OUTPUT_DIR / "processed"
@@ -31,7 +35,7 @@ def main():
 
     # Output a consolidated CSV
     consolidated_path = processed_dir / "consolidated.csv"
-    logger.debug(f"Writing to {consolidated_path}")
+    logger.debug(f"Writing {len(obj_list)} records to {consolidated_path}")
     with open(consolidated_path, "w") as fh:
         writer = csv.DictWriter(fh, obj_list[0].keys())
         writer.writeheader()
