@@ -17,6 +17,8 @@ pytest = "*"
 pytest-vcr = "*"
 pytest-cov = "*"
 mypy = "*"
+pandas = "*"
+jupyterlab = "*"
 
 [requires]
 python_version = "3.7"
