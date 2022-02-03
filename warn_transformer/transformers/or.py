@@ -6,9 +6,9 @@ class Transformer(BaseTransformer):
 
     postal_code = "OR"
     fields = dict(
-        company="Employer",
-        location="City",
-        date="Notification Date",
-        jobs="Count",
+        company="Company Name",
+        location="Location",
+        date="Received Date",
+        jobs="Laid Off",
     )
-    date_format = "%m/%d/%Y"
+    date_format = "%Y-%m-%d %H:%M:%S"

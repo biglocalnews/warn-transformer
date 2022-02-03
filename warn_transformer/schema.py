@@ -1,10 +1,10 @@
 import csv
-from datetime import datetime
 import hashlib
 import json
 import logging
-from pathlib import Path
 import typing
+from datetime import datetime
+from pathlib import Path
 
 from marshmallow import Schema, fields
 
@@ -114,9 +114,11 @@ class BaseTransformer:
             date=self.transform_date(row[self.fields["date"]]),
             jobs=self.transform_jobs(row[self.fields["jobs"]]),
         )
+
         # If they exist, do the optional fields
         if "location" in self.fields:
             data["location"] = self.transform_location(row[self.fields["location"]])
+
         # Return the data
         return data
 

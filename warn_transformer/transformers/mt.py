@@ -11,4 +11,4 @@ class Transformer(BaseTransformer):
         date="Date of Notice",
         jobs="Number of Employees Affected",
     )
-    date_format = "%Y-%m-%d"
+    date_format = "%Y-%m-%d %H:%M:%S"
