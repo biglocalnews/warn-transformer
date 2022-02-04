@@ -1,6 +1,6 @@
 import csv
-from importlib import import_module
 import logging
+from importlib import import_module
 from pathlib import Path
 
 from . import utils
@@ -34,6 +34,10 @@ def run(input_dir: Path = utils.WARN_ANALYSIS_OUTPUT_DIR / "raw") -> Path:
         # Add it to the master list
         obj_list += source_list
 
+    # Drop duplicates by using the hash as a unique identifer
+    unique_list = list({d["hash_id"]: d for d in obj_list}.values())
+    logger.debug(f"Dropped {len(obj_list) - len(unique_list)} duplicates")
+
     # Get the output directory
     processed_dir = utils.WARN_ANALYSIS_OUTPUT_DIR / "processed"
     if not processed_dir.exists():
@@ -41,11 +45,11 @@ def run(input_dir: Path = utils.WARN_ANALYSIS_OUTPUT_DIR / "raw") -> Path:
 
     # Output a consolidated CSV
     consolidated_path = processed_dir / "consolidated.csv"
-    logger.debug(f"Writing {len(obj_list)} records to {consolidated_path}")
+    logger.debug(f"Writing {len(unique_list)} records to {consolidated_path}")
     with open(consolidated_path, "w") as fh:
-        writer = csv.DictWriter(fh, obj_list[0].keys())
+        writer = csv.DictWriter(fh, unique_list[0].keys())
         writer.writeheader()
-        writer.writerows(obj_list)
+        writer.writerows(unique_list)
 
     # Return the path
     return consolidated_path
