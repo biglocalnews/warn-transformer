@@ -181,7 +181,7 @@ class BaseTransformer:
                 dt = self.date_corrections[value]
 
         # If it's a list, try them one by one
-        elif isinstance(self.date_format, list):
+        elif isinstance(self.date_format, (list, tuple)):
             for f in self.date_format:
                 try:
                     dt = datetime.strptime(value, f)

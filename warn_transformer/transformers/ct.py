@@ -13,7 +13,7 @@ class Transformer(BaseTransformer):
         date="warn_date",
         jobs="number_workers",
     )
-    date_format = ("%m/%d/%Y", "%m/%d/%y")
+    date_format = ["%m/%d/%Y", "%m/%d/%y"]
 
     def transform_date(self, value: str) -> typing.Optional[str]:
         """Transform a raw date string into a date object.

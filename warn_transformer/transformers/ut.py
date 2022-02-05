@@ -16,4 +16,9 @@ class Transformer(BaseTransformer):
     date_format = ("%m/%d/%Y", "%m/%d/%y")
     date_corrections = {
         "03/09/2020&": datetime(2020, 3, 9),
+        "01/05/18/": datetime(2018, 1, 5),
+        "03/05/14 Updated": datetime(2014, 3, 5),
+        "09/31/10": datetime(2010, 9, 30),
+        "05/2009": datetime(2009, 5, 1),
+        "01/07//09": datetime(2009, 1, 7),
     }
