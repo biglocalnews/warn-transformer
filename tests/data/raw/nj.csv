@@ -197,6 +197,7 @@ CONAIR,East Windsor,11/29/2019,98
 CVS Health,East Northport,12/15/2017,12
 Cadbury Senior Lifestyles,Cherry Hill,04/30/2016,255
 "Cadent, Inc.",Carlstadt,09/12/2012,106
+"Cadent, Inc.",Carlstadt,09/12/2012,106
 Canada Dry Bottling Company  - East Brunswick,East Brunswick,01/31/2021,22
 Canada Dry Bottling Company - Hackensack,Hackensack,01/31/2021,44
 Canberra Dover,Dover,08/31/2011,64
@@ -253,9 +254,12 @@ Compass Group dba: Chartwells,Woodbridge,11/28/2021,103
 "Compass Group, dba Chartwells Higher Education at Montclair State University",Montclair,08/21/2020,105
 Comprehensive Decommissioning Intenational (Oyster Creek),Forked River,08/01/2021,92
 Computershare,Edison,05/24/2013,58
-"Conagra Brands, Inc.",Cherry Hill,05/24/2019,196
 "Conagra Brands, Inc.",Parsippany,03/22/2019,308
+"Conagra Brands, Inc.",Cherry Hill,05/24/2019,196
 Concerned Parents for Head Start,Paterson,07/01/2013,63
+Concerned Parents for Head Start,Paterson,07/01/2013,63
+Concerned Parents for Head Start,Paterson,07/01/2013,63
+"Congoleum Acquistion, LLC",Trenton,02/01/2022,28
 Congoleum Corporation,Hamilton,09/01/2014,65
 "Consolidated Services Group, Inc.",Cherry Hill,10/24/2011,106
 Continental Airlines,Newark,09/23/2009,250
@@ -687,6 +691,7 @@ Middlesex Avenue Haulage LLC,Carteret,07/12/2015,45
 Millhouse Day Care,Trenton,04/27/2012,19
 "Mimeo.com, Inc.",Newark,07/07/2018,116
 MissaBay,Swedesboro,09/17/2012,305
+MissaBay,Swedesboro,09/17/2012,305
 Mondelez Global LLC,Fair Lawn,07/29/2021,593
 Mondelez Global LLC,Fair Lawn,07/09/2021,593
 Morgan Stanley,Princeton,09/30/2013,95
@@ -708,6 +713,7 @@ NJN Publishing,Flemington,06/06/2014,18
 "NRG Energy, Inc.",Wall,06/23/2017,65
 NSC National Wholesale Liquidators,Lodi,01/01/2019,152
 NY Daily News,Jersey City,03/12/2022,224
+NY Daily News  -Liberty View Production Facility,Jersey City,03/20/2022,224
 NY Daily News  -Liberty View Production Facility,Jersey City,03/20/2022,224
 "NYK (North America), Inc.",Secaucus,03/31/2018,75
 NYK Line (North America) Inc.,Secaucus,10/16/2009,58
@@ -760,6 +766,7 @@ Northrop Grumman,Mount Laurel,11/06/2012,61
 Novartis Pharmaceuticals,East Hanover,06/30/2014,47
 Novartis Pharmaceuticals Corporation,East Hanover,02/16/2015,200
 Novartis Pharmaceuticals Corporation,East Hanover,06/30/2014,2
+Novartis Pharmaceuticals Corporation,East Hanover,06/30/2014,2
 Novartis Pharmaceuticals Corporation,East Hanover,06/30/2014,3
 Novartis Pharmaceuticals Corporation,East Hanover,06/30/2014,10
 Novartis Pharmaceuticals Corporation,East Hanover,06/08/2012,93
@@ -773,18 +780,26 @@ Novartis Pharmaceuticals Corporation,East Hanover,06/30/2014,1
 Novartis Pharmaceuticals Corporation,East Hanover,04/14/2014,2
 Novartis Pharmaceuticals Corporation,East Hanover,04/14/2014,4
 Novartis Pharmaceuticals Corporation,East Hanover,04/14/2014,8
+Novartis Pharmaceuticals Corporation,East Hanover,04/14/2014,4
 Novartis Pharmaceuticals Corporation,East Hanover,04/14/2014,561
 Novartis Pharmaceuticals Corporation,East Hanover,05/31/2014,2
+Novartis Pharmaceuticals Corporation,East Hanover,04/14/2014,8
 Novartis Pharmaceuticals Corporation,East Hanover,02/05/2014,4
 Novartis Pharmaceuticals Corporation,East Hanover,04/14/2014,23
+Novartis Pharmaceuticals Corporation,East Hanover,06/30/2014,2
+Novartis Pharmaceuticals Corporation,East Hanover,06/30/2014,1
 Novartis Pharmaceuticals Corporation,East Hanover,06/30/2014,15
+Novartis Pharmaceuticals Corporation,East Hanover,06/30/2014,1
 Novartis Pharmaceuticals Corporation,East Hanover,06/30/2014,32
 Novartis Pharmaceuticals Corporation,East Hanover,06/30/2014,38
+Novartis Pharmaceuticals Corporation,East Hanover,06/30/2014,1
 Novartis Pharmaceuticals Corporation,East Hanover,06/30/2014,9
+Novartis Pharmaceuticals Corporation,East Hanover,06/30/2014,38
 Novartis Pharmaceuticals Corporation,East Hanover,02/01/2012,38
 Novartis Pharmaceuticals Corporation,East Hanover,04/30/2012,247
 Novartis Pharmaceuticals Corporation,East Hanover,06/08/2012,5
 Novartis Pharmaceuticals Corporation,East Hanover,06/08/2012,35
+Novartis Pharmaceuticals Corporation,East Hanover,06/08/2012,5
 Novartis Pharmaceuticals Corporation,East Hanover,04/02/2012,43
 Novartis Pharmaceuticals Corporation,East Hanover,06/08/2012,32
 Novartis Pharmaceuticals Corporation,East Hanover,09/10/2021,186
@@ -1655,6 +1670,7 @@ SETON COMPANY,NEWARK,10/8/04,96
 JOHNSON & JOHNSON,SKILLMAN,10/22/04,109
 APL LOGISTICS,MONROE,10/1/04,187
 PRESSMAN TOY,NEW BRUNSWICK,11/30/04,130
+BAXTER HEALTHCARE,NO. BRUNSWICK,7/30/04,42
 FUJITSU NETWORK,SWEDESBORO,10/22/04,93
 DALLAS AIRMOTIVE,MILLVILLE,11/30/04,240
 VERIZON WIRELESS,MORRISTOWN,11/30/04,195
