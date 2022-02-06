@@ -36,6 +36,9 @@ class BaseTransformer:
     # Manual date corrections for malformed data
     date_corrections: typing.Dict = {}
 
+    # Manual jobs corrections for malformed data
+    jobs_corrections: typing.Dict = {}
+
     def __init__(self, input_dir: Path):
         """Intialize a new instance.
 
@@ -224,8 +227,16 @@ class BaseTransformer:
 
         Returns: An integer number ready for consolidation. Or, if the value is invalid, a None.
         """
+        # Cut whitespace
         value = value.strip()
+        # If there's nothing there, return None
+        if not value:
+            return None
+        # Cut any commas
+        value = value.replace(",", "")
         try:
+            # Convert to integer
             return int(value)
         except ValueError:
-            return None
+            # If it won't convert, look for a manual correction
+            return self.jobs_corrections[value]
