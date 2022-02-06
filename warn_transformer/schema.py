@@ -106,25 +106,18 @@ class BaseTransformer:
 
         Returns: A transformed dict that's ready to be loaded into our consolidated schema.
         """
-        # Do the required fields
-        data = dict(
+        return dict(
             hash_id=self.get_hash_id(row),
             postal_code=self.postal_code.upper(),
             company=self.transform_company(
                 self.get_raw_value(row, self.fields["company"])
             ),
             date=self.transform_date(self.get_raw_value(row, self.fields["date"])),
+            location=self.transform_location(
+                self.get_raw_value(row, self.fields["location"])
+            ),
             jobs=self.transform_jobs(self.get_raw_value(row, self.fields["jobs"])),
         )
-
-        # If they exist, do the optional fields
-        if "location" in self.fields:
-            data["location"] = self.transform_location(
-                self.get_raw_value(row, self.fields["location"])
-            )
-
-        # Return the data
-        return data
 
     def get_raw_value(self, row, method):
         """Fetch a value from the row that for transformation.
