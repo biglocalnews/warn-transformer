@@ -1,5 +1,5 @@
-from datetime import datetime
 import typing
+from datetime import datetime
 
 from ..schema import BaseTransformer
 
@@ -17,6 +17,10 @@ class Transformer(BaseTransformer):
     date_format = "%m/%d/%Y"
     date_corrections = {
         "2/19/219": datetime(2019, 2, 19),
+    }
+    jobs_corrections = {
+        "8 in ID": 8,
+        "17 in ID": 17,
     }
 
     def transform_date(self, value: str) -> typing.Optional[str]:

@@ -14,6 +14,21 @@ class Transformer(BaseTransformer):
         jobs="Affected Workers",
     )
     date_format = ["%m/%d/%Y", "%m/%d/%y"]
+    jobs_corrections = {
+        "97 (in MI)0 (in IN)": 0,
+        "100+": 100,
+        "62 MAY be affected": 62,
+        "5 in Indiana": 5,
+        "Unknown": None,
+        "75 in Indiana": 75,
+        "40-50": 40,
+        "100-130": 100,
+        "4 Hoosiers": 4,
+        "Undisclosed at this time": None,
+        "500 Nationwide": None,
+        "NA": None,
+        "103 (REVISED) 10/22/2020 108": 103,
+    }
 
     def prep_row_list(
         self, row_list: typing.List[typing.Dict]

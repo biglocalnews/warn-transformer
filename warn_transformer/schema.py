@@ -239,4 +239,5 @@ class BaseTransformer:
             return int(value)
         except ValueError:
             # If it won't convert, look for a manual correction
+            logger.debug(f"Could not parse '{value}'. Looking up correction")
             return self.jobs_corrections[value]
