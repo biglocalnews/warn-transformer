@@ -110,17 +110,41 @@ class BaseTransformer:
         data = dict(
             hash_id=self.get_hash_id(row),
             postal_code=self.postal_code.upper(),
-            company=self.transform_company(row[self.fields["company"]]),
-            date=self.transform_date(row[self.fields["date"]]),
-            jobs=self.transform_jobs(row[self.fields["jobs"]]),
+            company=self.transform_company(
+                self.get_raw_value(row, self.fields["company"])
+            ),
+            date=self.transform_date(self.get_raw_value(row, self.fields["date"])),
+            jobs=self.transform_jobs(self.get_raw_value(row, self.fields["jobs"])),
         )
 
         # If they exist, do the optional fields
         if "location" in self.fields:
-            data["location"] = self.transform_location(row[self.fields["location"]])
+            data["location"] = self.transform_location(
+                self.get_raw_value(row, self.fields["location"])
+            )
 
         # Return the data
         return data
+
+    def get_raw_value(self, row, method):
+        """Fetch a value from the row that for transformation.
+
+        Args:
+            row: One raw row of data from the source
+            method: The technique to use to pull data.
+                If a strong method is provided,
+                it is used to fetch a key of that name from the row. If a callable function is provided, the row is run through it.
+
+        Returns: A value ready for transformation.
+        """
+        # If a string is provided, pull it from the row dict.
+        if isinstance(method, str):
+            return row[method]
+        # If a function is provided, run the row through it.
+        elif isinstance(method, typing.Callable):
+            return method(row)
+        else:
+            raise ValueError("The field method your provided is not valid.")
 
     def get_hash_id(self, row: typing.Dict) -> str:
         """Convert the row into a unique hexdigest to use as a unique identifier.
