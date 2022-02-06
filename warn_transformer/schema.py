@@ -17,7 +17,7 @@ class WarnNoticeSchema(Schema):
     hash_id = fields.Str(required=True)
     postal_code = fields.Str(max_length=2, required=True)
     company = fields.Str(required=True)
-    location = fields.Str(required=False, allow_none=True)
+    location = fields.Str(required=True, allow_none=True)
     date = fields.Date(required=True, allow_none=True)
     jobs = fields.Int(required=True, allow_none=True)
 
@@ -201,7 +201,7 @@ class BaseTransformer:
             try:
                 dt = datetime.strptime(value, self.date_format)
             except ValueError:
-                logger.debug(f"Could not parse {value}. Looking up correction")
+                logger.debug(f"Could not parse '{value}'. Looking up correction")
                 dt = self.date_corrections[value]
 
         # If it's a list, try them one by one
@@ -213,7 +213,7 @@ class BaseTransformer:
                     continue
             # If there's nothing at the end of the loop, try the correction
             if not dt:
-                logger.debug(f"Could not parse {value}. Looking up correction")
+                logger.debug(f"Could not parse '{value}'. Looking up correction")
                 dt = self.date_corrections[value]
 
         # If the date parses as None, return that

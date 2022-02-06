@@ -7,7 +7,7 @@ class Transformer(BaseTransformer):
     postal_code = "OK"
     fields = dict(
         company="employer",
-        location="city",
+        location=lambda row: row["city"] or row["address"] or row["lwib_area"],
         date="notice_date",
         jobs="number_of_employees_affected",
     )

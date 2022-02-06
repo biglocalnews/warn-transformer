@@ -9,6 +9,7 @@ class Transformer(BaseTransformer):
     postal_code = "DC"
     fields = dict(
         company="Organization Name",
+        location=lambda x: "Washington D.C.",  # Hardcode in the city name
         date="Notice Date",
         jobs="Number toEmployees Affected",
     )
