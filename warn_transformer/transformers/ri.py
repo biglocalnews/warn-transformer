@@ -12,6 +12,13 @@ class Transformer(BaseTransformer):
         jobs="Number Affected",
     )
     date_format = "%Y-%m-%d %H:%M:%S"
+    jobs_corrections = {
+        "---": None,
+        "54 Union 3 Non Union": 57,
+        "190 company with an additional 100 contracted": 290,
+        "60-80": 60,
+        "additional 16": 16,
+    }
 
     def transform_company(self, value: str) -> str:
         """Transform a raw company name.

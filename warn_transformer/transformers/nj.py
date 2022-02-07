@@ -15,3 +15,6 @@ class Transformer(BaseTransformer):
     date_corrections = {
         "-": None,
     }
+    jobs_corrections = {
+        "-": None,
+    }

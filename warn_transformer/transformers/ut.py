@@ -22,3 +22,6 @@ class Transformer(BaseTransformer):
         "05/2009": datetime(2009, 5, 1),
         "01/07//09": datetime(2009, 1, 7),
     }
+    jobs_corrections = {
+        "645 Revised": 645,
+    }

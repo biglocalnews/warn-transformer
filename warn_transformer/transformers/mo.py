@@ -14,6 +14,10 @@ class Transformer(BaseTransformer):
         jobs="# AFFECTED",
     )
     date_format = ("%m/%d/%Y", "%m/%d/%y")
+    jobs_corrections = {
+        "330 remote workers (18 located in Missouri)": 18,
+        "Unknown": None,
+    }
 
     def transform_date(self, value: str) -> typing.Optional[str]:
         """Transform a raw date string into a date object.
