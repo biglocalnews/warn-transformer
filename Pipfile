@@ -19,6 +19,7 @@ pytest-cov = "*"
 mypy = "*"
 pandas = "*"
 jupyterlab = "*"
+twine = "*"
 
 [requires]
 python_version = "3.7"

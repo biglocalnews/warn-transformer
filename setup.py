@@ -19,7 +19,7 @@ setup(
     long_description=read("README.md"),
     long_description_content_type="text/markdown",
     author="Big Local News",
-    url="https://github.com/biglocalnews/warn-analysis",
+    url="https://github.com/biglocalnews/warn-transformer",
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
