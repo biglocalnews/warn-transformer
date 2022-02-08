@@ -20,6 +20,8 @@ mypy = "*"
 pandas = "*"
 jupyterlab = "*"
 twine = "*"
+"keyrings.google-artifactregistry-auth" = "*"
+setuptools-scm = "*"
 
 [requires]
 python_version = "3.7"

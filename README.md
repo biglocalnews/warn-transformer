@@ -1,4 +1,4 @@
-Consolidate, enrich and analyze the data gathered by [warn-scraper](https://github.com/biglocalnews/warn-scraper)
+Consolidate, enrich and republish the data gathered by [warn-scraper](https://github.com/biglocalnews/warn-scraper)
 
 ## Getting started
 
