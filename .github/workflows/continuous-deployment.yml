@@ -108,7 +108,7 @@ jobs:
       - name: Install pipenv
         run: pipx install pipenv
 
-      - name: Install twin
+      - name: Install twine
         run: pipenv install twine
 
       - id: fetch
