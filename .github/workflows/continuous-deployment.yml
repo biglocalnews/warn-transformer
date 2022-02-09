@@ -69,15 +69,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install pipenv
-        run: pipx install pipenv
-
-      - uses: actions/setup-python@v2
+      - id: install
+        name: Install Python, pipenv and Pipfile packages
+        uses: palewire/install-python-pipenv-pipfile@v2
         with:
-          python-version: '3.7'
-          cache: 'pipenv'
-
-      - run: pipenv install --dev --pre
+          python-version: 3.7
 
       - id: build
         name: Build release
@@ -106,15 +102,14 @@ jobs:
       id-token: 'write'
 
     steps:
-      - uses: actions/setup-python@v2
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - id: install
+        name: Install Python, pipenv and Pipfile packages
+        uses: palewire/install-python-pipenv-pipfile@v2
         with:
-          python-version: '3.9'
-
-      - name: Install pipenv
-        run: pipx install pipenv
-
-      - name: Install twine
-        run: pipenv install twine
+          python-version: 3.7
 
       - id: fetch
         name: Fetch artifact
