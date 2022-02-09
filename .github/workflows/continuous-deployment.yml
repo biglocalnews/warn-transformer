@@ -108,12 +108,8 @@ jobs:
       - name: Install pipenv
         run: pipx install pipenv
 
-      - uses: actions/setup-python@v2
-        with:
-          python-version: '3.9'
-          cache: 'pipenv'
-
-      - run: pipenv install twine
+      - name: Install twin
+        run: pipenv install twine
 
       - id: fetch
         name: Fetch artifact
