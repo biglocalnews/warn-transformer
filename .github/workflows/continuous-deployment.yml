@@ -122,18 +122,12 @@ jobs:
         name: Authenticate with Google Cloud
         uses: google-github-actions/auth@v0
         with:
-          token_format: access_token
           workload_identity_provider: projects/990992937017/locations/global/workloadIdentityPools/warn-pool/providers/warn-provider
           service_account: warn-service-account@big-local-news-267923.iam.gserviceaccount.com
-          access_token_lifetime: 300s
-
-      - name: Login to Google Artifact Registry
-        uses: docker/login-action@v1
-        with:
-          registry: us-west2-python.pkg.dev
-          username: oauth2accesstoken
-          password: ${{ steps.auth-gcloud.outputs.access_token }}
+          create_credentials_file: true
 
       - id: release
         name: Release
         run: pipenv run twine upload --repository-url https://us-west2-python.pkg.dev/big-local-news-267923/warn-transformer/ dist/*
+        env:
+            GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth-gcloud.outputs.credentials_file_path }}
