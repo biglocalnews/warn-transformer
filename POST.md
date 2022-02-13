@@ -34,3 +34,7 @@ make build-release
 ```bash
 pipenv run twine upload --repository-url https://us-west2-python.pkg.dev/big-local-news-267923/warn-transformer/ dist/*
 ```
+
+```
+pipenv install --index-url https://us-west2-python.pkg.dev/big-local-news-267923/warn-transformer/ warn-transformer
+```
