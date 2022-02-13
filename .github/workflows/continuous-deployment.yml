@@ -80,7 +80,7 @@ jobs:
 
       - id: install-python-dependencies
         name: Install Python dependencies
-        run: pipenv install --dev --pre
+        run: pipenv install --dev --pre --python `which python`
 
       - id: run
         name: Run tests
