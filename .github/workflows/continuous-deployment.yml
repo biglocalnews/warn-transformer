@@ -12,11 +12,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - id: install
-        name: Install Python, pipenv and Pipfile packages
-        uses: palewire/install-python-pipenv-pipfile@v2
+      - id: install-pipenv
+        name: Install pipenv
+        run: pipx install pipenv
+
+      - id: install-python
+        name: Install Python
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.7
+          python-version: '3.7'
+          cache: 'pipenv'
+
+      - id: install-python-dependencies
+        name: Install Python dependencies
+        run: pipenv install --dev --pre
 
       - id: lint
         name: Lint
@@ -29,11 +38,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - id: install
-        name: Install Python, pipenv and Pipfile packages
-        uses: palewire/install-python-pipenv-pipfile@v2
+      - id: install-pipenv
+        name: Install pipenv
+        run: pipx install pipenv
+
+      - id: install-python
+        name: Install Python
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.7
+          python-version: '3.7'
+          cache: 'pipenv'
+
+      - id: install-python-dependencies
+        name: Install Python dependencies
+        run: pipenv install --dev --pre
 
       - id: mypy
         name: Mypy
@@ -49,11 +67,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - id: install
-        name: Install Python, pipenv and Pipfile packages
-        uses: palewire/install-python-pipenv-pipfile@v2
+      - id: install-pipenv
+        name: Install pipenv
+        run: pipx install pipenv
+
+      - id: install-python
+        name: Install Python
+        uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python }}
+          cache: 'pipenv'
+
+      - id: install-python-dependencies
+        name: Install Python dependencies
+        run: pipenv install --dev --pre
 
       - id: run
         name: Run tests
@@ -69,11 +96,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - id: install
-        name: Install Python, pipenv and Pipfile packages
-        uses: palewire/install-python-pipenv-pipfile@v2
+      - id: install-pipenv
+        name: Install pipenv
+        run: pipx install pipenv
+
+      - id: install-python
+        name: Install Python
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.7
+          python-version: "3.7"
+          cache: 'pipenv'
+
+      - id: install-python-dependencies
+        name: Install Python dependencies
+        run: pipenv install --dev --pre
 
       - id: build
         name: Build release
@@ -105,11 +141,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - id: install
-        name: Install Python, pipenv and Pipfile packages
-        uses: palewire/install-python-pipenv-pipfile@v2
+      - id: install-pipenv
+        name: Install pipenv
+        run: pipx install pipenv
+
+      - id: install-python
+        name: Install Python
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.7
+          python-version: "3.7"
+          cache: 'pipenv'
+
+      - id: install-python-dependencies
+        name: Install Python dependencies
+        run: pipenv install --dev --pre
 
       - id: fetch
         name: Fetch artifact

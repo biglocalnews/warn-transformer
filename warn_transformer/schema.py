@@ -94,7 +94,7 @@ class BaseTransformer:
         for row in row_list:
             # Skip empty rows
             try:
-                # A list with only empty cell will throw an error
+                # A list with only empty cells will throw an error
                 next(v for v in row.values() if v.strip())
             except StopIteration:
                 continue
