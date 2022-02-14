@@ -111,6 +111,10 @@ jobs:
         name: Install Python dependencies
         run: pipenv install --dev --pre
 
+      - id: print-version
+        name: Log version
+        run: pipenv run python setup.py --version
+
       - id: build
         name: Build release
         run: make build-release
