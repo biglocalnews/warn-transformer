@@ -103,3 +103,7 @@ That will take you to the Actions monitoring page. The task charged with publish
 ![Actions page](.github/images/releasing-actions-start.png)
 
 And that's it. The action should have released a new private version of our Python package in the Google Artifact Registry. You could debug this process via Google Cloud Console, but it shouldn't be necessary if everything works.
+
+## About
+
+The project is sponsored by [Big Local News](https://biglocalnews.org/#/about), a program at Stanford University that collects data for impactful journalism. The code is maintained by [Ben Welsh](https://palewi.re/who-is-ben-welsh/), a visiting data journalist from the Los Angeles Times.
