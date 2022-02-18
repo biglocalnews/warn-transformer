@@ -1,4 +1,5 @@
 Company,City,Affected Workers,Notice Date,LO/CL Date,NAICS,Description of Work,Notice Type,
+"Averitt Express, Inc.",Evansville,63,02/02/2022,02/28/2022,484121,"General Freight Trucking, Long-Distance, Truckload",CL,
 Sony DADC US Inc,Terre Haute,80,01/13/2022,03/31/2022,42512000,Wholesale Trade Agents and Brokers,LO,
 PPG Industries,Lafayette,54,01/11/2022,09/30/2022,541420,Industrial Design Services,CL,
 "Nash and Sons Trucking, Inc.","Muncie, Bloomington, Chandler and Indianapolis",75,12/28/2021,03/01/2022,56211900,Other Waste Collection,LO,
@@ -360,7 +361,7 @@ Del Monte Foods,Plymouth,107,09/12/2017,02/01/2018,311421,Fruit and vegetable ca
 Veolia North America,Indianapolis,70,09/08/2017,07/31/2018,541380,Environmental Services,CL,
 Kindred Hospital,Greenwood,86,09/08/2017,11/07/2017,623110,Nursing care facilities,LO,
 Prompt Ambulance Services,Lake Counties,140,08/31/2017,10/29/2017,621910,Ambulance Services,CL,
-"Bay Valley Foods LLC, Tree House Foods 
+"Bay Valley Foods LLC, Tree House Foods
         Occupations Affected",Plymouth,Unknown,08/31/2017,10/30/2017 & 06/30/2018,311991,Leading provider of shelf stable foods,CL,
 "Bay Valley Foods LLC, Tree House Foods- Revised (9/19/17)",Plymouth,N/A,N/A,N/A,N/A,N/A,N/A,
 Five Seasons Family Sports Club,Indianapolis,84,08/01/2017,09/30/2017,713940,"Sports club facilities, physical fitness",CL,

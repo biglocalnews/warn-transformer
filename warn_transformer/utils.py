@@ -3,10 +3,10 @@ import typing
 from pathlib import Path
 
 USER_DIR = Path(os.path.expanduser("~"))
-DEFAULT_WARN_ANALYSIS_OUTPUT_DIR = USER_DIR / ".warn-transformer"
+DEFAULT_WARN_TRANSFORMER_OUTPUT_DIR = USER_DIR / ".warn-transformer"
 
-WARN_ANALYSIS_OUTPUT_DIR = Path(
-    os.environ.get("WARN_ANALYSIS_OUTPUT_DIR", DEFAULT_WARN_ANALYSIS_OUTPUT_DIR)
+WARN_TRANSFORMER_OUTPUT_DIR = Path(
+    os.environ.get("WARN_TRANSFORMER_OUTPUT_DIR", DEFAULT_WARN_TRANSFORMER_OUTPUT_DIR)
 )
 
 

@@ -8,7 +8,7 @@ from . import utils
 logger = logging.getLogger(__name__)
 
 
-def run(input_dir: Path = utils.WARN_ANALYSIS_OUTPUT_DIR / "raw") -> Path:
+def run(input_dir: Path = utils.WARN_TRANSFORMER_OUTPUT_DIR / "raw") -> Path:
     """Consolidate raw data using a common data schema.
 
     Args:
@@ -39,7 +39,7 @@ def run(input_dir: Path = utils.WARN_ANALYSIS_OUTPUT_DIR / "raw") -> Path:
     logger.debug(f"Dropped {len(obj_list) - len(unique_list)} duplicates")
 
     # Get the output directory
-    processed_dir = utils.WARN_ANALYSIS_OUTPUT_DIR / "processed"
+    processed_dir = utils.WARN_TRANSFORMER_OUTPUT_DIR / "processed"
     if not processed_dir.exists():
         processed_dir.mkdir(parents=True)
 

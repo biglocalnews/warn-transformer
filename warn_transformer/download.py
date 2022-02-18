@@ -12,7 +12,7 @@ BLN_PROJECT_ID = "UHJvamVjdDpiZGM5NmU1MS1kMzBhLTRlYTctODY4Yi04ZGI4N2RjMzQ1ODI="
 logger = logging.getLogger(__name__)
 
 
-def run(download_dir: Path = utils.WARN_ANALYSIS_OUTPUT_DIR / "raw"):
+def run(download_dir: Path = utils.WARN_TRANSFORMER_OUTPUT_DIR / "raw"):
     """Download all the CSVs in the WARN Notice project on biglocalnews.org.
 
     Args:

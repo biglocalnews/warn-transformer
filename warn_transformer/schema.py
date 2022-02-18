@@ -17,7 +17,7 @@ class WarnNoticeSchema(Schema):
     hash_id = fields.Str(required=True)
     postal_code = fields.Str(max_length=2, required=True)
     company = fields.Str(required=True)
-    location = fields.Str(required=False, allow_none=True)
+    location = fields.Str(required=True, allow_none=True)
     date = fields.Date(required=True, allow_none=True)
     jobs = fields.Int(required=True, allow_none=True)
 
@@ -35,6 +35,9 @@ class BaseTransformer:
     date_format: typing.Any = "%m/%d/%Y"
     # Manual date corrections for malformed data
     date_corrections: typing.Dict = {}
+
+    # Manual jobs corrections for malformed data
+    jobs_corrections: typing.Dict = {}
 
     def __init__(self, input_dir: Path):
         """Intialize a new instance.
@@ -91,7 +94,7 @@ class BaseTransformer:
         for row in row_list:
             # Skip empty rows
             try:
-                # A list with only empty cell will throw an error
+                # A list with only empty cells will throw an error
                 next(v for v in row.values() if v.strip())
             except StopIteration:
                 continue
@@ -106,21 +109,38 @@ class BaseTransformer:
 
         Returns: A transformed dict that's ready to be loaded into our consolidated schema.
         """
-        # Do the required fields
-        data = dict(
+        return dict(
             hash_id=self.get_hash_id(row),
             postal_code=self.postal_code.upper(),
-            company=self.transform_company(row[self.fields["company"]]),
-            date=self.transform_date(row[self.fields["date"]]),
-            jobs=self.transform_jobs(row[self.fields["jobs"]]),
+            company=self.transform_company(
+                self.get_raw_value(row, self.fields["company"])
+            ),
+            date=self.transform_date(self.get_raw_value(row, self.fields["date"])),
+            location=self.transform_location(
+                self.get_raw_value(row, self.fields["location"])
+            ),
+            jobs=self.transform_jobs(self.get_raw_value(row, self.fields["jobs"])),
         )
 
-        # If they exist, do the optional fields
-        if "location" in self.fields:
-            data["location"] = self.transform_location(row[self.fields["location"]])
+    def get_raw_value(self, row, method):
+        """Fetch a value from the row that for transformation.
 
-        # Return the data
-        return data
+        Args:
+            row: One raw row of data from the source
+            method: The technique to use to pull data.
+                If a strong method is provided,
+                it is used to fetch a key of that name from the row. If a callable function is provided, the row is run through it.
+
+        Returns: A value ready for transformation.
+        """
+        # If a string is provided, pull it from the row dict.
+        if isinstance(method, str):
+            return row[method]
+        # If a function is provided, run the row through it.
+        elif isinstance(method, typing.Callable):
+            return method(row)
+        else:
+            raise ValueError("The field method your provided is not valid.")
 
     def get_hash_id(self, row: typing.Dict) -> str:
         """Convert the row into a unique hexdigest to use as a unique identifier.
@@ -177,11 +197,11 @@ class BaseTransformer:
             try:
                 dt = datetime.strptime(value, self.date_format)
             except ValueError:
-                logger.debug(f"Could not parse {value}. Looking up correction")
+                logger.debug(f"Could not parse '{value}'. Looking up correction")
                 dt = self.date_corrections[value]
 
         # If it's a list, try them one by one
-        elif isinstance(self.date_format, list):
+        elif isinstance(self.date_format, (list, tuple)):
             for f in self.date_format:
                 try:
                     dt = datetime.strptime(value, f)
@@ -189,7 +209,7 @@ class BaseTransformer:
                     continue
             # If there's nothing at the end of the loop, try the correction
             if not dt:
-                logger.debug(f"Could not parse {value}. Looking up correction")
+                logger.debug(f"Could not parse '{value}'. Looking up correction")
                 dt = self.date_corrections[value]
 
         # If the date parses as None, return that
@@ -207,8 +227,17 @@ class BaseTransformer:
 
         Returns: An integer number ready for consolidation. Or, if the value is invalid, a None.
         """
+        # Cut whitespace
         value = value.strip()
+        # If there's nothing there, return None
+        if not value:
+            return None
+        # Cut any commas
+        value = value.replace(",", "")
         try:
+            # Convert to integer
             return int(value)
         except ValueError:
-            return None
+            # If it won't convert, look for a manual correction
+            logger.debug(f"Could not parse '{value}'. Looking up correction")
+            return self.jobs_corrections[value]

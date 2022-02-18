@@ -11,4 +11,8 @@ class Transformer(BaseTransformer):
         date="Date of Notice",
         jobs="Number of Employees Affected",
     )
-    date_format = "%Y-%m-%d %H:%M:%S"
+    date_format = ("%Y-%m-%d %H:%M:%S", "%Y-%m-%d")
+    jobs_corrections = {
+        "Not noted": None,
+        "MT # unknown": None,
+    }

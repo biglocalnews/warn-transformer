@@ -1,89 +1,90 @@
-WARN Date,Date Received,Company Name,Location Of Layoffs,Number Affected,Effective Date,Closing Yes/No,Union Yes/No,Union Address
-5/18/21,5/20/21,Angelica,Pawtucket,94,7/17/21,Yes,Yes,"Teamster Local Union 251, 121 Brightridge Ave., East Providence, RI 02914"
-5/26/21,5/26/21,Honeywell,Smithfield,464,7/26/21,No,No,
-10/1/2020,9/30/2020,Santander*,Rhode Island,13,9/30/2020,No,No,
-8/21/2020,8/25/2020,Hotel Viking*,Newport,40,8/18/2020,No,No,
-8/14/2020,8/17/2020,Providence Mariott*,Providence,106,8/14/2020,No,No,
-8/6/2020,8/13/2020,Omni Hotel & Resorts*,Providence,272,3/24/2020,No,Yes,Multiple
-8/11/2020,7/28/2020,Twin River - Lincoln*,Lincoln,1043,9/30/2020,No,Yes,Multiple
-8/11/2020,7/28/2020,Twin River - Tiverton*,Lincoln,296,9/30/2020,No,Yes,Multiple
-8/3/2020,7/30/2020,RHD Rhode Island*,Providence,73,9/1/2020,Yes,No,
-7/15/2020,7/10/2020,"McLaughlin & Moran, Inc*",Cranston,127,8/1/2020,Yes,Yes,"Teamster Local Union 251 121 Brightridge Ave. East Providence, RI 02914"
-6/22/2020,6/22/2020,YMCA of Pawtucket *,Multiple Locations,71,5/22/2020,No,No,
-6/30/2020,6/30/2020,Upserve *,Providence,65,6/30/2020,No,No,
-6/3/2020,6/3/2020,Newport Marriot *,Providence,65,3/14/2020,No,No,
-5/29/20,5/29/2020,The Preservation Society of Newport County *,RI,231,5/29/2020,No,No,
-,,Hotel Viking*,Newport,72,5/7/2020,No,No,
-,4/27/20,Bloomin Brands*,RI,136,3/16/2020,No,No,
-,4/21/20,Eastern Speciality/Check n GO*,RI,5,4/21/2020,No,No,
-4/20/20,4/23/20,CB Chadwick-BaRoss*,West Warwick,1,4/20/2020,No,No,
-3/17/20,4/17/20,FGX Int*,Smithfield,13,4/17/2020,No,No,
-4/6/20,4/14/20,Massage Envy*,Cranston,51,3/16/2020,No,No,
-4/4/20,4/4/20,Moo*,Lincoln,110,4/6/2020,No,No,
-3/26/20,3/27/20,The Vanderbuilt*,Newport,37,3/26/2020,No,No,
-3/26/20,3/23/20,Highgate*,Providence,146,3/8/2020,No,Yes,"Local 26 1010 Station Landing, 4th fl Medford Ma, 02155"
-3/20/20,3/20/20,Greystone*,Lincoln,87,3/20/2020,No,No,
-3/19/20,3/23/20,HM Host*,Warwick,110,3/16/2020,No,No,
-2/13/2019,2/14/2019,Spectrum Pharmaceuticals,Portsmouth,1,"April 12, 2019",Yes,No,
-1/21/2019,1/21/2019,Tuition Management Systems,Warwick,59,"April 1,2109 August 30, 2019",Yes,No,
-1/14/2019,1/14/2019,"Agoda Travel Operations USA, Inc.",Providence,62,3/18/2019,Yes,No,
-11/1/2018,11/9/18,"DAL Global Services, LLC (DGS)",Warwick,51,1/31/2018,No,No,
-11/1/2108,11/1/2018,"Hooper Holmes, Inc. dba Provant Health",Warwick,92,12/31/2018,Yes,No,
-10/23/2108,11/1/2018,Nordstrom Providence Place,Providence,181,1/04/2019,Yes,No,
-10/9/2018,10/9/2018,Matlet/Group,Pawtucket,180,10/9/2018,Yes,No,
-9/19/2018,9/20/2018,"United Builders Supply Co., Inc.",Westerly,83,11/30/2018,Yes,No,
-6/22/2018,06/25/2018,Chase Corp dba Neptco,Pawtucket,64,08/27/2018,Yes,Yes,IBEW Local 1499
-6/01/2018,06/01/2018,Pinnacle Logistics,North Kingstown,149,07/31/2018,Yes,No,
-11/3/2017,11/3/2017,Memorial Hospital of Rhode Island,Pawtucket,477,1/12/2018,Yes,Yes,United Nurses and Allied Professionals Local 5082
-9/8/2017,9/12/2017,Benny's,Smithfield,171,11/30/2017 12/10/2017 and 12/31/2017,Yes,No,
-05/05/16,05/06/16,Homemade Real Foods,Cumberland,187,05/02/16,Yes,No,
-05/04/16,05/05/16,First Student,North Scituate,20,06/30/16,Yes,Yes,SEIU Local 1199
-04/08/16,04/08/16,Aramark,Smithfield,154,06/7/16,No,No,
-02/01/16,02/01/16,Optum,Providence,60,4/01/16 and 4/07/16,Yes,No,
-01/15/16,01/15/16,Sam's Club,Warwick,131,2/05/16,Yes,No,
-11/18/15,11/18/15,Blue Cross Blue Shield of RI,Providence,241,1/04/16 through 8/2017,No,No,
-11/10/15,11/12/15,"Fresenius Management Services, Inc.",East Providence,---,1/11/16 through 3/31/16,Yes,No,
-6/23/15,6/25/15,"Teespring, Inc.",Providence,70,8/24/2015,No,No,
-3/06/15,3/11/15,"United Airlines, Inc.'s Airport Operations Division",Warwick,54 Union 3 Non Union,5/17/2015,Yes,Yes,"International Assoc. of Machinists and Aerospace Workers, 1771 Commerce Drive, Suite 103 Elkgrove Village, IL 60007"
-2/27/15,3/2/15,Honeywell,Cranston,190 company with an additional 100 contracted,6/2015 through 6/2016 5/2015 for contracted employees,No,No,
-7/30/14,7/30/14,IntegraMed Inc.,Providence and Middletown,5,9/30/14,No,No,
-6/30/14,7/1/14,Cox Communications,West Warwick,142,8/31/14,No,No,
-3/26/14,3/31/14,Sodexo,Smithfield,115,5/15/14,Yes,Yes,USAWR 90 Printery St. Providence
-11/15/13,11/18/13,Money Management International,Lincoln,49,1/15/14,Yes,No,
-9/30/13,9/30/13,Dessert Services Inc.,Warwick,1,11/30/13,Yes,No,
-8/9/13,8/16/13,"Landauef Metropolitan, Inc.",Warwick,66,10/8/13,No,No,
-5/31/13,6/13/13,Essential Salon Products Inc.,Cranston,3,5/31/13,Yes,No,
-5/22/13,5/23/13,Sodexho Inc,Warwick,62,7/30/13,Yes,Yes,
-1/11/13,1/11/13,American Suzuki Motor Corporation,Washington County,---,3/14/13,Yes,No,
-6/27/12,6/27/12,Portola Tech International Inc.,Cumberland,51,8/27/12,Yes,No,
-4/12/12,4/12/12,Pawtuxet Village Care & Rehabilitation Center,Cranston,150,6/11/12,Yes,Yes,"North America AFL-CIO 410 South Main Street, Providence RI"
-1/30/12,1/31/12,"John Crane, Inc.",Cranston,70,4/1/12,Yes,Yes,"Sealol Shop Union, 15 Pioneer Ave., Warwick RI 02888"
-10/17/11,10/17/11,Lowe?s Home Center,North Kingstown,110,10/17/11,Yes,No,---
-8/30/11,9/2/11,WSI,Newport,16,10/30/11,Yes,No,---
-7/28/11,8/3/11,Lockheed Martin Corp - Global Training & Logistics,Newport,9,9/30/11,Yes,No,---
-7/29/11,8/1/11,BNY Mellon,Pawtucket,98,"October 28, 2011 and November 10, 2011",Yes,No,---
-5/25/11,5/27/11,Flextronics Americas LLC,"North Kingstown, Providence, Smithfield and Warwick",21,Staggered,Yes,No,---
-4/1/11,4/1/11,Bank of New York Mellon (BNY Mellon),Pawtucket,98,6/6/11-10/30/11,Yes,No,---
-2/15/11,2/15/11,Stanley Black & Decker,East Greenwich,5,4/11/2011,No,No,---
-1/22/11,1/25/11,"Wal-Mart Stores, Inc. /Sam’s Club",Warwick,122,2/18/2011,No,No,---
-8/20/10,8/23/10,Bank of America,Lincoln,89,10/1/10,No,No,---
-8/2/10,2/8/10,Stanley Works Nail Dept.,East Greenwich,26,"10/1/2010-10/15/2010, 10/29/2010-11/12/2010, 12/3/2010-12/17/2010",No,No,---
-2/5/10,2/8/10,Stanley Works Nail Dept.,East Greenwich,165,2/8/10,No,No,---
-12/31/09,1/4/10,The Ski Market,Warwick,8,2/1/10,Yes,No,---
-11/20/09,11/24/09,Leviton Mfg,Warwick,66,1/20/10 2/19/10,Yes,No,---
-11/20/09,11/24/09,Liz Clayborne,Lincoln,103,4/19/10 4/30/10,Yes,Yes,"NE Joint Board, Local 324, UNITE HERE"
-10/8/09,10/8/09,Aramark,Providence,60-80,11/30/09,No,No,
-10/5/09,10/5/09,A.T. Cross,Lincoln,63,12/1/09,No,No,
-8/21/09,8/25/09,A.T. Cross,Lincoln,additional 16,3/23/09,No,No,
-7/13/09,7/14/09,Portola,Woonsocket,130,3/23/09,Yes,No,
-7/13/09,7/14/09,Victoria & Company,East Providence,26,7/7/09,Yes,No,
-7/1/09,3/23/09,A.T. Cross,Lincoln,14,3/23/09,No,No,
-6/16/09,7/2/09,HGA Quest,Nationwide - RI,10,8/16/09,No,No,
-4/28/09,4/29/09,Providence Public Library,Providence,171,6/30/09,No,Yes,"United Service & Allied Workers of RI 90 Printery St. Providence, RI 02904"
-4/15/09,4/15/09,First Student,Burrillville,55,6/30/09,Yes,No,
-3/11/09,3/10/09,Honeywell,Pawtucket,29,5/10/09,Yes,No,
-3/9/09,3/9/09,Victoria & Company,East Providence,71,5/8/09,No,No,
-3/4/09,3/6/09,APC by Schneider Electric,West Warwick,54,5/2/09,Yes,No,
-3/5/09,3/5/09,Leviton Mfg,Warwick,119,5/10/09,Yes,No,
-2/19/09,2/20/09,"Colibri Group, Inc.",East Providence and Providence,270,1/15/09,Yes,No,
-1/19/09,1/12/09,Bank of America,Lincoln,121,1/8/09,No,No,
+WARN Date,Date Received,Company Name (* Denotes Covid 19 Related WARN),Location of Layoffs,Number Affected,Effective Date,Closing Yes/No,Union Yes/No,Union Address
+2022-02-03 00:00:00,2022-02-02 00:00:00,Santander,East Providence,198,2022-04-08 00:00:00,No,No,
+2021-05-18 00:00:00,2021-05-20 00:00:00,Angelica,Pawtucket,94,2021-07-17 00:00:00,Yes,Yes,"Teamster Local Union 251, 121 Brightridge Ave., East Providence, RI 02914"
+2021-05-26 00:00:00,2021-05-26 00:00:00,Honeywell,Smithfield,464,2021-07-26 00:00:00,No,No,
+2020-10-01 00:00:00,2020-09-30 00:00:00,Santander*,Rhode Island,13,2020-09-30 00:00:00,No,No,
+2020-08-21 00:00:00,2020-08-25 00:00:00,Hotel Viking*,Newport,40,2020-08-18 00:00:00,No,No,
+2020-08-14 00:00:00,2020-08-17 00:00:00,Providence Mariott*,Providence,106,2020-08-14 00:00:00,No,No,
+2020-08-06 00:00:00,2020-08-13 00:00:00,Omni Hotel & Resorts*,Providence,272,2020-03-24 00:00:00,No,Yes,Multiple
+2020-08-11 00:00:00,2020-07-28 00:00:00,Twin River - Lincoln*,Lincoln,1043,2020-09-30 00:00:00,No,Yes,Multiple
+2020-08-11 00:00:00,2020-07-28 00:00:00,Twin River - Tiverton*,Lincoln,296,2020-09-30 00:00:00,No,Yes,Multiple
+2020-08-03 00:00:00,2020-07-30 00:00:00,RHD Rhode Island*,Providence,73,2020-09-01 00:00:00,Yes,No,
+2020-07-15 00:00:00,2020-07-10 00:00:00,"McLaughlin & Moran, Inc*",Cranston,127,2020-08-01 00:00:00,Yes,Yes,"Teamster Local Union 251 121 Brightridge Ave. East Providence, RI 02914"
+2020-06-22 00:00:00,2020-06-22 00:00:00,YMCA of Pawtucket *,Multiple Locations,71,2020-05-22 00:00:00,No,No,
+2020-06-30 00:00:00,2020-06-30 00:00:00,Upserve *,Providence,65,2020-06-30 00:00:00,No,No,
+2020-06-03 00:00:00,2020-06-03 00:00:00,Newport Marriot *,Providence,65,2020-03-14 00:00:00,No,No,
+2020-05-29 00:00:00,2020-05-29 00:00:00,The Preservation Society of Newport County *,RI,231,2020-05-29 00:00:00,No,No,
+,,Hotel Viking*,Newport,72,2020-05-07 00:00:00,No,No,
+,2020-04-27 00:00:00,Bloomin Brands*,RI,136,2020-03-16 00:00:00,No,No,
+,2020-04-21 00:00:00,Eastern Speciality/Check n GO*,RI,5,2020-04-21 00:00:00,No,No,
+2020-04-20 00:00:00,2020-04-23 00:00:00,CB Chadwick-BaRoss*,West Warwick,1,2020-04-20 00:00:00,No,No,
+2020-03-17 00:00:00,2020-04-17 00:00:00,FGX Int*,Smithfield,13,2020-04-17 00:00:00,No,No,
+2020-04-06 00:00:00,2020-04-14 00:00:00,Massage Envy*,Cranston,51,2020-03-16 00:00:00,No,No,
+2020-04-04 00:00:00,2020-04-04 00:00:00,Moo*,Lincoln,110,2020-04-06 00:00:00,No,No,
+2020-03-26 00:00:00,2020-03-27 00:00:00,The Vanderbuilt*,Newport,37,2020-03-26 00:00:00,No,No,
+2020-03-26 00:00:00,2020-03-23 00:00:00,Highgate*,Providence,146,2020-03-08 00:00:00,No,Yes,"Local 26 1010 Station Landing, 4th fl Medford Ma, 02155"
+2020-03-20 00:00:00,2020-03-20 00:00:00,Greystone*,Lincoln,87,2020-03-20 00:00:00,No,No,
+2020-03-19 00:00:00,2020-03-23 00:00:00,HM Host*,Warwick,110,2020-03-16 00:00:00,No,No,
+2019-02-13 00:00:00,2019-02-14 00:00:00,Spectrum Pharmaceuticals,Portsmouth,1,2019-04-12 00:00:00,Yes,No,
+2019-01-21 00:00:00,2019-01-21 00:00:00,Tuition Management Systems,Warwick,59,"April 1,2109 August 30, 2019",Yes,No,
+2019-01-14 00:00:00,2019-01-14 00:00:00,"Agoda Travel Operations USA, Inc.",Providence,62,2019-03-18 00:00:00,Yes,No,
+2018-11-01 00:00:00,2018-11-09 00:00:00,"DAL Global Services, LLC (DGS)",Warwick,51,2018-01-31 00:00:00,No,No,
+2108-11-01 00:00:00,2018-11-01 00:00:00,"Hooper Holmes, Inc. dba Provant Health",Warwick,92,2018-12-31 00:00:00,Yes,No,
+2108-10-23 00:00:00,2018-11-01 00:00:00,Nordstrom Providence Place,Providence,181,2019-01-04 00:00:00,Yes,No,
+2018-10-09 00:00:00,2018-10-09 00:00:00,Matlet/Group,Pawtucket,180,2018-10-09 00:00:00,Yes,No,
+2018-09-19 00:00:00,2018-09-20 00:00:00,"United Builders Supply Co., Inc.",Westerly,83,2018-11-30 00:00:00,Yes,No,
+2018-06-22 00:00:00,2018-06-25 00:00:00,Chase Corp dba Neptco,Pawtucket,64,2018-08-27 00:00:00,Yes,Yes,IBEW Local 1499
+2018-06-01 00:00:00,2018-06-01 00:00:00,Pinnacle Logistics,North Kingstown,149,2018-07-31 00:00:00,Yes,No,
+2017-11-03 00:00:00,2017-11-03 00:00:00,Memorial Hospital of Rhode Island,Pawtucket,477,2018-01-12 00:00:00,Yes,Yes,United Nurses and Allied Professionals Local 5082
+2017-09-08 00:00:00,2017-09-12 00:00:00,Benny's,Smithfield,171,11/30/2017 12/10/2017 and 12/31/2017,Yes,No,
+2016-05-05 00:00:00,2016-05-06 00:00:00,Homemade Real Foods,Cumberland,187,2016-05-02 00:00:00,Yes,No,
+2016-05-04 00:00:00,2016-05-05 00:00:00,First Student,North Scituate,20,2016-06-30 00:00:00,Yes,Yes,SEIU Local 1199
+2016-04-08 00:00:00,2016-04-08 00:00:00,Aramark,Smithfield,154,2016-06-07 00:00:00,No,No,
+2016-02-01 00:00:00,2016-02-01 00:00:00,Optum,Providence,60,4/01/16 and 4/07/16,Yes,No,
+2016-01-15 00:00:00,2016-01-15 00:00:00,Sam's Club,Warwick,131,2016-02-05 00:00:00,Yes,No,
+2015-11-18 00:00:00,2015-11-18 00:00:00,Blue Cross Blue Shield of RI,Providence,241,1/04/16 through 8/2017,No,No,
+2015-11-10 00:00:00,2015-11-12 00:00:00,"Fresenius Management Services, Inc.",East Providence,---,1/11/16 through 3/31/16,Yes,No,
+2015-06-23 00:00:00,2015-06-25 00:00:00,"Teespring, Inc.",Providence,70,2015-08-24 00:00:00,No,No,
+2015-03-06 00:00:00,2015-03-11 00:00:00,"United Airlines, Inc.'s Airport Operations Division",Warwick,54 Union 3 Non Union,2015-05-17 00:00:00,Yes,Yes,"International Assoc. of Machinists and Aerospace Workers, 1771 Commerce Drive, Suite 103 Elkgrove Village, IL 60007"
+2015-02-27 00:00:00,2015-03-02 00:00:00,Honeywell,Cranston,190 company with an additional 100 contracted,6/2015 through 6/2016 5/2015 for contracted employees,No,No,
+2014-07-30 00:00:00,2014-07-30 00:00:00,IntegraMed Inc.,Providence and Middletown,5,2014-09-30 00:00:00,No,No,
+2014-06-30 00:00:00,2014-07-01 00:00:00,Cox Communications,West Warwick,142,2014-08-31 00:00:00,No,No,
+2014-03-26 00:00:00,2014-03-31 00:00:00,Sodexo,Smithfield,115,2014-05-15 00:00:00,Yes,Yes,USAWR 90 Printery St. Providence
+2013-11-15 00:00:00,2013-11-18 00:00:00,Money Management International,Lincoln,49,2014-01-15 00:00:00,Yes,No,
+2013-09-30 00:00:00,2013-09-30 00:00:00,Dessert Services Inc.,Warwick,1,2013-11-30 00:00:00,Yes,No,
+2013-08-09 00:00:00,2013-08-16 00:00:00,"Landauef Metropolitan, Inc.",Warwick,66,2013-10-08 00:00:00,No,No,
+2013-05-31 00:00:00,2013-06-13 00:00:00,Essential Salon Products Inc.,Cranston,3,2013-05-31 00:00:00,Yes,No,
+2013-05-22 00:00:00,2013-05-23 00:00:00,Sodexho Inc,Warwick,62,2013-07-30 00:00:00,Yes,Yes,
+2013-01-11 00:00:00,2013-01-11 00:00:00,American Suzuki Motor Corporation,Washington County,---,2013-03-14 00:00:00,Yes,No,
+2012-06-27 00:00:00,2012-06-27 00:00:00,Portola Tech International Inc.,Cumberland,51,2012-08-27 00:00:00,Yes,No,
+2012-04-12 00:00:00,2012-04-12 00:00:00,Pawtuxet Village Care & Rehabilitation Center,Cranston,150,2012-06-11 00:00:00,Yes,Yes,"North America AFL-CIO 410 South Main Street, Providence RI"
+2012-01-30 00:00:00,2012-01-31 00:00:00,"John Crane, Inc.",Cranston,70,2012-04-01 00:00:00,Yes,Yes,"Sealol Shop Union, 15 Pioneer Ave., Warwick RI 02888"
+2011-10-17 00:00:00,2011-10-17 00:00:00,Lowe?s Home Center,North Kingstown,110,2011-10-17 00:00:00,Yes,No,
+2011-08-30 00:00:00,2011-09-02 00:00:00,WSI,Newport,16,2011-10-30 00:00:00,Yes,No,
+2011-07-28 00:00:00,2011-08-03 00:00:00,Lockheed Martin Corp - Global Training & Logistics,Newport,9,2011-09-30 00:00:00,Yes,No,
+2011-07-29 00:00:00,2011-08-01 00:00:00,BNY Mellon,Pawtucket,98,"October 28, 2011 and November 10, 2011",Yes,No,
+2011-05-25 00:00:00,2011-05-27 00:00:00,Flextronics Americas LLC,"North Kingstown, Providence, Smithfield and Warwick",21,Staggered,Yes,No,
+2011-04-01 00:00:00,2011-04-01 00:00:00,Bank of New York Mellon (BNY Mellon),Pawtucket,98,6/6/11-10/30/11,Yes,No,
+2011-02-15 00:00:00,2011-02-15 00:00:00,Stanley Black & Decker,East Greenwich,5,2011-04-11 00:00:00,No,No,
+2011-01-22 00:00:00,2011-01-25 00:00:00,"Wal-Mart Stores, Inc. /Sam’s Club",Warwick,122,2011-02-18 00:00:00,No,No,
+2010-08-20 00:00:00,2010-08-23 00:00:00,Bank of America,Lincoln,89,2010-10-01 00:00:00,No,No,
+2010-08-02 00:00:00,2010-02-08 00:00:00,Stanley Works Nail Dept.,East Greenwich,26,"10/1/2010-10/15/2010, 10/29/2010-11/12/2010, 12/3/2010-12/17/2010",No,No,
+2010-02-05 00:00:00,2010-02-08 00:00:00,Stanley Works Nail Dept.,East Greenwich,165,2010-02-08 00:00:00,No,No,
+2009-12-31 00:00:00,2010-01-04 00:00:00,The Ski Market,Warwick,8,2010-02-01 00:00:00,Yes,No,
+2009-11-20 00:00:00,2009-11-24 00:00:00,Leviton Mfg,Warwick,66,1/20/10 2/19/10,Yes,No,
+2009-11-20 00:00:00,2009-11-24 00:00:00,Liz Clayborne,Lincoln,103,4/19/10 4/30/10,Yes,Yes,"NE Joint Board, Local 324, UNITE HERE"
+2009-10-08 00:00:00,2009-10-08 00:00:00,Aramark,Providence,60-80,2009-11-30 00:00:00,No,No,
+2009-10-05 00:00:00,2009-10-05 00:00:00,A.T. Cross,Lincoln,63,2009-12-01 00:00:00,No,No,
+2009-08-21 00:00:00,2009-08-25 00:00:00,A.T. Cross,Lincoln,additional 16,2009-03-23 00:00:00,No,No,
+2009-07-13 00:00:00,2009-07-14 00:00:00,Portola,Woonsocket,130,2009-03-23 00:00:00,Yes,No,
+2009-07-13 00:00:00,2009-07-14 00:00:00,Victoria & Company,East Providence,26,2009-07-07 00:00:00,Yes,No,
+2009-07-01 00:00:00,2009-03-23 00:00:00,A.T. Cross,Lincoln,14,2009-03-23 00:00:00,No,No,
+2009-06-16 00:00:00,2009-07-02 00:00:00,HGA Quest,Nationwide - RI,10,2009-08-16 00:00:00,No,No,
+2009-04-28 00:00:00,2009-04-29 00:00:00,Providence Public Library,Providence,171,2009-06-30 00:00:00,No,Yes,"United Service & Allied Workers of RI 90 Printery St. Providence, RI 02904"
+2009-04-15 00:00:00,2009-04-15 00:00:00,First Student,Burrillville,55,2009-06-30 00:00:00,Yes,No,
+2009-03-11 00:00:00,2009-03-10 00:00:00,Honeywell,Pawtucket,29,2009-05-10 00:00:00,Yes,No,
+2009-03-09 00:00:00,2009-03-09 00:00:00,Victoria & Company,East Providence,71,2009-05-08 00:00:00,No,No,
+2009-03-04 00:00:00,2009-03-06 00:00:00,APC by Schneider Electric,West Warwick,54,2009-05-02 00:00:00,Yes,No,
+2009-03-05 00:00:00,2009-03-05 00:00:00,Leviton Mfg,Warwick,119,2009-05-10 00:00:00,Yes,No,
+2009-02-19 00:00:00,2009-02-20 00:00:00,"Colibri Group, Inc.",East Providence and Providence,270,2009-01-15 00:00:00,Yes,No,
+2009-01-19 00:00:00,2009-01-12 00:00:00,Bank of America,Lincoln,121,2009-01-08 00:00:00,No,No,

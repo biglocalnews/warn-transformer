@@ -94,6 +94,21 @@ test: ## run all tests
 	@$(PYTHON) setup.py -q test
 
 #
+# Releases
+#
+
+check-release: ## check release for potential errors
+	$(call banner,      🔎 Checking release 🔎)
+	@$(PIPENV) twine check dist/*
+
+
+build-release: ## builds source and wheel package
+	$(call banner,      📦 Building release 📦)
+	@$(PYTHON) setup.py sdist
+	@$(PYTHON) setup.py bdist_wheel
+	@ls -l dist
+
+#
 # Extras
 #
 
