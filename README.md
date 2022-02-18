@@ -46,13 +46,13 @@ Here's how it's done, step by step. The screenshots are from a different reposit
 
 The first step is to visit [our repository's homepage](https://github.com/biglocalnews/warn-transformer) and click on [the "releases" headline](https://github.com/biglocalnews/warn-transformer/releases) in the right rail.
 
-![Release button](.github/images/releasing-releases-button.png)
+![Release button](https://raw.githubusercontent.com/biglocalnews/warn-transformer/main/.github/images/releasing-releases-button.png)
 
 ### 2. Click 'Draft a new release'
 
 Note the number of the latest release. Click the "Draft a new release" button in the upper-right corner. If you don't see this button, you do not have permission to make a release. Only the maintainers of the repository are able to release new code.
 
-![Draft button](.github/images/releasing-draft-button.png)
+![Draft button](https://raw.githubusercontent.com/biglocalnews/warn-transformer/main/.github/images/releasing-draft-button.png)
 
 ### 3. Create a new tag
 
@@ -64,43 +64,43 @@ If you're unsure, review the standards defined at [semver.org](https://semver.or
 
 Once you've settled on the number for your new release, click on the "Choose a tag" pull down.
 
-![Tag button](.github/images/releasing-tag-button.png)
+![Tag button](https://raw.githubusercontent.com/biglocalnews/warn-transformer/main/.github/images/releasing-tag-button.png)
 
 Enter your version number into the box. Then click the "Create new tag" option that appears.
 
-![Tag dropdown](.github/images/releasing-name-tag.png)
+![Tag dropdown](https://raw.githubusercontent.com/biglocalnews/warn-transformer/main/.github/images/releasing-name-tag.png)
 
 ### 4. Name the release
 
 Enter the same number into the "Release title" box.
 
-![Name box](.github/images/releasing-name-release.png)
+![Name box](https://raw.githubusercontent.com/biglocalnews/warn-transformer/main/.github/images/releasing-name-release.png)
 
 ### 5. Auto-generate release notes
 
 Click the "Auto-generate release notes" button in the upper right corner of the large description box.
 
-![Auto-generate release notes button](.github/images/releasing-changelog-button.png)
+![Auto-generate release notes button](https://raw.githubusercontent.com/biglocalnews/warn-transformer/main/.github/images/releasing-changelog-button.png)
 
 That should fill in the box below. What appears will depend on how many pull requests you've merged since the last release.
 
-![Auto-generate release notes results](.github/images/releasing-changelog-entered.png)
+![Auto-generate release notes results](https://raw.githubusercontent.com/biglocalnews/warn-transformer/main/github/images/releasing-changelog-entered.png)
 
 ### 6. Publish the release
 
 Click the green button that says "Publish release" at the bottom of the page.
 
-![Publish button](.github/images/releasing-publish-button.png)
+![Publish button](https://raw.githubusercontent.com/biglocalnews/warn-transformer/main/.github/images/releasing-publish-button.png)
 
 ### 7. Wait for the Action to finish
 
 GitHub will take you to a page dedicated to your new release and start an automated process that release our new version to the world. Follow its progress by clicking on the [Actions tab](https://github.com/biglocalnews/warn-transformer/actions) near the top of the page.
 
-![Release page](.github/images/releasing-release-published.png)
+![Release page](https://raw.githubusercontent.com/biglocalnews/warn-transformer/main/.github/images/releasing-release-published.png)
 
 That will take you to the Actions monitoring page. The task charged with publishing your release should be at the top.
 
-![Actions page](.github/images/releasing-actions-start.png)
+![Actions page](https://raw.githubusercontent.com/biglocalnews/warn-transformer/main/.github/images/releasing-actions-start.png)
 
 After a few minutes, the process there should finish and show a green check mark. When it does, visit [warn-transformer’s page on PyPI](https://pypi.org/project/warn-transformer/), where you should see the latest version displayed at the top of the page.
 
