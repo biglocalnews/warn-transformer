@@ -80,7 +80,7 @@ jobs:
 
       - id: install-python-dependencies
         name: Install Python dependencies
-        run: pipenv install --dev --pre --python `which python`
+        run: pipenv install --dev --python `which python`
 
       - id: run
         name: Run tests
@@ -96,11 +96,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - id: install
-        name: Install Python, pipenv and Pipfile packages
-        uses: palewire/install-python-pipenv-pipfile@v2
+      - id: install-pipenv
+        name: Install pipenv
+        run: pipx install pipenv
+
+      - id: install-python
+        name: Install Python
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.7
+          python-version: '3.7'
+          cache: 'pipenv'
+
+      - id: install-python-dependencies
+        name: Install Python dependencies
+        run: pipenv install --dev --python 3.7
 
       - id: build
         name: Build release
