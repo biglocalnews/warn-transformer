@@ -102,7 +102,9 @@ That will take you to the Actions monitoring page. The task charged with publish
 
 ![Actions page](.github/images/releasing-actions-start.png)
 
-And that's it. The action should have released a new private version of our Python package in the Google Artifact Registry. You could debug this process via Google Cloud Console, but it shouldn't be necessary if everything works.
+After a few minutes, the process there should finish and show a green check mark. When it does, visit [warn-transformer’s page on PyPI](https://pypi.org/project/warn-transformer/), where you should see the latest version displayed at the top of the page.
+
+If the action fails, something has gone wrong with the deployment process. You can click into its debugging panel to search for the cause or ask the project maintainers for help.
 
 ## About
 
