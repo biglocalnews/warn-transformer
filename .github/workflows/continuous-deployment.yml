@@ -129,23 +129,9 @@ jobs:
       id-token: 'write'
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - id: install-pipenv
-        name: Install pipenv
-        run: pipx install pipenv
-
-      - id: install-python
-        name: Install Python
-        uses: actions/setup-python@v2
+      - uses: actions/setup-python@v2
         with:
-          python-version: "3.7"
-          cache: 'pipenv'
-
-      - id: install-python-dependencies
-        name: Install Python dependencies
-        run: pipenv install --dev --pre
+          python-version: '3.9'
 
       - id: fetch
         name: Fetch artifact
@@ -154,16 +140,11 @@ jobs:
           name: release-${{ github.run_number }}
           path: ./dist
 
-      - id: auth-gcloud
-        name: Authenticate with Google Cloud
-        uses: google-github-actions/auth@v0
+      - id: publish
+        name: Publish release
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          workload_identity_provider: projects/990992937017/locations/global/workloadIdentityPools/warn-pool/providers/warn-provider
-          service_account: warn-service-account@big-local-news-267923.iam.gserviceaccount.com
-          create_credentials_file: true
-
-      - id: release
-        name: Release
-        run: pipenv run twine upload --repository-url https://us-west2-python.pkg.dev/big-local-news-267923/warn-transformer/ dist/*
-        env:
-            GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth-gcloud.outputs.credentials_file_path }}
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
+          verbose: true
+          verify_metadata: false
