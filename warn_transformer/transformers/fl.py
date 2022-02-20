@@ -12,6 +12,11 @@ class Transformer(BaseTransformer):
         jobs="Employees Affected",
     )
     date_format = ("%m-%d-%y", "%m/%d/%Y")
+    jobs_corrections = {
+        # This Disney layoff notice is large but legit
+        # https://www.usatoday.com/story/travel/2020/10/30/disney-world-live-entertainment-shows-dark-covid-19-pandemic/6088586002/
+        10903: 10903,
+    }
 
     def transform_company(self, value: str) -> str:
         """Transform a raw company name.

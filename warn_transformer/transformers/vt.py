@@ -12,3 +12,6 @@ class Transformer(BaseTransformer):
         jobs="number_of_employees_affected",
     )
     date_format = "%b %d, %Y"
+    jobs_corrections = {
+        9999999: None,
+    }
