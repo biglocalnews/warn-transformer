@@ -3,7 +3,7 @@ import hashlib
 import json
 import logging
 import typing
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 from marshmallow import Schema, fields
@@ -35,6 +35,8 @@ class BaseTransformer:
     date_format: typing.Any = "%m/%d/%Y"
     # Manual date corrections for malformed data
     date_corrections: typing.Dict = {}
+    # The minimum year allowed
+    minimum_year: int = 1999
 
     # Manual jobs corrections for malformed data
     jobs_corrections: typing.Dict = {}
@@ -74,7 +76,7 @@ class BaseTransformer:
         # Transform the row list into dicts that are ready to be submitted for validation
         transformed_list = [self.transform_row(r) for r in row_list]
 
-        # Validate the row list against our schema
+        # Validate each row against our schema
         validated_list = [self.schema().load(r) for r in transformed_list]
 
         # Return the result, which should be ready for consolidation
@@ -190,7 +192,7 @@ class BaseTransformer:
             return None
 
         # The result, whene we find it
-        dt = None
+        dt: typing.Any = None
 
         # If there's only one date_format, try that
         if isinstance(self.date_format, str):
@@ -216,6 +218,24 @@ class BaseTransformer:
         if dt is None:
             return None
 
+        # Make sure we've got a date at this point
+        assert dt is not None and isinstance(dt, datetime)
+
+        # If the date is more than 90 days in future, fix it
+        today = datetime.today()
+        if dt > today + timedelta(days=90):
+            logger.debug(
+                f"Date '{dt}' is more than 90 days in the future. Looking up correction"
+            )
+            dt = self.date_corrections[value]
+
+        # If the date is below the minimum year, fix it
+        if dt.year < self.minimum_year:
+            logger.debug(
+                f"Year {dt.year} below minimum of {self.minimum_year}. Looking up correction"
+            )
+            dt = self.date_corrections[value]
+
         # If we have a datetime, return the result as a string
         return str(dt.date())
 
@@ -229,9 +249,11 @@ class BaseTransformer:
         """
         # Cut whitespace
         value = value.strip()
+
         # If there's nothing there, return None
         if not value:
             return None
+
         # Cut any commas
         value = value.replace(",", "")
         try:
@@ -241,9 +263,11 @@ class BaseTransformer:
             # If it won't convert, look for a manual correction
             logger.debug(f"Could not parse '{value}'. Looking up correction")
             clean_value = self.jobs_corrections[value]
+
         # If it's None, return it now
         if not clean_value:
             return clean_value
+
         # Now validate it
         if clean_value < 0:
             logger.debug("Jobs must be greater than 0. Looking up correction")
@@ -253,5 +277,6 @@ class BaseTransformer:
                 "Jobs greater than 10,000 are probably wrong. Looking up correction"
             )
             clean_value = self.jobs_corrections[clean_value]
+
         # Pass it out
         return clean_value

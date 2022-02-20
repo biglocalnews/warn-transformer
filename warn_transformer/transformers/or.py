@@ -12,6 +12,7 @@ class Transformer(BaseTransformer):
         jobs="Laid Off",
     )
     date_format = "%Y-%m-%d %H:%M:%S"
+    minimum_year = 1988
     jobs_corrections = {
         27500: None,
     }
