@@ -56,6 +56,7 @@ setup(
     install_requires=[
         "bln",
         "marshmallow",
+        "click",
     ],
     license="Apache 2.0 license",
     zip_safe=False,
@@ -79,4 +80,8 @@ setup(
     ],
     setup_requires=["pytest-runner", "setuptools_scm"],
     use_scm_version={"version_scheme": version_scheme, "local_scheme": local_version},
+    entry_points="""
+        [console_scripts]
+        warn-transformer=warn_transformer.cli:cli
+    """,
 )
