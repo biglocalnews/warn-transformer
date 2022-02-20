@@ -247,11 +247,11 @@ class BaseTransformer:
         # Now validate it
         if clean_value < 0:
             logger.debug("Jobs must be greater than 0. Looking up correction")
-            clean_value = self.jobs_corrections[value]
+            clean_value = self.jobs_corrections[clean_value]
         if clean_value > 10000:
             logger.debug(
                 "Jobs greater than 10,000 are probably wrong. Looking up correction"
             )
-            clean_value = self.jobs_corrections[value]
+            clean_value = self.jobs_corrections[clean_value]
         # Pass it out
         return clean_value
