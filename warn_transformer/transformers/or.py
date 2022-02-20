@@ -14,5 +14,7 @@ class Transformer(BaseTransformer):
     date_format = "%Y-%m-%d %H:%M:%S"
     minimum_year = 1988
     jobs_corrections = {
-        27500: None,
+        # This is a nationwide Northwest Airlines layoff that is large and legit.
+        # https://www.nytimes.com/1998/09/03/us/northwest-lays-off-27000-increasing-pressure-on-strike.html
+        27500: 27500,
     }
