@@ -236,8 +236,22 @@ class BaseTransformer:
         value = value.replace(",", "")
         try:
             # Convert to integer
-            return int(value)
+            clean_value = int(value)
         except ValueError:
             # If it won't convert, look for a manual correction
             logger.debug(f"Could not parse '{value}'. Looking up correction")
-            return self.jobs_corrections[value]
+            clean_value = self.jobs_corrections[value]
+        # If it's None, return it now
+        if not clean_value:
+            return clean_value
+        # Now validate it
+        if clean_value < 0:
+            logger.debug("Jobs must be greater than 0. Looking up correction")
+            clean_value = self.jobs_corrections[value]
+        if clean_value > 10000:
+            logger.debug(
+                "Jobs greater than 10,000 are probably wrong. Looking up correction"
+            )
+            clean_value = self.jobs_corrections[value]
+        # Pass it out
+        return clean_value

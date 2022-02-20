@@ -67,7 +67,7 @@ PYTHON := $(PIPENV) python -W ignore
 #
 
 consolidate: ## download raw data
-	$(call banner,      🤝 Consolidating data 🤝)
+	$(call banner,      🪢 Consolidating data 🪢)
 	$(PIPENV) python -m warn_transformer.consolidate
 
 

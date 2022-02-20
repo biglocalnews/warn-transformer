@@ -18,6 +18,10 @@ class Transformer(BaseTransformer):
         "TBA": None,
         "To be Determined": None,
         "-": None,
+        23695: None,
+        # The United airlines number is legimate, though nationwide
+        # https://abcnews.go.com/Politics/united-airlines-furlough-16000-employees/story?id=72771897
+        16000: 16000,
     }
     date_corrections = {
         "TBA": None,
