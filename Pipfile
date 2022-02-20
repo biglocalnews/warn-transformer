@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 bln = "*"
 marshmallow = "*"
+click = "*"
 
 [dev-packages]
 pre-commit = "*"
