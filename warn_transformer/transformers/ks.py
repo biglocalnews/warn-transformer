@@ -12,3 +12,4 @@ class Transformer(BaseTransformer):
         jobs="number_of_employees_affected",
     )
     date_format = "%b %d, %Y"
+    minimum_year = 1998

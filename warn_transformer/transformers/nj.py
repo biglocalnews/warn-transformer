@@ -1,4 +1,5 @@
 import typing
+from datetime import datetime
 
 from ..schema import BaseTransformer
 
@@ -27,6 +28,7 @@ class Transformer(BaseTransformer):
         "TBA": None,
         "Temp layoff": None,
         "-": None,
+        "3030-08-23 00:00:00": datetime(2020, 8, 23),
     }
 
     def transform_jobs(self, value: str) -> typing.Optional[int]:
