@@ -10,14 +10,14 @@ class Transformer(BaseTransformer):
     fields = dict(
         company="COMPANY NAME",
         location=lambda row: f"{row['COMPANY ADDRESS']} {row['CITY, STATE, ZIP']}".strip(),
-        date=lambda row: row['NOTICE DATE'] or row['SUPP NOTICE DATE'],
+        date=lambda row: row["NOTICE DATE"] or row["SUPP NOTICE DATE"],
         jobs="WORKERS AFFECTED",
     )
     date_format = ("%Y-%m-%d %H:%M:%S", "%m/%d/%Y")
     jobs_corrections = {
         "N/A": None,
-        'Not Provided': None,
-        'Not reported': None,
+        "Not Provided": None,
+        "Not reported": None,
     }
 
     def transform_jobs(self, value: str) -> typing.Optional[int]:
