@@ -13,7 +13,7 @@ class Transformer(BaseTransformer):
         date="Notice Date",
         jobs="Emp #",
     )
-    date_format = "%m/%d/%Y"
+    date_format = ("%m/%d/%Y", "%Y-%m-%d %H:%M:%S")
     date_corrections = {
         "9/1/8/2020": datetime(2020, 1, 8),
         "4/26/21": datetime(2021, 4, 26),
