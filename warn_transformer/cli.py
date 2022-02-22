@@ -1,3 +1,4 @@
+import typing
 from pathlib import Path
 
 import click
@@ -20,9 +21,14 @@ def cli():
     type=click.Path(),
     help="The Path were the results will be downloaded",
 )
-def download(download_dir: Path):
+@click.option(
+    "--source",
+    default=None,
+    help="The source to download. Default is all sources.",
+)
+def download(download_dir: Path, source: typing.Optional[str] = None):
     """Download all the CSVs in the WARN Notice project on biglocalnews.org."""
-    download_runner.run(download_dir)
+    download_runner.run(download_dir, source)
 
 
 @cli.command()
@@ -32,9 +38,14 @@ def download(download_dir: Path):
     type=click.Path(),
     help="The Path were the raw files results are located",
 )
-def consolidate(input_dir: Path):
+@click.option(
+    "--source",
+    default=None,
+    help="The source to download. Default is all sources.",
+)
+def consolidate(input_dir: Path, source: typing.Optional[str] = None):
     """Consolidate raw data using a common data schema."""
-    consolidate_runner.run(input_dir)
+    consolidate_runner.run(input_dir, source)
 
 
 if __name__ == "__main__":

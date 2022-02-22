@@ -1,5 +1,6 @@
 import csv
 import logging
+import typing
 from importlib import import_module
 from pathlib import Path
 
@@ -8,7 +9,10 @@ from . import utils
 logger = logging.getLogger(__name__)
 
 
-def run(input_dir: Path = utils.WARN_TRANSFORMER_OUTPUT_DIR / "raw") -> Path:
+def run(
+    input_dir: Path = utils.WARN_TRANSFORMER_OUTPUT_DIR / "raw",
+    source: typing.Optional[str] = None,
+) -> Path:
     """Consolidate raw data using a common data schema.
 
     Args:
@@ -21,6 +25,10 @@ def run(input_dir: Path = utils.WARN_TRANSFORMER_OUTPUT_DIR / "raw") -> Path:
     # Get all of the transformers
     transformer_list = utils.get_all_transformers()
     logger.info(f"Consolidating {len(transformer_list)} sources")
+
+    # If a source is provided, limit the list
+    if source:
+        transformer_list = [t for t in transformer_list if source.lower() in t.lower()]
 
     # Loop through them
     obj_list = []

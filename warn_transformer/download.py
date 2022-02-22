@@ -1,5 +1,6 @@
 import logging
 import os
+import typing
 from pathlib import Path
 
 from bln.client import Client
@@ -12,11 +13,15 @@ BLN_PROJECT_ID = "UHJvamVjdDpiZGM5NmU1MS1kMzBhLTRlYTctODY4Yi04ZGI4N2RjMzQ1ODI="
 logger = logging.getLogger(__name__)
 
 
-def run(download_dir: Path = utils.WARN_TRANSFORMER_OUTPUT_DIR / "raw"):
+def run(
+    download_dir: Path = utils.WARN_TRANSFORMER_OUTPUT_DIR / "raw",
+    source: typing.Optional[str] = None,
+):
     """Download all the CSVs in the WARN Notice project on biglocalnews.org.
 
     Args:
         download_dir (Path): The directory where files will be downloaded.
+        source (str): The postal code of the source to download. Default is all sources.
     """
     logging.basicConfig(level="DEBUG", format="%(asctime)s - %(name)s - %(message)s")
 
@@ -28,6 +33,10 @@ def run(download_dir: Path = utils.WARN_TRANSFORMER_OUTPUT_DIR / "raw"):
 
     # Get all the files in the project.
     file_list = [f["name"] for f in p["files"]]
+
+    # If a source is provided, limit the list
+    if source:
+        file_list = [f for f in file_list if source.lower() in f.lower()]
 
     # Make the download directory, if it doesn't already exist.
     if not download_dir.exists():
