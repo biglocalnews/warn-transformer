@@ -1,3 +1,4 @@
+import typing
 from datetime import datetime
 
 from ..schema import BaseTransformer
@@ -21,3 +22,13 @@ class Transformer(BaseTransformer):
         "7/14/21": datetime(2021, 7, 14),
         "7/12/21": datetime(2021, 7, 12),
     }
+
+    def check_if_amendment(self, row: typing.Dict) -> bool:
+        """Determine whether a row is an amendment or not.
+
+        Args:
+            row (dict): The raw row of data.
+
+        Returns: A boolean
+        """
+        return "amendment" in row["Notice Type"].lower().strip()
