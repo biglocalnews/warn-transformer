@@ -1,7 +1,10 @@
+import logging
 import typing
 from datetime import datetime
 
 from ..schema import BaseTransformer
+
+logger = logging.getLogger(__name__)
 
 
 class Transformer(BaseTransformer):
@@ -32,3 +35,20 @@ class Transformer(BaseTransformer):
         Returns: A boolean
         """
         return "amendment" in row["Notice Type"].lower().strip()
+
+    def handle_amendments(
+        self, row_list: typing.List[typing.Dict]
+    ) -> typing.List[typing.Dict]:
+        """Remove amended filings from the provided list of records.
+
+        Args:
+            row_list (list): A list of clean rows of data.
+
+        Returns: A list of cleaned data, minus amended records.
+        """
+        amendments_count = len([r for r in row_list if r["is_amendment"] is True])
+        logger.debug(f"{amendments_count} amendments in {self.postal_code}")
+        logger.debug(
+            "No action has been taken because it does not appear to be necessary to remove ancestor filings."
+        )
+        return row_list

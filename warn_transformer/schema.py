@@ -80,8 +80,11 @@ class BaseTransformer:
         # Validate each row against our schema
         validated_list = [self.schema().load(r) for r in transformed_list]
 
+        # Deal with amendments
+        amended_list = self.handle_amendments(validated_list)
+
         # Return the result, which should be ready for consolidation
-        return validated_list
+        return amended_list
 
     def prep_row_list(
         self, row_list: typing.List[typing.Dict]
@@ -293,3 +296,19 @@ class BaseTransformer:
         Returns: A boolean
         """
         return False
+
+    def handle_amendments(
+        self, row_list: typing.List[typing.Dict]
+    ) -> typing.List[typing.Dict]:
+        """Remove amended filings from the provided list of records.
+
+        Args:
+            row_list (list): A list of clean rows of data.
+
+        Returns: A list of cleaned data, minus amended records.
+        """
+        amendments_count = len([r for r in row_list if r["is_amendment"] is True])
+        if amendments_count == 0:
+            logger.debug(f"No amendments in {self.postal_code}")
+            return row_list
+        raise NotImplementedError
