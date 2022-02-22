@@ -66,12 +66,12 @@ class Transformer(BaseTransformer):
                 previous_index = i - 1
                 previous_record = row_list[previous_index]
 
-                # Are the first five characters of the company name the same?
+                # Are the first five characters of the company name found?
                 similar_name = (
                     row["company"][:5].lower() in previous_record["company"].lower()
                 )
 
-                # If not, it's not an amendment
+                # If not, it's not an obvious ancestor
                 if not similar_name:
                     logger.debug(f"No ancestor found for {row['company']}")
                     continue
