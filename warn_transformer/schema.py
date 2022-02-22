@@ -20,6 +20,7 @@ class WarnNoticeSchema(Schema):
     location = fields.Str(required=True, allow_none=True)
     date = fields.Date(required=True, allow_none=True)
     jobs = fields.Int(required=True, allow_none=True)
+    is_amendment = fields.Boolean(required=True, default=False)
 
 
 class BaseTransformer:
@@ -121,6 +122,7 @@ class BaseTransformer:
                 self.get_raw_value(row, self.fields["location"])
             ),
             jobs=self.transform_jobs(self.get_raw_value(row, self.fields["jobs"])),
+            is_amendment=self.check_if_amendment(row),
         )
         data["hash_id"] = self.get_hash_id(data)
         return data
@@ -281,3 +283,13 @@ class BaseTransformer:
 
         # Pass it out
         return clean_value
+
+    def check_if_amendment(self, row: typing.Dict) -> bool:
+        """Determine whether or a row is an amendment or not.
+
+        Args:
+            row (dict): The raw row of data.
+
+        Returns: A boolean
+        """
+        return False
