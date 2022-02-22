@@ -285,7 +285,7 @@ class BaseTransformer:
         return clean_value
 
     def check_if_amendment(self, row: typing.Dict) -> bool:
-        """Determine whether or a row is an amendment or not.
+        """Determine whether a row is an amendment or not.
 
         Args:
             row (dict): The raw row of data.
