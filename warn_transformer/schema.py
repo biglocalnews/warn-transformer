@@ -111,8 +111,7 @@ class BaseTransformer:
 
         Returns: A transformed dict that's ready to be loaded into our consolidated schema.
         """
-        return dict(
-            hash_id=self.get_hash_id(row),
+        data = dict(
             postal_code=self.postal_code.upper(),
             company=self.transform_company(
                 self.get_raw_value(row, self.fields["company"])
@@ -123,6 +122,8 @@ class BaseTransformer:
             ),
             jobs=self.transform_jobs(self.get_raw_value(row, self.fields["jobs"])),
         )
+        data["hash_id"] = self.get_hash_id(data)
+        return data
 
     def get_raw_value(self, row, method):
         """Fetch a value from the row that for transformation.
@@ -144,16 +145,16 @@ class BaseTransformer:
         else:
             raise ValueError("The field method your provided is not valid.")
 
-    def get_hash_id(self, row: typing.Dict) -> str:
+    def get_hash_id(self, dict: typing.Dict) -> str:
         """Convert the row into a unique hexdigest to use as a unique identifier.
 
         Args:
-            row (dict): One raw row of data from the source
+            dict (dict): One raw row of data from the source
 
         Returns: A unique hexdigest string computed from the source data.
         """
-        row_string = json.dumps(row)
-        hash_obj = hashlib.sha224(row_string.encode("utf-8"))
+        dict_string = json.dumps(dict)
+        hash_obj = hashlib.sha224(dict_string.encode("utf-8"))
         return hash_obj.hexdigest()
 
     def transform_company(self, value: str) -> str:
