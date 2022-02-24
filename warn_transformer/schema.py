@@ -266,7 +266,7 @@ class BaseTransformer:
         value = value.replace(",", "")
         try:
             # Convert to integer
-            clean_value = int(value)
+            clean_value = int(float(value))
         except ValueError:
             # If it won't convert, look for a manual correction
             logger.debug(f"Could not parse '{value}'. Looking up correction")
