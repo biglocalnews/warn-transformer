@@ -41,6 +41,8 @@ class BaseTransformer:
 
     # Manual jobs corrections for malformed data
     jobs_corrections: typing.Dict = {}
+    # The max jobs we allow without throwing an error
+    maximum_jobs: int = 10000
 
     def __init__(self, input_dir: Path):
         """Intialize a new instance.
@@ -278,9 +280,9 @@ class BaseTransformer:
         if clean_value < 0:
             logger.debug("Jobs must be greater than 0. Looking up correction")
             clean_value = self.jobs_corrections[clean_value]
-        if clean_value > 10000:
+        if clean_value > self.maximum_jobs:
             logger.debug(
-                "Jobs greater than 10,000 are probably wrong. Looking up correction"
+                "Jobs greater than {self.maximum_jobs} are probably wrong. Looking up correction"
             )
             clean_value = self.jobs_corrections[clean_value]
 
