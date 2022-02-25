@@ -282,7 +282,7 @@ class BaseTransformer:
             clean_value = self.jobs_corrections[clean_value]
         if clean_value > self.maximum_jobs:
             logger.debug(
-                "Jobs greater than {self.maximum_jobs} are probably wrong. Looking up correction"
+                f"Jobs greater than {self.maximum_jobs} are probably wrong. Looking up correction"
             )
             clean_value = self.jobs_corrections[clean_value]
 
