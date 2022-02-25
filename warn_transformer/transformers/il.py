@@ -14,21 +14,3 @@ class Transformer(BaseTransformer):
     date_format = "%Y-%m-%d %H:%M:%S"
     minimum_year = 1987
     maximum_jobs = 100000
-    # jobs_corrections = {
-    #     "N/A": None,
-    #     "Not Provided": None,
-    #     "Not reported": None,
-    # }
-
-    # def transform_jobs(self, value: str) -> typing.Optional[int]:
-    #     """Transform a raw jobs number into an integer.
-
-    #     Args:
-    #         value (str): A raw jobs number provided by the source
-
-    #     Returns: An integer number ready for consolidation. Or, if the value is invalid, a None.
-    #     """
-    #     # Split on new lines
-    #     values = value.split("\n")
-    #     # Do the normal stuff
-    #     return super().transform_jobs(values[0])
