@@ -9,7 +9,7 @@ class Transformer(BaseTransformer):
         company="Location Name",
         location=lambda row: f"{row['Location Address']} {row['Location City']}, {row['Location State']} {row['Location Zipcode']}".strip(),
         date=lambda row: row["Initial Date Reported"] or row["Notify Date"],
-        jobs="Total # of Employees",
+        jobs="Revised Layoff",
     )
     date_format = "%Y-%m-%d %H:%M:%S"
     minimum_year = 1987
