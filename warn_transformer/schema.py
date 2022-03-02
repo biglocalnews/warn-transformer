@@ -20,6 +20,8 @@ class WarnNoticeSchema(Schema):
     location = fields.Str(required=True, allow_none=True)
     date = fields.Date(required=True, allow_none=True)
     jobs = fields.Int(required=True, allow_none=True)
+    is_temporary = fields.Boolean(required=True, allow_none=True, default=None)
+    is_closure = fields.Boolean(required=True, allow_none=True, default=None)
     is_amendment = fields.Boolean(required=True, default=False)
 
 
@@ -127,6 +129,8 @@ class BaseTransformer:
                 self.get_raw_value(row, self.fields["location"])
             ),
             jobs=self.transform_jobs(self.get_raw_value(row, self.fields["jobs"])),
+            is_temporary=self.check_if_temporary(row),
+            is_closure=self.check_if_closure(row),
             is_amendment=self.check_if_amendment(row),
         )
         data["hash_id"] = self.get_hash_id(data)
@@ -288,6 +292,26 @@ class BaseTransformer:
 
         # Pass it out
         return clean_value
+
+    def check_if_temporary(self, row: typing.Dict) -> typing.Optional[bool]:
+        """Determine whether a row is a temporary or not.
+
+        Args:
+            row (dict): The raw row of data.
+
+        Returns: A boolean or null
+        """
+        return None
+
+    def check_if_closure(self, row: typing.Dict) -> typing.Optional[bool]:
+        """Determine whether a row is a closure or not.
+
+        Args:
+            row (dict): The raw row of data.
+
+        Returns: A boolean or null
+        """
+        return None
 
     def check_if_amendment(self, row: typing.Dict) -> bool:
         """Determine whether a row is an amendment or not.

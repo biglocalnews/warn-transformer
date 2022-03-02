@@ -1,3 +1,4 @@
+import typing
 from datetime import datetime
 
 from ..schema import BaseTransformer
@@ -23,3 +24,23 @@ class Transformer(BaseTransformer):
     date_corrections = {
         "09/04/2008": datetime(2018, 9, 4),
     }
+
+    def check_if_temporary(self, row: typing.Dict) -> typing.Optional[bool]:
+        """Determine whether a row is a temporary or not.
+
+        Args:
+            row (dict): The raw row of data.
+
+        Returns: A boolean or null
+        """
+        return "temporary" in row["layoff_or_closure"].lower() or None
+
+    def check_if_closure(self, row: typing.Dict) -> typing.Optional[bool]:
+        """Determine whether a row is a closure or not.
+
+        Args:
+            row (dict): The raw row of data.
+
+        Returns: A boolean or null
+        """
+        return row["layoff_or_closure"].lower().strip() == "closure permanent" or None
