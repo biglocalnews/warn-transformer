@@ -51,7 +51,12 @@ setup(
     long_description_content_type="text/markdown",
     author="Big Local News",
     url="https://github.com/biglocalnews/warn-transformer",
-    packages=find_packages(),
+    packages=find_packages(
+        exclude=[
+            "tests",
+            "_notebooks",
+        ]
+    ),
     include_package_data=True,
     install_requires=[
         "bln",
