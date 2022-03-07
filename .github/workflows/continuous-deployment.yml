@@ -20,12 +20,12 @@ jobs:
         name: Install Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.7'
+          python-version: '3.9'
           cache: 'pipenv'
 
       - id: install-python-dependencies
         name: Install Python dependencies
-        run: pipenv install --dev --pre
+        run: pipenv sync --dev
 
       - id: lint
         name: Lint
@@ -46,12 +46,12 @@ jobs:
         name: Install Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.7'
+          python-version: '3.9'
           cache: 'pipenv'
 
       - id: install-python-dependencies
         name: Install Python dependencies
-        run: pipenv install --dev --pre
+        run: pipenv sync --dev
 
       - id: mypy
         name: Mypy
@@ -104,12 +104,12 @@ jobs:
         name: Install Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.7'
+          python-version: '3.9'
           cache: 'pipenv'
 
       - id: install-python-dependencies
         name: Install Python dependencies
-        run: pipenv install --dev --python 3.7
+        run: pipenv sync --dev
 
       - id: build
         name: Build release
