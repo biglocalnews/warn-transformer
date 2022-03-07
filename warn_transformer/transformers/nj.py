@@ -19,6 +19,7 @@ class Transformer(BaseTransformer):
         "TBA": None,
         "To be Determined": None,
         "-": None,
+        "Unknown": None,
         23695: None,
         # The United airlines number is legimate, though nationwide
         # https://abcnews.go.com/Politics/united-airlines-furlough-16000-employees/story?id=72771897
@@ -29,6 +30,7 @@ class Transformer(BaseTransformer):
         "Temp layoff": None,
         "-": None,
         "3030-08-23 00:00:00": datetime(2020, 8, 23),
+        "04/22/2022, 09/30/2022, 12/21/22": datetime(2022, 4, 22),
     }
 
     def transform_jobs(self, value: str) -> typing.Optional[int]:
