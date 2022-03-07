@@ -49,3 +49,14 @@ class Transformer(BaseTransformer):
 
         # Cut rows with data-free revisions
         return [r for r in row_list if r["Affected Workers"] != "N/A"]
+
+    def check_if_closure(self, row: typing.Dict) -> typing.Optional[bool]:
+        """Determine whether a row is a closure or not.
+
+        Args:
+            row (dict): The raw row of data.
+
+        Returns: A boolean or null
+        """
+        whitelist = ["CL", "CL -Relocating", "LO and CL", "LO/CL", "PENDING CL"]
+        return row["Notice Type"] in whitelist or None

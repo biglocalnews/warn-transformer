@@ -36,6 +36,16 @@ class Transformer(BaseTransformer):
         """
         return "amendment" in row["Notice Type"].lower().strip()
 
+    def check_if_closure(self, row: typing.Dict) -> typing.Optional[bool]:
+        """Determine whether a row is a closure or not.
+
+        Args:
+            row (dict): The raw row of data.
+
+        Returns: A boolean or null
+        """
+        return "closing" in row["Notice Type"].lower() or None
+
     def handle_amendments(
         self, row_list: typing.List[typing.Dict]
     ) -> typing.List[typing.Dict]:

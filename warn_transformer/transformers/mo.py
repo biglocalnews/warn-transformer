@@ -30,3 +30,13 @@ class Transformer(BaseTransformer):
         # A little custom clean up based on the weird stuff from this source
         value = value.strip().split()[0].strip()
         return super().transform_date(value)
+
+    def check_if_closure(self, row: typing.Dict) -> typing.Optional[bool]:
+        """Determine whether a row is a closure or not.
+
+        Args:
+            row (dict): The raw row of data.
+
+        Returns: A boolean or null
+        """
+        return "clos" in row["TYPE"].lower() or None

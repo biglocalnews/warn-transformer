@@ -49,3 +49,18 @@ class Transformer(BaseTransformer):
         value = value.replace("+", "").strip()
         value = re.split(" {5,}", value)[0].strip()
         return super().transform_jobs(value)
+
+    def check_if_closure(self, row: typing.Dict) -> typing.Optional[bool]:
+        """Determine whether a row is a closure or not.
+
+        Args:
+            row (dict): The raw row of data.
+
+        Returns: A boolean or null
+        """
+        if "closure" in row["Closure or Layoff?"].lower():
+            return True
+        elif "closure" in row["Closure/Layoff"].lower():
+            return True
+        else:
+            return None
