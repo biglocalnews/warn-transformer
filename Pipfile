@@ -18,11 +18,8 @@ pytest = "*"
 pytest-vcr = "*"
 pytest-cov = "*"
 mypy = "*"
-pandas = "*"
-jupyterlab = "*"
 twine = "*"
-"keyrings.google-artifactregistry-auth" = "*"
 setuptools-scm = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.9"

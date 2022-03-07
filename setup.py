@@ -54,7 +54,6 @@ setup(
     packages=find_packages(
         exclude=[
             "tests",
-            "_notebooks",
         ]
     ),
     include_package_data=True,
