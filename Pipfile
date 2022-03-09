@@ -20,6 +20,10 @@ pytest-cov = "*"
 mypy = "*"
 twine = "*"
 setuptools-scm = "*"
+sphinx = "*"
+sphinx-autobuild = "*"
+myst-parser = "*"
+sphinxcontrib-napoleon = "*"
 
 [requires]
 python_version = "3.9"

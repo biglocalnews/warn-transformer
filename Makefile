@@ -109,6 +109,20 @@ build-release: ## builds source and wheel package
 	@ls -l dist
 
 #
+# Docs
+#
+
+serve-docs: ## start the documentation test server
+	$(call banner,         📃 Serving docs 📃)
+	cd docs && $(PIPENV) make livehtml;
+
+
+test-docs: ## build the docs as html
+	$(call banner,        📃 Building docs 📃)
+	cd docs && $(PIPENV) make html;
+
+
+#
 # Extras
 #
 
