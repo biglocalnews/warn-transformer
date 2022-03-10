@@ -1,4 +1,5 @@
 import typing
+from datetime import datetime
 
 from ..schema import BaseTransformer
 
@@ -10,10 +11,12 @@ class Transformer(BaseTransformer):
     fields = dict(
         company="Company",
         location="City",
-        date="Initial Report Date",
+        notice_date="Initial Report Date",
+        effective_date="Planned Starting Date",
         jobs="Planned # Affected Employees",
     )
     date_format = "%m/%d/%Y"
+    date_corrections = {"01/01/0001": datetime(2020, 1, 1)}
 
     def check_if_closure(self, row: typing.Dict) -> typing.Optional[bool]:
         """Determine whether a row is a closure or not.

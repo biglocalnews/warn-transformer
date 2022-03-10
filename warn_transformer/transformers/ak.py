@@ -11,14 +11,44 @@ class Transformer(BaseTransformer):
     fields = dict(
         company="Company",
         location="Location",
-        date="Notice Date",
+        notice_date="Notice Date",
+        effective_date="Layoff Date",
         jobs="Employees Affected",
     )
     date_format = "%m/%d/%y"
-    date_corrections = {"9/30/20*": datetime(2020, 9, 30)}
+    date_corrections = {
+        "9/30/20*": datetime(2020, 9, 30),
+        "August-November 2021": datetime(2021, 8, 1),
+        "4/1/20 5/31/20": datetime(2020, 4, 1),
+        "Varied": None,
+        "March to May 2016": datetime(2016, 3, 1),
+        "various": None,
+    }
     jobs_corrections = {
         "Up to 300": 300,
     }
+
+    def transform_date(self, value: str) -> typing.Optional[str]:
+        """Transform a raw date string into a date object.
+
+        Args:
+            value (str): The raw date string provided by the source
+
+        Returns: A date object ready for consolidation. Or, if the date string is invalid, a None.
+        """
+        try:
+            dt = self.date_corrections[value]
+            if dt:
+                return str(dt.date())
+            else:
+                assert dt is None
+                return dt
+        except KeyError:
+            pass
+        value = value.strip()
+        value = value.split(" to ")[0].strip()
+        value = value.replace("Starting ", "").strip()
+        return super().transform_date(value)
 
     def check_if_temporary(self, row: typing.Dict) -> typing.Optional[bool]:
         """Determine whether a row is a temporary or not.

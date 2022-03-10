@@ -18,7 +18,8 @@ class WarnNoticeSchema(Schema):
     postal_code = fields.Str(max_length=2, required=True)
     company = fields.Str(required=True)
     location = fields.Str(required=True, allow_none=True)
-    date = fields.Date(required=True, allow_none=True)
+    notice_date = fields.Date(required=True, allow_none=True)
+    effective_date = fields.Date(required=True, allow_none=True)
     jobs = fields.Int(required=True, allow_none=True)
     is_temporary = fields.Boolean(required=True, allow_none=True, default=None)
     is_closure = fields.Boolean(required=True, allow_none=True, default=None)
@@ -124,7 +125,12 @@ class BaseTransformer:
             company=self.transform_company(
                 self.get_raw_value(row, self.fields["company"])
             ),
-            date=self.transform_date(self.get_raw_value(row, self.fields["date"])),
+            notice_date=self.transform_date(
+                self.get_raw_value(row, self.fields["notice_date"])
+            ),
+            effective_date=self.transform_date(
+                self.get_raw_value(row, self.fields["effective_date"])
+            ),
             location=self.transform_location(
                 self.get_raw_value(row, self.fields["location"])
             ),
