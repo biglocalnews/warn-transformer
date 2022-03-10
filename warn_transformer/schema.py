@@ -268,6 +268,13 @@ class BaseTransformer:
             )
             dt = self.date_corrections[value]
 
+        # If the date parses as None, return that
+        if dt is None:
+            return None
+
+        # Make sure we've got a date at this point
+        assert dt is not None and isinstance(dt, datetime)
+
         # If we have a datetime, return the result as a string
         return str(dt.date())
 
