@@ -126,9 +126,6 @@ class BaseTransformer:
             company=self.transform_company(
                 self.get_raw_value(row, self.fields["company"])
             ),
-            notice_date=self.transform_date(
-                self.get_raw_value(row, self.fields["notice_date"])
-            ),
             location=self.transform_location(
                 self.get_raw_value(row, self.fields["location"])
             ),
@@ -138,7 +135,14 @@ class BaseTransformer:
             is_amendment=self.check_if_amendment(row),
         )
 
-        # Add optional effective_date field
+        # Add optional date fields
+        if "notice_date" in self.fields:
+            data["notice_date"] = self.transform_date(
+                self.get_raw_value(row, self.fields["notice_date"])
+            )
+        else:
+            data["notice_date"] = None
+
         if "effective_date" in self.fields:
             data["effective_date"] = self.transform_date(
                 self.get_raw_value(row, self.fields["effective_date"])
