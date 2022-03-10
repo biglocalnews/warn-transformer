@@ -11,12 +11,14 @@ class Transformer(BaseTransformer):
     fields = dict(
         company="Company",
         location="City",
-        date="Date of Letter",
+        notice_date="Date of Letter",
+        effective_date="Effective or Commencing Date",
         jobs="No. of Employees Affected",
     )
     date_format = "%m/%d/%Y"
     date_corrections = {
         "2/19/219": datetime(2019, 2, 19),
+        "3/7/2010-3/20/2010": datetime(2010, 3, 7),
     }
     jobs_corrections = {
         "8 in ID": 8,
@@ -32,6 +34,7 @@ class Transformer(BaseTransformer):
         Returns: A date object ready for consolidation. Or, if the date string is invalid, a None.
         """
         # A little custom clean up based on the weird stuff from this source
+        value = value.replace("starting", "")
         value = value.strip().split()[0].replace(",", "").strip()
 
         # The same old stuff
