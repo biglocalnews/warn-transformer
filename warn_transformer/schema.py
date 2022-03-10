@@ -249,11 +249,11 @@ class BaseTransformer:
         # Make sure we've got a date at this point
         assert dt is not None and isinstance(dt, datetime)
 
-        # If the date is more than 90 days in future, fix it
+        # If the date is more than 365 days in future, fix it
         today = datetime.today()
-        if dt > today + timedelta(days=90):
+        if dt > today + timedelta(days=365):
             logger.debug(
-                f"Date '{dt}' is more than 90 days in the future. Looking up correction"
+                f"Date '{dt}' is more than 365 days in the future. Looking up correction"
             )
             dt = self.date_corrections[value]
 

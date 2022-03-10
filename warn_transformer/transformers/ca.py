@@ -11,7 +11,8 @@ class Transformer(BaseTransformer):
     fields = dict(
         company="company",
         location=lambda row: row["city"] or row["address"],
-        date="notice_date",
+        notice_date="notice_date",
+        effective_date="effective_date",
         jobs="num_employees",
     )
     date_format = "%m/%d/%Y"
@@ -23,6 +24,9 @@ class Transformer(BaseTransformer):
     }
     date_corrections = {
         "09/04/2008": datetime(2018, 9, 4),
+        "07/04/2002": datetime(2020, 7, 4),
+        "03/09/2121": datetime(2021, 3, 9),
+        "03/30/3030": datetime(2020, 3, 30),
     }
 
     def check_if_temporary(self, row: typing.Dict) -> typing.Optional[bool]:
