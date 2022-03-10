@@ -120,6 +120,7 @@ class BaseTransformer:
 
         Returns: A transformed dict that's ready to be loaded into our consolidated schema.
         """
+        # Parse the fields we expect in every transformer
         data = dict(
             postal_code=self.postal_code.upper(),
             company=self.transform_company(
@@ -127,9 +128,6 @@ class BaseTransformer:
             ),
             notice_date=self.transform_date(
                 self.get_raw_value(row, self.fields["notice_date"])
-            ),
-            effective_date=self.transform_date(
-                self.get_raw_value(row, self.fields["effective_date"])
             ),
             location=self.transform_location(
                 self.get_raw_value(row, self.fields["location"])
@@ -139,7 +137,19 @@ class BaseTransformer:
             is_closure=self.check_if_closure(row),
             is_amendment=self.check_if_amendment(row),
         )
+
+        # Add optional effective_date field
+        if "effective_date" in self.fields:
+            data["effective_date"] = self.transform_date(
+                self.get_raw_value(row, self.fields["effective_date"])
+            )
+        else:
+            data["effective_date"] = None
+
+        # Stamp record with a unique ID
         data["hash_id"] = self.get_hash_id(data)
+
+        # Return the results
         return data
 
     def get_raw_value(self, row, method):
