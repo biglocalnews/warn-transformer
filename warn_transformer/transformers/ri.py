@@ -12,12 +12,14 @@ class Transformer(BaseTransformer):
         company="Company Name (* Denotes Covid 19 Related WARN)",
         location="Location of Layoffs",
         date="WARN Date",
+        effective_date="Effective Date",
         jobs="Number Affected",
     )
-    date_format = "%Y-%m-%d %H:%M:%S"
+    date_format = ("%Y-%m-%d %H:%M:%S", "%m/%d/%Y", "%m/%d/%y", "%m/%Y")
     date_corrections = {
         "2108-10-23 00:00:00": datetime(2018, 10, 23),
         "2108-11-01 00:00:00": datetime(2018, 11, 1),
+        "Staggered": None,
     }
     jobs_corrections = {
         "---": None,
@@ -36,6 +38,23 @@ class Transformer(BaseTransformer):
         Returns: A string object ready for consolidation.
         """
         return value.strip().replace("*", "")
+
+    def transform_date(self, value: str) -> typing.Optional[str]:
+        """Transform a raw date string into a date object.
+
+        Args:
+            value (str): The raw date string provided by the source
+
+        Returns: A date object ready for consolidation. Or, if the date string is invalid, a None.
+        """
+        try:
+            return super().transform_date(value)
+        except Exception:
+            value = value.strip().split()[0].strip()
+            value = value.strip().split("-")[0].strip()
+            value = value.replace("–", "")
+            value = value.replace(",", "")
+            return super().transform_date(value)
 
     def check_if_closure(self, row: typing.Dict) -> typing.Optional[bool]:
         """Determine whether a row is a closure or not.
