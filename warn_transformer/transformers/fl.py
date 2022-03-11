@@ -29,9 +29,13 @@ class Transformer(BaseTransformer):
 
         Returns: A date object ready for consolidation. Or, if the date string is invalid, a None.
         """
-        value = value.replace("\n", "").strip()
-        value = value.split(" thru")[0].strip()
-        return super().transform_date(value)
+        try:
+            return super().transform_date(value)
+        except Exception:
+            value = value.replace("\n", "").strip()
+            value = value.split(" thru")[0].strip()
+            value = value.split("thru")[0].strip()
+            return super().transform_date(value)
 
     def transform_company(self, value: str) -> str:
         """Transform a raw company name.
