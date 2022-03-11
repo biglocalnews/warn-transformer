@@ -13,7 +13,8 @@ class Transformer(BaseTransformer):
         location=lambda row: row["Location"]
         or row["County: Local  Name"]
         or row["County"],
-        date="Date Received",
+        notice_date="Date Received",
+        effective_date="Projected Date",
         jobs="Employees",
     )
     date_format = "%Y-%m-%d %H:%M:%S"
@@ -22,6 +23,7 @@ class Transformer(BaseTransformer):
         "43490.0": None,
         "N/A": None,
         "November": None,
+        "43735.0": None,
     }
     jobs_corrections = {
         "?": None,

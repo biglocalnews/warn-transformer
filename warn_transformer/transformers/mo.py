@@ -1,4 +1,5 @@
 import typing
+from datetime import datetime
 
 from ..schema import BaseTransformer
 
@@ -10,10 +11,17 @@ class Transformer(BaseTransformer):
     fields = dict(
         company="COMPANY NAME",
         location="LOCATION",
-        date="DATE RECEIVED",
+        notice_date="DATE RECEIVED",
+        effective_date="LAYOFF DATE",
         jobs="# AFFECTED",
     )
-    date_format = ("%m/%d/%Y", "%m/%d/%y")
+    date_format = ("%m/%d/%Y", "%m/%d/%y", "%B %Y", "%B %d, %Y")
+    date_corrections = {
+        "04/-9/2020": datetime(2020, 4, 9),
+        "March 2020": datetime(2020, 3, 1),
+        "": None,
+        "11/08/2109": datetime(2019, 11, 8),
+    }
     jobs_corrections = {
         "330 remote workers (18 located in Missouri)": 18,
         "Unknown": None,
@@ -27,9 +35,14 @@ class Transformer(BaseTransformer):
 
         Returns: A date object ready for consolidation. Or, if the date string is invalid, a None.
         """
-        # A little custom clean up based on the weird stuff from this source
-        value = value.strip().split()[0].strip()
-        return super().transform_date(value)
+        try:
+            return super().transform_date(value)
+        except Exception:
+            value = value.strip().split()[0].strip()
+            value = value.strip().split("-")[0].strip()
+            value = value.replace("–", "")
+            value = value.replace(",", "")
+            return super().transform_date(value)
 
     def check_if_closure(self, row: typing.Dict) -> typing.Optional[bool]:
         """Determine whether a row is a closure or not.

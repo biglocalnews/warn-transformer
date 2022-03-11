@@ -18,7 +18,8 @@ class WarnNoticeSchema(Schema):
     postal_code = fields.Str(max_length=2, required=True)
     company = fields.Str(required=True)
     location = fields.Str(required=True, allow_none=True)
-    date = fields.Date(required=True, allow_none=True)
+    notice_date = fields.Date(required=True, allow_none=True)
+    effective_date = fields.Date(required=True, allow_none=True)
     jobs = fields.Int(required=True, allow_none=True)
     is_temporary = fields.Boolean(required=True, allow_none=True, default=None)
     is_closure = fields.Boolean(required=True, allow_none=True, default=None)
@@ -119,12 +120,12 @@ class BaseTransformer:
 
         Returns: A transformed dict that's ready to be loaded into our consolidated schema.
         """
+        # Parse the fields we expect in every transformer
         data = dict(
             postal_code=self.postal_code.upper(),
             company=self.transform_company(
                 self.get_raw_value(row, self.fields["company"])
             ),
-            date=self.transform_date(self.get_raw_value(row, self.fields["date"])),
             location=self.transform_location(
                 self.get_raw_value(row, self.fields["location"])
             ),
@@ -133,7 +134,26 @@ class BaseTransformer:
             is_closure=self.check_if_closure(row),
             is_amendment=self.check_if_amendment(row),
         )
+
+        # Add optional date fields
+        if "notice_date" in self.fields:
+            data["notice_date"] = self.transform_date(
+                self.get_raw_value(row, self.fields["notice_date"])
+            )
+        else:
+            data["notice_date"] = None
+
+        if "effective_date" in self.fields:
+            data["effective_date"] = self.transform_date(
+                self.get_raw_value(row, self.fields["effective_date"])
+            )
+        else:
+            data["effective_date"] = None
+
+        # Stamp record with a unique ID
         data["hash_id"] = self.get_hash_id(data)
+
+        # Return the results
         return data
 
     def get_raw_value(self, row, method):
@@ -233,11 +253,11 @@ class BaseTransformer:
         # Make sure we've got a date at this point
         assert dt is not None and isinstance(dt, datetime)
 
-        # If the date is more than 90 days in future, fix it
+        # If the date is more than 365 days in future, fix it
         today = datetime.today()
-        if dt > today + timedelta(days=90):
+        if dt > today + timedelta(days=365):
             logger.debug(
-                f"Date '{dt}' is more than 90 days in the future. Looking up correction"
+                f"Date '{dt}' is more than 365 days in the future. Looking up correction"
             )
             dt = self.date_corrections[value]
 
@@ -247,6 +267,13 @@ class BaseTransformer:
                 f"Year {dt.year} below minimum of {self.minimum_year}. Looking up correction"
             )
             dt = self.date_corrections[value]
+
+        # If the date parses as None, return that
+        if dt is None:
+            return None
+
+        # Make sure we've got a date at this point
+        assert dt is not None and isinstance(dt, datetime)
 
         # If we have a datetime, return the result as a string
         return str(dt.date())

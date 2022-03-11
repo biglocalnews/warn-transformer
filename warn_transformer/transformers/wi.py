@@ -13,10 +13,19 @@ class Transformer(BaseTransformer):
     fields = dict(
         company="Company",
         location="City",
-        date="Notice Received",
+        notice_date="Notice Received",
+        effective_date="Layoff Begin Date",
         jobs="Affected Workers",
     )
-    date_format = ("%m/%d/%Y", "%Y%m%d")
+    date_format = (
+        "%m/%d/%Y",
+        "%Y%m%d",
+        "%m/%d/%y",
+    )
+    date_corrections = {
+        "11/03": None,
+        "Unknown": None,
+    }
     jobs_corrections = {
         "Unknown": None,
     }

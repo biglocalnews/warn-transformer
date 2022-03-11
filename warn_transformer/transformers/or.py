@@ -10,7 +10,8 @@ class Transformer(BaseTransformer):
     fields = dict(
         company="Company Name",
         location="Location",
-        date="Received Date",
+        notice_date="Received Date",
+        effective_date="Layoff Date",
         jobs="Laid Off",
     )
     date_format = "%Y-%m-%d %H:%M:%S"
@@ -20,6 +21,7 @@ class Transformer(BaseTransformer):
         # https://www.nytimes.com/1998/09/03/us/northwest-lays-off-27000-increasing-pressure-on-strike.html
         27500: 27500,
     }
+    date_corrections = {"1899-12-29 00:00:00": None}
 
     def check_if_temporary(self, row: typing.Dict) -> typing.Optional[bool]:
         """Determine whether a row is a temporary or not.

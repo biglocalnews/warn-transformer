@@ -8,7 +8,8 @@ class Transformer(BaseTransformer):
     fields = dict(
         company="JOB SITE NAME",
         location="CITY NAME",
-        date="NOTICE DATE",
+        notice_date="NOTICE DATE",
+        effective_date="LAYOFF DATE",
         jobs="TOTAL LAYOFF NUMBER",
     )
     date_format = ("%d-%b-%Y", "%d-%b-%y", "%m/%d/%Y")

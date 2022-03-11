@@ -10,10 +10,14 @@ class Transformer(BaseTransformer):
     fields = dict(
         company="Company Name",
         location="Location City",
-        date="Notice Date",
+        notice_date="Notice Date",
+        effective_date="Impact Date",
         jobs="Employees Affected",
     )
     date_format = "%m/%d/%Y"
+    date_corrections = {
+        "10/01/1973": None,
+    }
 
     def check_if_closure(self, row: typing.Dict) -> typing.Optional[bool]:
         """Determine whether a row is a closure or not.

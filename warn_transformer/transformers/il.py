@@ -10,7 +10,8 @@ class Transformer(BaseTransformer):
     fields = dict(
         company="Location Name",
         location=lambda row: f"{row['Location Address']} {row['Location City']}, {row['Location State']} {row['Location Zipcode']}".strip(),
-        date=lambda row: row["Initial Date Reported"] or row["Notify Date"],
+        notice_date=lambda row: row["Initial Date Reported"] or row["Notify Date"],
+        effective_date="Impact Date",
         jobs="Revised Layoff",
     )
     date_format = "%Y-%m-%d %H:%M:%S"
