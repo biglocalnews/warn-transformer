@@ -40,7 +40,7 @@ class BaseTransformer:
     # Manual date corrections for malformed data
     date_corrections: typing.Dict = {}
     # The minimum year allowed
-    minimum_year: int = 1999
+    minimum_year: int = 1988
 
     # Manual jobs corrections for malformed data
     jobs_corrections: typing.Dict = {}
