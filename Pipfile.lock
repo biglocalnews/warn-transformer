@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "96e56971277fcd31b813e70f0504927d8b810b4b22ed640602def780a69c169f"
+            "sha256": "d4151985033f2a3744a8ad5180c6712297c4ce53c90c08ba60879aa76df55576"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -765,11 +765,11 @@
         },
         "pytest": {
             "hashes": [
-                "sha256:b555252a95bbb2a37a97b5ac2eb050c436f7989993565f5e0c9128fcaacadd0e",
-                "sha256:f1089d218cfcc63a212c42896f1b7fbf096874d045e1988186861a1a87d27b47"
+                "sha256:841132caef6b1ad17a9afde46dc4f6cfa59a05f9555aae5151f73bdf2820ca63",
+                "sha256:92f723789a8fdd7180b6b06483874feca4c48a5c76968e03bb3e7f806a1869ea"
             ],
             "index": "pypi",
-            "version": "==7.1.0"
+            "version": "==7.1.1"
         },
         "pytest-cov": {
             "hashes": [
@@ -1054,12 +1054,27 @@
             "index": "pypi",
             "version": "==3.8.0"
         },
+        "types-requests": {
+            "hashes": [
+                "sha256:5d6f77f3c7565659bdb7b7bce1d33d1abb7d0b056138cac714860e13da2f19df",
+                "sha256:cf0646031dd6307113b37814f743c04f0707a3357378c2bb1326f848412f5ba9"
+            ],
+            "index": "pypi",
+            "version": "==2.27.13"
+        },
+        "types-urllib3": {
+            "hashes": [
+                "sha256:24d64e441168851eb05f1d022de18ae31558f5649c8f1117e384c2e85e31315b",
+                "sha256:bd0abc01e9fb963e4fddd561a56d21cc371b988d1245662195c90379077139cd"
+            ],
+            "version": "==1.26.11"
+        },
         "typing-extensions": {
             "hashes": [
                 "sha256:1a9462dcc3347a79b1f1c0271fbe79e844580bb598bafa1ed208b94da3cdcd42",
                 "sha256:21c85e0fe4b9a155d0799430b0ad741cdce7e359660ccbd8b530613e8df88ce2"
             ],
-            "markers": "python_version >= '3.6'",
+            "markers": "python_version < '3.10'",
             "version": "==4.1.1"
         },
         "urllib3": {
