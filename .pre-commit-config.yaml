@@ -12,6 +12,7 @@ repos:
         language_version: python3
     -   id: check-added-large-files
         language_version: python3
+        args: ['--maxkb=10000']
     -   id: check-byte-order-marker
         language_version: python3
     -   id: check-case-conflict
