@@ -3,6 +3,7 @@ import logging
 from collections import defaultdict
 from datetime import datetime, timezone
 from itertools import chain
+from operator import itemgetter
 from pathlib import Path
 
 import jellyfish
@@ -104,12 +105,26 @@ def run(
                 if likely_matches == 2:
                     likely_match_list.append(current_row)
 
-            # If there is more than one likely match, throw an error
-            assert len(likely_match_list) < 2
+            # If there is more than one likely match, we should compare some extra fields
+            likely_match = None
+            if len(likely_match_list) > 1:
+                # Score all the location similarities
+                location_similarity_list = []
+                for current_row in likely_match_list:
+                    score = jellyfish.jaro_winkler_similarity(
+                        current_row["location"], new_row["location"]
+                    )
+                    location_similarity_list.append((current_row, score))
+                # Take the one that's most similar, if it's over a certain score
+                location_similarity_list.sort(key=itemgetter(1), reverse=True)
+                if location_similarity_list[0][1] > 0.95:
+                    likely_match = likely_match_list[0]
+            elif len(likely_match_list) == 1:
+                likely_match = likely_match_list[0]
 
             # If there is one, we assume this is an amendment
-            if likely_match_list:
-                amend_list.append({"new": new_row, "current": likely_match_list[0]})
+            if likely_match:
+                amend_list.append({"new": new_row, "current": likely_match})
             # Otherwise we estimate it's a new record
             else:
                 insert_list.append(new_row)
