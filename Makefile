@@ -75,6 +75,11 @@ download: ## download raw data
 	$(call banner,      🔽 Downloading data 🔽)
 	$(PIPENV) python -m warn_transformer.download
 
+
+integrate: ## download raw data
+	$(call banner,      💠 Integrating data 💠)
+	$(PIPENV) python -m warn_transformer.integrate
+
 #
 # Tests
 #
