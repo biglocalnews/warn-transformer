@@ -19,6 +19,13 @@ def run(
     / "processed"
     / "consolidated.csv",
 ) -> Path:
+    """Integrate the latest consolidated data with the current database.
+
+    Args:
+        new_path (Path): The path to the latest consolidated file on the local file system
+
+    Returns a Path to the newly integrated file.
+    """
     # Download the current database
     current_url = "https://raw.githubusercontent.com/biglocalnews/warn-github-flow/transformer/data/warn-transformer/processed/integrated.csv"
     current_r = requests.get(current_url)
