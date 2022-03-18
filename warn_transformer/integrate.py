@@ -15,66 +15,6 @@ from . import utils
 logger = logging.getLogger(__name__)
 
 
-def get_current_data(init: bool = False) -> typing.List[typing.Dict[str, typing.Any]]:
-    """Fetch the most recent published version of our integrated dataset.
-
-    Args:
-        init (bool): Set to True when you want to create a new integrated dataset from scratch. Default False.
-
-    Returns a list of dictionaries ready for comparison against the new consolidated data file.
-    """
-    # Set which file to pull
-    base_url = "https://raw.githubusercontent.com/biglocalnews/warn-github-flow/transformer/data/warn-transformer/processed/"
-    if init:
-        current_url = f"{base_url}consolidated.csv"
-        logger.debug(f"Initializing new current file from {current_url}")
-    else:
-        current_url = f"{base_url}integrated.csv"
-        logger.debug(f"Downloading most recent current file from {current_url}")
-
-    # Download the current database
-    current_r = requests.get(current_url)
-    current_data_str = current_r.content.decode("utf-8")
-
-    # Read in the current database
-    current_data_reader = csv.DictReader(current_data_str.splitlines(), delimiter=",")
-    current_data_list: typing.List[typing.Dict[str, typing.Any]] = list(
-        current_data_reader
-    )
-
-    # If we're initializing a new dataset, we'll need to fill in the extra
-    # fields custom to the integrated set.
-    if init:
-        now = datetime.now(timezone.utc)
-        for row in current_data_list:
-            row["first_inserted_date"] = now
-            row["last_updated_date"] = now
-            row["estimated_amendments"] = 0
-    else:
-        # Otherwise we'll want to parse a few data types for later use
-        row["last_updated_date"] = datetime.fromisoformat(row["last_updated_date"])
-        row["first_inserted_date"] = datetime.fromisoformat(row["first_inserted_date"])
-        row["estimated_amendments"] = int(row["estimated_amendments"])
-
-    # Return the list
-    logger.debug(f"{len(current_data_list)} records downloaded from current database")
-    return current_data_list
-
-
-def regroup_by_source(data_list: typing.List) -> typing.DefaultDict[str, typing.List]:
-    """Regroup the provided list by its source field.
-
-    Args:
-        data_list: A list of dictionaries presumed to have a "postal_code" field.
-
-    Returns: A dictionary keyed by postal code. Each value is a list of all records with that value.
-    """
-    regrouped_dict = defaultdict(list)
-    for row in data_list:
-        regrouped_dict[row["postal_code"]].append(row)
-    return regrouped_dict
-
-
 def run(
     new_path: Path = utils.WARN_TRANSFORMER_OUTPUT_DIR
     / "processed"
@@ -102,40 +42,21 @@ def run(
     current_data_by_source = regroup_by_source(current_data_list)
     new_data_by_source = regroup_by_source(new_data_list)
 
-    # Loop through the sources
+    # Winnow down the new data to records that have changed
+    changed_data_by_source = get_changed_data(
+        new_data_by_source, current_data_by_source
+    )
+
+    # Loop through the changed data to determine which are new and which are amendements
     amend_by_source = {}
     insert_by_source = {}
-    for postal_code, new_row_list in new_data_by_source.items():
-        logger.debug(f"Inspecting {len(new_row_list)} new records from {postal_code}")
-
-        # Pull the current rows from the source
+    for postal_code, change_list in changed_data_by_source.items():
+        logger.debug(
+            f"Inspecting {len(change_list)} changed records from {postal_code}"
+        )
         current_row_list = current_data_by_source[postal_code]
-        logger.debug(
-            f"Comparing against {len(current_row_list)} records from the current database"
-        )
-
-        # Loop through the rows in this source
-        unchanged_list = []
-        change_list = []
-        for new_row in new_row_list:
-            # Identify new rows that are identical to a record in the current database
-            new_hash = new_row["hash_id"]
-            if any(r for r in current_row_list if r["hash_id"] == new_hash):
-                unchanged_list.append(new_row)
-            else:
-                change_list.append(new_row)
-
-        # Log where we stand
-        logger.debug(
-            f"{len(unchanged_list)} unchanged rows ({round((len(unchanged_list)/len(new_row_list))*100, 2)}%)"
-        )
-        logger.debug(
-            f"{len(change_list)} changed rows ({round((len(change_list)/len(new_row_list))*100, 2)}%)"
-        )
-
-        # Loop through the change list
-        insert_list = []
         amend_list = []
+        insert_list = []
         for new_row in change_list:
             # Check our key fields against everything in the dataset
             likely_match_list = []
@@ -255,6 +176,108 @@ def run(
 
     # Return it
     return integrated_path
+
+
+def get_current_data(init: bool = False) -> typing.List[typing.Dict[str, typing.Any]]:
+    """Fetch the most recent published version of our integrated dataset.
+
+    Args:
+        init (bool): Set to True when you want to create a new integrated dataset from scratch. Default False.
+
+    Returns a list of dictionaries ready for comparison against the new consolidated data file.
+    """
+    # Set which file to pull
+    base_url = "https://raw.githubusercontent.com/biglocalnews/warn-github-flow/transformer/data/warn-transformer/processed/"
+    if init:
+        current_url = f"{base_url}consolidated.csv"
+        logger.debug(f"Initializing new current file from {current_url}")
+    else:
+        current_url = f"{base_url}integrated.csv"
+        logger.debug(f"Downloading most recent current file from {current_url}")
+
+    # Download the current database
+    current_r = requests.get(current_url)
+    current_data_str = current_r.content.decode("utf-8")
+
+    # Read in the current database
+    current_data_reader = csv.DictReader(current_data_str.splitlines(), delimiter=",")
+    current_data_list: typing.List[typing.Dict[str, typing.Any]] = list(
+        current_data_reader
+    )
+
+    # If we're initializing a new dataset, we'll need to fill in the extra
+    # fields custom to the integrated set.
+    if init:
+        now = datetime.now(timezone.utc)
+        for row in current_data_list:
+            row["first_inserted_date"] = now
+            row["last_updated_date"] = now
+            row["estimated_amendments"] = 0
+    else:
+        # Otherwise we'll want to parse a few data types for later use
+        row["last_updated_date"] = datetime.fromisoformat(row["last_updated_date"])
+        row["first_inserted_date"] = datetime.fromisoformat(row["first_inserted_date"])
+        row["estimated_amendments"] = int(row["estimated_amendments"])
+
+    # Return the list
+    logger.debug(f"{len(current_data_list)} records downloaded from current database")
+    return current_data_list
+
+
+def get_changed_data(
+    new_data: typing.DefaultDict[str, typing.List],
+    current_data: typing.DefaultDict[str, typing.List],
+) -> typing.DefaultDict[str, typing.List]:
+    """Determine which rows in a new data file are different from the current dataset.
+
+    Args:
+        new_data (dict): A dictionary keyed by postal code. Each value is a list of all records from that source.
+        current_data (dict): A dictionary keyed by postal code. Each value is a list of all records from that source.
+
+    Returns a dictionary keyed by postal code. Each value is a list of all records with that value deemed to have changed.
+    """
+    changed_dict = defaultdict(list)
+    for postal_code, new_row_list in new_data.items():
+        logger.debug(f"Inspecting {len(new_row_list)} new records from {postal_code}")
+
+        # Pull the current rows from the source
+        current_row_list = current_data[postal_code]
+        logger.debug(
+            f"Comparing against {len(current_row_list)} records from the current database"
+        )
+
+        # Loop through the rows in this source
+        for new_row in new_row_list:
+            # Identify new rows that are identical to a record in the current database
+            if not any(
+                r for r in current_row_list if r["hash_id"] == new_row["hash_id"]
+            ):
+                # If not, it's either a new record or an amendment.
+                # So it goes in our change list
+                changed_dict[postal_code].append(new_row)
+
+        # Log where we stand
+        change_list = changed_dict[postal_code]
+        logger.debug(
+            f"{len(change_list)} changed rows ({round((len(change_list)/len(new_row_list))*100, 2)}%)"
+        )
+
+    # Pass it out
+    return changed_dict
+
+
+def regroup_by_source(data_list: typing.List) -> typing.DefaultDict[str, typing.List]:
+    """Regroup the provided list by its source field.
+
+    Args:
+        data_list: A list of dictionaries presumed to have a "postal_code" field.
+
+    Returns: A dictionary keyed by postal code. Each value is a list of all records with that value.
+    """
+    regrouped_dict = defaultdict(list)
+    for row in data_list:
+        regrouped_dict[row["postal_code"]].append(row)
+    return regrouped_dict
 
 
 if __name__ == "__main__":
