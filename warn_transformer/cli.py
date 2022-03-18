@@ -41,6 +41,7 @@ def download(
     download_dir: Path, source: typing.Optional[str] = None, log_level: str = "INFO"
 ):
     """Download all the CSVs in the WARN Notice project on biglocalnews.org."""
+    logging.getLogger("urllib3").setLevel(logging.ERROR)
     logging.basicConfig(level=log_level, format="%(asctime)s - %(name)s - %(message)s")
     logger = logging.getLogger(__name__)
     logger.debug("Running download command")
