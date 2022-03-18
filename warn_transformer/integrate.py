@@ -88,8 +88,9 @@ def run(
         # If this is an amended row, change it
         if current_row["hash_id"] in amend_lookup:
             amend_dict = amend_lookup[current_row["hash_id"]]
+            amend_dict["first_inserted_date"] = current_row["first_inserted_date"]
             amend_dict["last_updated_date"] = datetime.now(timezone.utc)
-            amend_dict["estimated_amendments"] += 1
+            amend_dict["estimated_amendments"] = current_row["estimated_amendments"] + 1
             integrated_list.append(amend_dict)
         # If it's not, pass it along
         else:

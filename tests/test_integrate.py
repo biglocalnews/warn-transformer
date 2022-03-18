@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 
 from warn_transformer import integrate
@@ -6,4 +8,6 @@ from warn_transformer import integrate
 @pytest.mark.vcr()
 def test_integrate():
     """Test integrate."""
-    integrate.run(init_current_data=True)
+    this_dir = Path(__file__).parent
+    new_path = this_dir / "data" / "processed" / "consolidated.csv"
+    integrate.run(new_path, init_current_data=True)
