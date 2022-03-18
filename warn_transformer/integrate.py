@@ -1,5 +1,6 @@
 import csv
 import logging
+import typing
 from collections import defaultdict
 from datetime import datetime, timezone
 from itertools import chain
@@ -14,27 +15,68 @@ from . import utils
 logger = logging.getLogger(__name__)
 
 
-def run(
-    new_path: Path = utils.WARN_TRANSFORMER_OUTPUT_DIR
-    / "processed"
-    / "consolidated.csv",
-) -> Path:
-    """Integrate the latest consolidated data with the current database.
+def get_current_data(init: bool = False) -> typing.List[typing.Dict[str, typing.Any]]:
+    """Fetch the most recent published version of our integrated dataset.
 
     Args:
-        new_path (Path): The path to the latest consolidated file on the local file system
+        init (bool): Set to True when you want to create a new integrated dataset from scratch. Default False.
 
-    Returns a Path to the newly integrated file.
+    Returns a list of dictionaries ready for comparison against the new consolidated data file.
     """
+    # Set which file to pull
+    base_url = "https://raw.githubusercontent.com/biglocalnews/warn-github-flow/transformer/data/warn-transformer/processed/"
+    if init:
+        current_url = f"{base_url}consolidated.csv"
+        logger.debug(f"Initializing new current file from {current_url}")
+    else:
+        current_url = f"{base_url}integrated.csv"
+        logger.debug(f"Downloading most recent current file from {current_url}")
+
     # Download the current database
-    current_url = "https://raw.githubusercontent.com/biglocalnews/warn-github-flow/transformer/data/warn-transformer/processed/integrated.csv"
     current_r = requests.get(current_url)
     current_data_str = current_r.content.decode("utf-8")
 
     # Read in the current database
     current_data_reader = csv.DictReader(current_data_str.splitlines(), delimiter=",")
-    current_data_list = list(current_data_reader)
+    current_data_list: typing.List[typing.Dict[str, typing.Any]] = list(
+        current_data_reader
+    )
+
+    # If we're initializing a new dataset, we'll need to fill in the extra
+    # fields custom to the integrated set.
+    if init:
+        now = datetime.now(timezone.utc)
+        for row in current_data_list:
+            row["first_inserted_date"] = now
+            row["last_updated_date"] = now
+            row["estimated_amendments"] = 0
+    else:
+        # Otherwise we'll want to parse a few data types for later use
+        row["last_updated_date"] = datetime.fromisoformat(row["last_updated_date"])
+        row["first_inserted_date"] = datetime.fromisoformat(row["first_inserted_date"])
+        row["estimated_amendments"] = int(row["estimated_amendments"])
+
+    # Return the list
     logger.debug(f"{len(current_data_list)} records downloaded from current database")
+    return current_data_list
+
+
+def run(
+    new_path: Path = utils.WARN_TRANSFORMER_OUTPUT_DIR
+    / "processed"
+    / "consolidated.csv",
+    init_current_data: bool = False,
+) -> Path:
+    """Integrate the latest consolidated data with the current database.
+
+    Args:
+        new_path (Path): The path to the latest consolidated file on the local file system
+        init_current_data (bool): Set to True when you want to create a new integrated dataset from scratch. Default False.
+
+    Returns a Path to the newly integrated file.
+    """
+    # Get the most recently published integrated dataset
+    current_data_list = get_current_data(init_current_data)
 
     # Read in new consolidated.csv file
     with open(new_path) as fh:
@@ -108,8 +150,19 @@ def run(
                 ):
                     likely_matches += 1
 
+                # Check the location, if it exists
+                if new_row["location"] and current_row["location"]:
+                    passed_location_test = (
+                        jellyfish.jaro_winkler_similarity(
+                            new_row["location"], current_row["location"]
+                        )
+                        > 0.95
+                    )
+                else:
+                    passed_location_test = True
+
                 # If both match, we call it a likely match
-                if likely_matches == 2:
+                if likely_matches == 2 and passed_location_test:
                     likely_match_list.append(current_row)
 
             # If there is more than one likely match, we should compare some extra fields
@@ -153,7 +206,7 @@ def run(
     # Overwrite the amendments, storing the old versions somewhere ...
     now = datetime.now(timezone.utc)
     amend_lookup = {d["current"]["hash_id"]: d["new"] for d in full_amend_list}
-    integrated_list = []
+    integrated_list: typing.List[typing.Dict[str, typing.Any]] = []
     for current_row in current_data_list:
         # If this is an amended row, change it
         if current_row["hash_id"] in amend_lookup:
@@ -175,14 +228,21 @@ def run(
         row["estimated_amendments"] = "0"
         integrated_list.append(row)
 
+    # Sort
+    sorted_list = sorted(
+        integrated_list,
+        key=itemgetter("last_updated_date", "first_inserted_date"),
+        reverse=True,
+    )
+
     # Write out what we got
     processed_dir = utils.WARN_TRANSFORMER_OUTPUT_DIR / "processed"
     integrated_path = processed_dir / "integrated.csv"
     logger.debug(f"Writing {len(integrated_list)} records to {integrated_path}")
     with open(integrated_path, "w") as fh:
-        writer = csv.DictWriter(fh, integrated_list[0].keys())
+        writer = csv.DictWriter(fh, sorted_list[0].keys(), extrasaction="ignore")
         writer.writeheader()
-        writer.writerows(integrated_list)
+        writer.writerows(sorted_list)
 
     # Return it
     return integrated_path

@@ -87,6 +87,11 @@ def consolidate(
     help="The Path were the new results are located",
 )
 @click.option(
+    "--init",
+    default=False,
+    is_flag=True,
+)
+@click.option(
     "--log-level",
     "-l",
     default="INFO",
@@ -95,15 +100,13 @@ def consolidate(
     ),
     help="Set the logging level",
 )
-def integrate(
-    input_dir: Path, source: typing.Optional[str] = None, log_level: str = "INFO"
-):
+def integrate(input_dir: Path, init: bool = False, log_level: str = "INFO"):
     """Integrate the latest consolidated data with the current database."""
     logging.getLogger("urllib3").setLevel(logging.ERROR)
     logging.basicConfig(level=log_level, format="%(asctime)s - %(name)s - %(message)s")
     logger = logging.getLogger(__name__)
     logger.debug("Running integrate command")
-    integrate_runner.run(input_dir)
+    integrate_runner.run(input_dir, init_current_data=init)
 
 
 if __name__ == "__main__":
