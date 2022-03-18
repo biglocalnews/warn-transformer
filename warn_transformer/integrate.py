@@ -61,6 +61,20 @@ def get_current_data(init: bool = False) -> typing.List[typing.Dict[str, typing.
     return current_data_list
 
 
+def regroup_by_source(data_list: typing.List) -> typing.DefaultDict[str, typing.List]:
+    """Regroup the provided list by its source field.
+
+    Args:
+        data_list: A list of dictionaries presumed to have a "postal_code" field.
+
+    Returns: A dictionary keyed by postal code. Each value is a list of all records with that value.
+    """
+    regrouped_dict = defaultdict(list)
+    for row in data_list:
+        regrouped_dict[row["postal_code"]].append(row)
+    return regrouped_dict
+
+
 def run(
     new_path: Path = utils.WARN_TRANSFORMER_OUTPUT_DIR
     / "processed"
@@ -85,13 +99,8 @@ def run(
     logger.debug(f"{len(new_data_list)} records in new file")
 
     # Regroup each list by state
-    current_data_by_source = defaultdict(list)
-    for row in current_data_list:
-        current_data_by_source[row["postal_code"]].append(row)
-
-    new_data_by_source = defaultdict(list)
-    for row in new_data_list:
-        new_data_by_source[row["postal_code"]].append(row)
+    current_data_by_source = regroup_by_source(current_data_list)
+    new_data_by_source = regroup_by_source(new_data_list)
 
     # Loop through the sources
     amend_by_source = {}
