@@ -76,23 +76,20 @@ def run(
         amend_by_source[postal_code] = amend_list
 
     # Final report on what we'll do
-    full_amend_list = list(chain(*amend_by_source.values()))
-    full_insert_list = list(chain(*insert_by_source.values()))
+    full_amend_list = flatten_grouped_data(amend_by_source)
+    full_insert_list = flatten_grouped_data(insert_by_source)
     logger.debug(f"{len(full_insert_list)} total new records")
     logger.debug(f"{len(full_amend_list)} total amended records")
 
     # Overwrite the amendments, storing the old versions somewhere ...
-    now = datetime.now(timezone.utc)
-    amend_lookup = {d["current"]["hash_id"]: d["new"] for d in full_amend_list}
     integrated_list: typing.List[typing.Dict[str, typing.Any]] = []
+    amend_lookup = {d["current"]["hash_id"]: d["new"] for d in full_amend_list}
     for current_row in current_data_list:
         # If this is an amended row, change it
         if current_row["hash_id"] in amend_lookup:
             amend_dict = amend_lookup[current_row["hash_id"]]
-            amend_dict["last_updated_date"] = str(now)
-            amend_dict["estimated_amendments"] = str(
-                int(current_row["estimated_amendments"]) + 1
-            )
+            amend_dict["last_updated_date"] = datetime.now(timezone.utc)
+            amend_dict["estimated_amendments"] += 1
             integrated_list.append(amend_dict)
         # If it's not, pass it along
         else:
@@ -101,12 +98,13 @@ def run(
 
     # Insert the new records with today's timestamp
     for row in full_insert_list:
-        row["first_inserted_date"] = str(now)
-        row["last_updated_date"] = str(now)
-        row["estimated_amendments"] = "0"
+        now = datetime.now(timezone.utc)
+        row["first_inserted_date"] = now
+        row["last_updated_date"] = now
+        row["estimated_amendments"] = 0
         integrated_list.append(row)
 
-    # Sort
+    # Sort it in reverse chronological order
     sorted_list = sorted(
         integrated_list,
         key=itemgetter("last_updated_date", "first_inserted_date"),
@@ -114,15 +112,14 @@ def run(
     )
 
     # Write out what we got
-    processed_dir = utils.WARN_TRANSFORMER_OUTPUT_DIR / "processed"
-    integrated_path = processed_dir / "integrated.csv"
+    integrated_path = utils.WARN_TRANSFORMER_OUTPUT_DIR / "processed" / "integrated.csv"
     logger.debug(f"Writing {len(integrated_list)} records to {integrated_path}")
     with open(integrated_path, "w") as fh:
         writer = csv.DictWriter(fh, sorted_list[0].keys(), extrasaction="ignore")
         writer.writeheader()
         writer.writerows(sorted_list)
 
-    # Return it
+    # Return the path
     return integrated_path
 
 
@@ -296,6 +293,17 @@ def regroup_by_source(data_list: typing.List) -> typing.DefaultDict[str, typing.
     for row in data_list:
         regrouped_dict[row["postal_code"]].append(row)
     return regrouped_dict
+
+
+def flatten_grouped_data(grouped_data: typing.Dict[str, typing.List]):
+    """Flatten a dictionary of data grouped by source down to a single list.
+
+    Args:
+        grouped_data (dict): The grouped data
+
+    Returns a list of the data for all sources
+    """
+    return list(chain(*grouped_data.values()))
 
 
 if __name__ == "__main__":
