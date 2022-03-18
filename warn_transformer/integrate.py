@@ -229,10 +229,13 @@ def get_current_data(init: bool = False) -> typing.List[typing.Dict[str, typing.
             row["last_updated_date"] = now
             row["estimated_amendments"] = 0
     else:
-        # Otherwise we'll want to parse a few data types for later use
-        row["last_updated_date"] = datetime.fromisoformat(row["last_updated_date"])
-        row["first_inserted_date"] = datetime.fromisoformat(row["first_inserted_date"])
-        row["estimated_amendments"] = int(row["estimated_amendments"])
+        for row in current_data_list:
+            # Otherwise we'll want to parse a few data types for later use
+            row["last_updated_date"] = datetime.fromisoformat(row["last_updated_date"])
+            row["first_inserted_date"] = datetime.fromisoformat(
+                row["first_inserted_date"]
+            )
+            row["estimated_amendments"] = int(row["estimated_amendments"])
 
     # Return the list
     logger.debug(f"{len(current_data_list)} records downloaded from current database")
