@@ -58,63 +58,11 @@ def run(
         amend_list = []
         insert_list = []
         for new_row in change_list:
-            # Check our key fields against everything in the dataset
-            likely_match_list = []
-            for current_row in current_row_list:
-                likely_matches = 0
-                # Check the company names
-                if (
-                    jellyfish.jaro_winkler_similarity(
-                        new_row["company"], current_row["company"]
-                    )
-                    > 0.95
-                ):
-                    likely_matches += 1
-
-                # Check the notice date
-                if (
-                    jellyfish.levenshtein_distance(
-                        new_row["notice_date"], current_row["notice_date"]
-                    )
-                    < 4
-                ):
-                    likely_matches += 1
-
-                # Check the location, if it exists
-                if new_row["location"] and current_row["location"]:
-                    passed_location_test = (
-                        jellyfish.jaro_winkler_similarity(
-                            new_row["location"], current_row["location"]
-                        )
-                        > 0.95
-                    )
-                else:
-                    passed_location_test = True
-
-                # If both match, we call it a likely match
-                if likely_matches == 2 and passed_location_test:
-                    likely_match_list.append(current_row)
-
-            # If there is more than one likely match, we should compare some extra fields
-            likely_match = None
-            if len(likely_match_list) > 1:
-                # Score all the location similarities
-                location_similarity_list = []
-                for current_row in likely_match_list:
-                    score = jellyfish.jaro_winkler_similarity(
-                        current_row["location"], new_row["location"]
-                    )
-                    location_similarity_list.append((current_row, score))
-                # Take the one that's most similar, if it's over a certain score
-                location_similarity_list.sort(key=itemgetter(1), reverse=True)
-                if location_similarity_list[0][1] > 0.95:
-                    likely_match = likely_match_list[0]
-            elif len(likely_match_list) == 1:
-                likely_match = likely_match_list[0]
-
+            # See if we can find a likely parent that was amended
+            likely_ancestor = get_likely_ancestor(new_row, current_row_list)
             # If there is one, we assume this is an amendment
-            if likely_match:
-                amend_list.append({"new": new_row, "current": likely_match})
+            if likely_ancestor:
+                amend_list.append({"new": new_row, "current": likely_ancestor})
             # Otherwise we estimate it's a new record
             else:
                 insert_list.append(new_row)
@@ -176,6 +124,76 @@ def run(
 
     # Return it
     return integrated_path
+
+
+def get_likely_ancestor(
+    new_row: typing.Dict[str, typing.Any], current_data: typing.List
+) -> typing.Optional[typing.Dict[str, typing.Any]]:
+    """Determine if the provided new row has a likely parent in the current dataset.
+
+    Args:
+        new_row (dict): A record from the new dataset believed to contain a change to the current dataset.
+        current_data (list): All of the records in the current dataset for comparison
+
+    Returns:
+        The record in the current data judged most likely to be the ancestor of the new record.
+        Returns None if the record is estimated to be new.
+    """
+    # Check our key fields against everything in the dataset
+    likely_match_list = []
+    for current_row in current_data:
+        likely_matches = 0
+        # Check the company names
+        if (
+            jellyfish.jaro_winkler_similarity(
+                new_row["company"], current_row["company"]
+            )
+            > 0.95
+        ):
+            likely_matches += 1
+
+        # Check the notice date
+        if (
+            jellyfish.levenshtein_distance(
+                new_row["notice_date"], current_row["notice_date"]
+            )
+            < 4
+        ):
+            likely_matches += 1
+
+        # Check the location, if it exists
+        if new_row["location"] and current_row["location"]:
+            passed_location_test = (
+                jellyfish.jaro_winkler_similarity(
+                    new_row["location"], current_row["location"]
+                )
+                > 0.95
+            )
+        else:
+            passed_location_test = True
+
+        # If both match, we call it a likely match
+        if likely_matches == 2 and passed_location_test:
+            likely_match_list.append(current_row)
+
+    # If there is more than one likely match, we should compare some extra fields
+    likely_match = None
+    if len(likely_match_list) > 1:
+        # Score all the location similarities
+        location_similarity_list = []
+        for current_row in likely_match_list:
+            score = jellyfish.jaro_winkler_similarity(
+                current_row["location"], new_row["location"]
+            )
+            location_similarity_list.append((current_row, score))
+        # Take the one that's most similar, if it's over a certain score
+        location_similarity_list.sort(key=itemgetter(1), reverse=True)
+        if location_similarity_list[0][1] > 0.95:
+            likely_match = likely_match_list[0]
+    elif len(likely_match_list) == 1:
+        likely_match = likely_match_list[0]
+
+    return likely_match
 
 
 def get_current_data(init: bool = False) -> typing.List[typing.Dict[str, typing.Any]]:
