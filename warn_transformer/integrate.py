@@ -21,7 +21,7 @@ def run(
     / "consolidated.csv",
     init_current_data: bool = False,
 ) -> Path:
-    """Integrate the latest consolidated data with the current database.
+    """Integrate new consolidated data with the current database.
 
     Args:
         new_path (Path): The path to the latest consolidated file on the local file system
@@ -81,23 +81,47 @@ def run(
     logger.debug(f"{len(full_insert_list)} total new records")
     logger.debug(f"{len(full_amend_list)} total amended records")
 
-    # Overwrite the amendments, storing the old versions somewhere ...
+    # Create a new list to store everything
     integrated_list: typing.List[typing.Dict[str, typing.Any]] = []
+
+    # Create a lookup of the current amended records that links them their likely replacements
     amend_lookup = {d["current"]["hash_id"]: d["new"] for d in full_amend_list}
+
+    # Loop through everything in the current database
     for current_row in current_data_list:
-        # If this is an amended row, change it
+        # If this is an amended row ...
         if current_row["hash_id"] in amend_lookup:
-            amend_dict = amend_lookup[current_row["hash_id"]]
-            amend_dict["first_inserted_date"] = current_row["first_inserted_date"]
-            amend_dict["last_updated_date"] = datetime.now(timezone.utc)
-            amend_dict["estimated_amendments"] = current_row["estimated_amendments"] + 1
-            integrated_list.append(amend_dict)
-        # If it's not, pass it along
-        else:
-            # Otherwise keep what we got
+            # Pull out the new record from the our lookup
+            amended_row = amend_lookup[current_row["hash_id"]]
+
+            # Link it to its likely ancestor
+            amended_row["is_amendment"] = True
+            amended_row["likely_ancestor"] = current_row["hash_id"]
+
+            # Update is metadata
+            amended_row["first_inserted_date"] = current_row["first_inserted_date"]
+            amended_row["last_updated_date"] = datetime.now(timezone.utc)
+            amended_row["estimated_amendments"] = (
+                current_row["estimated_amendments"] + 1
+            )
+
+            # Add it to the new integrated database
+            integrated_list.append(amended_row)
+
+            # Mark the current record as superseded
+            # This allows it to be excluded circumstances where we only want unique records
+            # But without deleting it entirely
+            current_row["is_superseded"] = True
+
+            # Add it to the integrated database
             integrated_list.append(current_row)
 
-    # Insert the new records with today's timestamp
+        # If the current row is not amended ...
+        else:
+            # Then we just keep what we got
+            integrated_list.append(current_row)
+
+    # Now insert the new records with today's timestamp
     for row in full_insert_list:
         now = datetime.now(timezone.utc)
         row["first_inserted_date"] = now
@@ -105,14 +129,14 @@ def run(
         row["estimated_amendments"] = 0
         integrated_list.append(row)
 
-    # Sort it in reverse chronological order
+    # And sort everything in reverse chronological order
     sorted_list = sorted(
         integrated_list,
         key=itemgetter("last_updated_date", "first_inserted_date"),
         reverse=True,
     )
 
-    # Write out what we got
+    # Finally, write out what we got
     integrated_path = utils.WARN_TRANSFORMER_OUTPUT_DIR / "processed" / "integrated.csv"
     logger.debug(f"Writing {len(integrated_list)} records to {integrated_path}")
     with open(integrated_path, "w") as fh:
@@ -120,7 +144,7 @@ def run(
         writer.writeheader()
         writer.writerows(sorted_list)
 
-    # Return the path
+    # And return the path
     return integrated_path
 
 

@@ -78,7 +78,7 @@ download: ## download raw data
 
 integrate: ## download raw data
 	$(call banner,      💠 Integrating data 💠)
-	$(PIPENV) python -m warn_transformer.cli integrate -l DEBUG
+	$(PIPENV) python -m warn_transformer.cli integrate -l DEBUG --init
 
 #
 # Tests
