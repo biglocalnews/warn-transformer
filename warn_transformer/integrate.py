@@ -36,7 +36,7 @@ def run(
     with open(new_path) as fh:
         new_data_reader = csv.DictReader(fh)
         new_data_list = list(new_data_reader)
-    logger.debug(f"{len(new_data_list)} records in new file")
+    logger.debug(f"{len(new_data_list)} records in new file at {new_path}")
 
     # Regroup each list by state
     current_data_by_source = regroup_by_source(current_data_list)
@@ -118,16 +118,23 @@ def run(
 
         # If the current row is not amended ...
         else:
+            # If these field haven't already been filled in, nope 'em
+            if "is_superseded" not in current_row.keys():
+                current_row["is_superseded"] = False
+            if "is_amendment" not in current_row.keys():
+                current_row["is_amendment"] = False
             # Then we just keep what we got
             integrated_list.append(current_row)
 
     # Now insert the new records with today's timestamp
-    for row in full_insert_list:
+    for new_row in full_insert_list:
         now = datetime.now(timezone.utc)
-        row["first_inserted_date"] = now
-        row["last_updated_date"] = now
-        row["estimated_amendments"] = 0
-        integrated_list.append(row)
+        new_row["first_inserted_date"] = now
+        new_row["last_updated_date"] = now
+        new_row["estimated_amendments"] = 0
+        new_row["is_superseded"] = False
+        new_row["is_amendment"] = False
+        integrated_list.append(new_row)
 
     # And sort everything in reverse chronological order
     sorted_list = sorted(
