@@ -1,6 +1,4 @@
-
-
-## Releasing
+# Releasing
 
 Our release process is automated as a [continuous deployment](https://en.wikipedia.org/wiki/Continuous_deployment) via the [GitHub Actions](https://github.com/features/actions) framework. The logic that governs the process is stored [in the `workflows` directory](https://github.com/biglocalnews/warn-transformer/blob/main/.github/workflows/continuous-deployment.yml).
 
@@ -8,19 +6,19 @@ That means that everything necessary to make a release can be done with a few cl
 
 Here's how it's done, step by step. The screenshots are from a different repository, but the process is the same.
 
-### 1. Go to the releases page
+## 1. Go to the releases page
 
 The first step is to visit [our repository's homepage](https://github.com/biglocalnews/warn-transformer) and click on [the "releases" headline](https://github.com/biglocalnews/warn-transformer/releases) in the right rail.
 
 ![Release button](https://raw.githubusercontent.com/biglocalnews/warn-transformer/main/.github/images/releasing-releases-button.png)
 
-### 2. Click 'Draft a new release'
+## 2. Click 'Draft a new release'
 
 Note the number of the latest release. Click the "Draft a new release" button in the upper-right corner. If you don't see this button, you do not have permission to make a release. Only the maintainers of the repository are able to release new code.
 
 ![Draft button](https://raw.githubusercontent.com/biglocalnews/warn-transformer/main/.github/images/releasing-draft-button.png)
 
-### 3. Create a new tag
+## 3. Create a new tag
 
 Think about how big your changes are and decide if you're a major, minor or patch release.
 
@@ -36,13 +34,13 @@ Enter your version number into the box. Then click the "Create new tag" option t
 
 ![Tag dropdown](https://raw.githubusercontent.com/biglocalnews/warn-transformer/main/.github/images/releasing-name-tag.png)
 
-### 4. Name the release
+## 4. Name the release
 
 Enter the same number into the "Release title" box.
 
 ![Name box](https://raw.githubusercontent.com/biglocalnews/warn-transformer/main/.github/images/releasing-name-release.png)
 
-### 5. Auto-generate release notes
+## 5. Auto-generate release notes
 
 Click the "Auto-generate release notes" button in the upper right corner of the large description box.
 
@@ -52,13 +50,13 @@ That should fill in the box below. What appears will depend on how many pull req
 
 ![Auto-generate release notes results](https://raw.githubusercontent.com/biglocalnews/warn-transformer/main/github/images/releasing-changelog-entered.png)
 
-### 6. Publish the release
+## 6. Publish the release
 
 Click the green button that says "Publish release" at the bottom of the page.
 
 ![Publish button](https://raw.githubusercontent.com/biglocalnews/warn-transformer/main/.github/images/releasing-publish-button.png)
 
-### 7. Wait for the Action to finish
+## 7. Wait for the Action to finish
 
 GitHub will take you to a page dedicated to your new release and start an automated process that release our new version to the world. Follow its progress by clicking on the [Actions tab](https://github.com/biglocalnews/warn-transformer/actions) near the top of the page.
 
