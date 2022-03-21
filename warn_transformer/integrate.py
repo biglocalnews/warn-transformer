@@ -87,6 +87,9 @@ def run(
     # Create a lookup of the current amended records that links them their likely replacements
     amend_lookup = {d["current"]["hash_id"]: d["new"] for d in full_amend_list}
 
+    # Get the current timestamp to mark the updates we make in this run
+    now = datetime.now(timezone.utc)
+
     # Loop through everything in the current database
     for current_row in current_data_list:
         # If this is an amended row ...
@@ -100,7 +103,7 @@ def run(
 
             # Update is metadata
             amended_row["first_inserted_date"] = current_row["first_inserted_date"]
-            amended_row["last_updated_date"] = datetime.now(timezone.utc)
+            amended_row["last_updated_date"] = now
             amended_row["estimated_amendments"] = (
                 current_row["estimated_amendments"] + 1
             )
@@ -128,7 +131,6 @@ def run(
 
     # Now insert the new records with today's timestamp
     for new_row in full_insert_list:
-        now = datetime.now(timezone.utc)
         new_row["first_inserted_date"] = now
         new_row["last_updated_date"] = now
         new_row["estimated_amendments"] = 0
@@ -139,7 +141,7 @@ def run(
     # And sort everything in reverse chronological order
     sorted_list = sorted(
         integrated_list,
-        key=itemgetter("last_updated_date", "first_inserted_date"),
+        key=itemgetter("last_updated_date", "first_inserted_date", "notice_date"),
         reverse=True,
     )
 
@@ -147,7 +149,8 @@ def run(
     integrated_path = utils.WARN_TRANSFORMER_OUTPUT_DIR / "processed" / "integrated.csv"
     logger.debug(f"Writing {len(integrated_list)} records to {integrated_path}")
     with open(integrated_path, "w") as fh:
-        writer = csv.DictWriter(fh, sorted_list[0].keys(), extrasaction="ignore")
+        fieldnames = sorted_list[0].keys()
+        writer = csv.DictWriter(fh, fieldnames, extrasaction="ignore")
         writer.writeheader()
         writer.writerows(sorted_list)
 
@@ -252,10 +255,12 @@ def get_current_data(init: bool = False) -> typing.List[typing.Dict[str, typing.
         current_data_reader
     )
 
+    # Get the current timestamp to mark the updates we make in this run
+    now = datetime.now(timezone.utc)
+
     # If we're initializing a new dataset, we'll need to fill in the extra
     # fields custom to the integrated set.
     if init:
-        now = datetime.now(timezone.utc)
         for row in current_data_list:
             row["first_inserted_date"] = now
             row["last_updated_date"] = now
