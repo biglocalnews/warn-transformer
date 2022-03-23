@@ -247,8 +247,8 @@ def get_likely_ancestor(
     if len(likely_match_list) > 1:
         # Log here. Might do more later.
         logger.debug("New row has more than one likely match")
-        logger.debug(f"New row: {json.dumps(new_row, indent=2)}")
-        logger.debug(f"Likely matches: {json.dumps(likely_match_list, indent=2)}")
+        logger.debug(f"New row: {json.dumps(new_row, indent=2, default=str)}")
+        logger.debug(f"Likely matches: {json.dumps(likely_match_list, indent=2, default=str)}")
 
     # For now we just return the first one
     return likely_match_list[0]
