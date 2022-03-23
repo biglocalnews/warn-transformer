@@ -1,4 +1,5 @@
 import csv
+import json
 import logging
 import typing
 from collections import defaultdict
@@ -175,6 +176,30 @@ def run(
     return integrated_path
 
 
+def is_similar_string(s1, s2):
+    """Evaluate whether we consider the two strings close enough to be likely variations.
+
+    Args:
+        s1 (str): The first string.
+        s2 (str): The second string.
+
+    Returns True or False.
+    """
+    return jellyfish.jaro_winkler_similarity(s1, s2) > 0.95
+
+
+def is_similar_date(d1, d2):
+    """Evaluate whether we consider the two date strings close enough to be likely variations.
+
+    Args:
+        d1 (str): The first string.
+        d2 (str): The second string.
+
+    Returns True or False.
+    """
+    return jellyfish.levenshtein_distance(d1, d2) <= 3
+
+
 def get_likely_ancestor(
     new_row: typing.Dict[str, typing.Any], current_data: typing.List
 ) -> typing.Optional[typing.Dict[str, typing.Any]]:
@@ -191,58 +216,38 @@ def get_likely_ancestor(
     # Check our key fields against everything in the dataset
     likely_match_list = []
     for current_row in current_data:
-        likely_matches = 0
         # Check the company names
-        if (
-            jellyfish.jaro_winkler_similarity(
-                new_row["company"], current_row["company"]
-            )
-            > 0.95
-        ):
-            likely_matches += 1
+        if not is_similar_string(new_row["company"], current_row["company"]):
+            continue
 
         # Check the notice date
-        if (
-            jellyfish.levenshtein_distance(
-                new_row["notice_date"], current_row["notice_date"]
-            )
-            < 4
-        ):
-            likely_matches += 1
+        if not is_similar_date(new_row["notice_date"], current_row["notice_date"]):
+            continue
+
+        # Check the effective date, if it exists
+        if new_row["effective_date"] and current_row["effective_date"]:
+            if not is_similar_date(
+                new_row["effective_date"], current_row["effective_date"]
+            ):
+                continue
 
         # Check the location, if it exists
         if new_row["location"] and current_row["location"]:
-            passed_location_test = (
-                jellyfish.jaro_winkler_similarity(
-                    new_row["location"], current_row["location"]
-                )
-                > 0.95
-            )
-        else:
-            passed_location_test = True
+            if not is_similar_string(new_row["location"], current_row["location"]):
+                continue
 
-        # If both match, we call it a likely match
-        if likely_matches == 2 and passed_location_test:
-            likely_match_list.append(current_row)
+        # Whatever is left we keep
+        likely_match_list.append(current_row)
 
-    # If there is more than one likely match, we should compare some extra fields
-    likely_match = None
+    # If there is more than one likely match, we are going to log out
     if len(likely_match_list) > 1:
-        # Score all the location similarities
-        location_similarity_list = []
-        for current_row in likely_match_list:
-            score = jellyfish.jaro_winkler_similarity(
-                current_row["location"], new_row["location"]
-            )
-            location_similarity_list.append((current_row, score))
-        # Take the one that's most similar, if it's over a certain score
-        location_similarity_list.sort(key=itemgetter(1), reverse=True)
-        if location_similarity_list[0][1] > 0.95:
-            likely_match = likely_match_list[0]
-    elif len(likely_match_list) == 1:
-        likely_match = likely_match_list[0]
+        # Log here. Might do more later.
+        logger.debug("New row has more than one likely match")
+        logger.debug(f"New row: {json.dumps(new_row, indent=2)}")
+        logger.debug(f"Likely matches: {json.dumps(likely_match_list, indent=2)}")
 
-    return likely_match
+    # For now we just return the first one
+    return likely_match_list[0]
 
 
 def get_current_data(init: bool = False) -> typing.List[typing.Dict[str, typing.Any]]:
