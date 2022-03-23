@@ -239,6 +239,10 @@ def get_likely_ancestor(
         # Whatever is left we keep
         likely_match_list.append(current_row)
 
+    # If there's nothing, return None
+    if not likely_match_list:
+        return None
+
     # If there is more than one likely match, we are going to log out
     if len(likely_match_list) > 1:
         # Log here. Might do more later.
