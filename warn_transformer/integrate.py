@@ -82,6 +82,21 @@ def run(
     logger.debug(f"{len(full_insert_list)} total new records")
     logger.debug(f"{len(full_amend_list)} total amended records")
 
+    # Write out both lists
+    insert_path = utils.WARN_TRANSFORMER_OUTPUT_DIR / "processed" / "additions.csv"
+    logger.debug(f"Writing {len(full_insert_list)} records to {insert_path}")
+    with open(insert_path, "w") as fh:
+        writer = csv.DictWriter(fh, full_insert_list[0].keys())
+        writer.writeheader()
+        writer.writerows(full_insert_list)
+
+    amend_path = utils.WARN_TRANSFORMER_OUTPUT_DIR / "processed" / "amendments.csv"
+    logger.debug(f"Writing {len(full_amend_list)} records to {amend_path}")
+    with open(amend_path, "w") as fh:
+        writer = csv.DictWriter(fh, full_amend_list[0].keys())
+        writer.writeheader()
+        writer.writerows(full_amend_list)
+
     # Create a new list to store everything
     integrated_list: typing.List[typing.Dict[str, typing.Any]] = []
 
