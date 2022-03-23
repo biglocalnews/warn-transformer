@@ -150,7 +150,23 @@ def run(
     integrated_path = utils.WARN_TRANSFORMER_OUTPUT_DIR / "processed" / "integrated.csv"
     logger.debug(f"Writing {len(integrated_list)} records to {integrated_path}")
     with open(integrated_path, "w") as fh:
-        fieldnames = sorted_list[0].keys()
+        fieldnames = [
+            "hash_id",
+            "first_inserted_date",
+            "notice_date",
+            "effective_date",
+            "postal_code",
+            "company",
+            "location",
+            "jobs",
+            "is_closure",
+            "is_temporary",
+            "is_superseded",
+            "is_amendment",
+            "likely_ancestor",
+            "estimated_amendments",
+            "last_updated_date",
+        ]
         writer = csv.DictWriter(fh, fieldnames, extrasaction="ignore")
         writer.writeheader()
         writer.writerows(sorted_list)
