@@ -15,7 +15,7 @@ class Transformer(BaseTransformer):
         effective_date="Effective or Commencing Date",
         jobs="No. of Employees Affected",
     )
-    date_format = "%m/%d/%Y"
+    date_format = ("%m/%d/%Y", "%m/%d/%y")
     date_corrections = {
         "2/19/219": datetime(2019, 2, 19),
         "3/7/2010-3/20/2010": datetime(2010, 3, 7),
