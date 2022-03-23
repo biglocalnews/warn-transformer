@@ -83,19 +83,21 @@ def run(
     logger.debug(f"{len(full_amend_list)} total amended records")
 
     # Write out both lists
-    insert_path = utils.WARN_TRANSFORMER_OUTPUT_DIR / "processed" / "additions.csv"
-    logger.debug(f"Writing {len(full_insert_list)} records to {insert_path}")
-    with open(insert_path, "w") as fh:
-        writer = csv.DictWriter(fh, full_insert_list[0].keys())
-        writer.writeheader()
-        writer.writerows(full_insert_list)
+    if full_insert_list:
+        insert_path = utils.WARN_TRANSFORMER_OUTPUT_DIR / "processed" / "additions.csv"
+        logger.debug(f"Writing {len(full_insert_list)} records to {insert_path}")
+        with open(insert_path, "w") as fh:
+            writer = csv.DictWriter(fh, full_insert_list[0].keys())
+            writer.writeheader()
+            writer.writerows(full_insert_list)
 
-    amend_path = utils.WARN_TRANSFORMER_OUTPUT_DIR / "processed" / "amendments.csv"
-    logger.debug(f"Writing {len(full_amend_list)} records to {amend_path}")
-    with open(amend_path, "w") as fh:
-        writer = csv.DictWriter(fh, full_amend_list[0].keys())
-        writer.writeheader()
-        writer.writerows(full_amend_list)
+    if full_amend_list:
+        amend_path = utils.WARN_TRANSFORMER_OUTPUT_DIR / "processed" / "amendments.csv"
+        logger.debug(f"Writing {len(full_amend_list)} records to {amend_path}")
+        with open(amend_path, "w") as fh:
+            writer = csv.DictWriter(fh, full_amend_list[0].keys())
+            writer.writeheader()
+            writer.writerows(full_amend_list)
 
     # Create a new list to store everything
     integrated_list: typing.List[typing.Dict[str, typing.Any]] = []
@@ -263,7 +265,9 @@ def get_likely_ancestor(
         # Log here. Might do more later.
         logger.debug("New row has more than one likely match")
         logger.debug(f"New row: {json.dumps(new_row, indent=2, default=str)}")
-        logger.debug(f"Likely matches: {json.dumps(likely_match_list, indent=2, default=str)}")
+        logger.debug(
+            f"Likely matches: {json.dumps(likely_match_list, indent=2, default=str)}"
+        )
 
     # For now we just return the first one
     return likely_match_list[0]
