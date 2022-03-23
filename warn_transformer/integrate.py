@@ -99,6 +99,7 @@ def run(
 
             # Link it to its likely ancestor
             amended_row["is_amendment"] = True
+            amended_row["is_superseded"] = False
             amended_row["likely_ancestor"] = current_row["hash_id"]
 
             # Update is metadata
