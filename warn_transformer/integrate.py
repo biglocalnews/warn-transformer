@@ -83,18 +83,18 @@ def run(
     logger.debug(f"{len(full_amend_list)} total amended records")
 
     # Write out both lists
-    if full_insert_list:
-        insert_path = utils.WARN_TRANSFORMER_OUTPUT_DIR / "processed" / "additions.csv"
-        logger.debug(f"Writing {len(full_insert_list)} records to {insert_path}")
-        with open(insert_path, "w") as fh:
+    insert_path = utils.WARN_TRANSFORMER_OUTPUT_DIR / "processed" / "additions.csv"
+    with open(insert_path, "w") as fh:
+        if full_insert_list:
+            logger.debug(f"Writing {len(full_insert_list)} records to {insert_path}")
             writer = csv.DictWriter(fh, full_insert_list[0].keys())
             writer.writeheader()
             writer.writerows(full_insert_list)
 
-    if full_amend_list:
-        amend_path = utils.WARN_TRANSFORMER_OUTPUT_DIR / "processed" / "amendments.csv"
-        logger.debug(f"Writing {len(full_amend_list)} records to {amend_path}")
-        with open(amend_path, "w") as fh:
+    amend_path = utils.WARN_TRANSFORMER_OUTPUT_DIR / "processed" / "amendments.csv"
+    with open(amend_path, "w") as fh:
+        if full_amend_list:
+            logger.debug(f"Writing {len(full_amend_list)} records to {amend_path}")
             writer = csv.DictWriter(fh, full_amend_list[0].keys())
             writer.writeheader()
             writer.writerows(full_amend_list)
