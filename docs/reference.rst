@@ -6,6 +6,13 @@ Reference
   :depth: 1
   :local:
 
+Commands
+--------
+
+.. click:: warn_transformer.cli:cli
+   :prog: warn-transformer
+   :nested: full
+
 Schema
 ------
 

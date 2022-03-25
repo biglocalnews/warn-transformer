@@ -2,3 +2,6 @@ Sphinx
 myst-parser
 sphinxcontrib-napoleon
 marshmallow
+sphinx-click
+jellyfish
+bln

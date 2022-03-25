@@ -26,6 +26,7 @@ sphinx-autobuild = "*"
 myst-parser = "*"
 sphinxcontrib-napoleon = "*"
 types-requests = "*"
+sphinx-click = "*"
 
 [requires]
 python_version = "3.9"

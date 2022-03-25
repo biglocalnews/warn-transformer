@@ -31,3 +31,9 @@ Consolidate the raw files into a single file.
 ```bash
 make consolidate
 ```
+
+Integrate the consolidated file with our latest polished dataset.
+
+```bash
+make integrate
+```

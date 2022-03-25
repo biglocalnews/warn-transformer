@@ -6,7 +6,12 @@ from datetime import datetime
 sys.path.insert(0, os.path.abspath(".."))
 sys.path.insert(0, os.path.abspath("./"))
 
-extensions = ["myst_parser", "sphinx.ext.autodoc", "sphinxcontrib.napoleon"]
+extensions = [
+    "myst_parser",
+    "sphinx.ext.autodoc",
+    "sphinxcontrib.napoleon",
+    "sphinx_click",
+]
 templates_path = ["_templates"]
 source_suffix = {
     ".rst": "restructuredtext",
