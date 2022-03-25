@@ -15,7 +15,6 @@ pipenv install warn-transformer
 ```{toctree}
 :maxdepth: 1
 :name: mastertoc
-:numbered:
 
 contributing
 releasing
