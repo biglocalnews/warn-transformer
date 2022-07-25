@@ -66,7 +66,7 @@ PYTHON := $(PIPENV) python -W ignore
 # Commands
 #
 
-consolidate: ## download raw data
+consolidate: ## consolidate data
 	$(call banner,      🪢 Consolidating data 🪢)
 	$(PIPENV) python -m warn_transformer.cli consolidate -l DEBUG
 
@@ -76,7 +76,7 @@ download: ## download raw data
 	$(PIPENV) python -m warn_transformer.cli download -l DEBUG
 
 
-integrate: ## download raw data
+integrate: ## integrate data
 	$(call banner,      💠 Integrating data 💠)
 	$(PIPENV) python -m warn_transformer.cli integrate -l DEBUG
 
