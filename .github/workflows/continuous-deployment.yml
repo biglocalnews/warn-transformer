@@ -80,7 +80,10 @@ jobs:
 
       - id: install-python-dependencies
         name: Install Python dependencies
-        run: pipenv install --python `which python` --skip-lock pytest pytest-vcr bln marshmallow click jellyfish requests certifi
+        run: |
+          pipenv install --python `which python` --skip-lock pytest pytest-vcr bln marshmallow click jellyfish requests certifi
+          pipenv run pip install certifi
+        shell: bash
 
       - id: run
         name: Run tests
