@@ -51,7 +51,7 @@ jobs:
 
       - id: install-python-dependencies
         name: Install Python dependencies
-        run: pipenv install --dev
+        run: pipenv install --dev --skip-lock
 
       - id: mypy
         name: Mypy
@@ -80,7 +80,7 @@ jobs:
 
       - id: install-python-dependencies
         name: Install Python dependencies
-        run: pipenv install --dev --python `which python`
+        run: pipenv install --dev --python `which python` --skip-lock
 
       - id: run
         name: Run tests
@@ -109,7 +109,7 @@ jobs:
 
       - id: install-python-dependencies
         name: Install Python dependencies
-        run: pipenv install --dev
+        run: pipenv install --dev --skip-lock
 
       - id: build
         name: Build release
