@@ -25,7 +25,7 @@ jobs:
 
       - id: install-python-dependencies
         name: Install Python dependencies
-        run: pipenv install --dev
+        run: pipenv install --dev --skip-lock
 
       - id: lint
         name: Lint
