@@ -80,7 +80,7 @@ jobs:
 
       - id: install-python-dependencies
         name: Install Python dependencies
-        run: pipenv install --dev --python `which python` --skip-lock
+        run: pipenv install --python `which python` pytest pytest-vcr bln marshmellow click jellyfish
 
       - id: run
         name: Run tests
