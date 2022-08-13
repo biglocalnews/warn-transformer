@@ -96,7 +96,7 @@ mypy: ## run mypy type checks
 
 test: ## run all tests
 	$(call banner,       🤖 Running tests 🤖)
-	@$(PYTHON) setup.py -q test
+	@$(PIPENV) pytest tests
 
 #
 # Releases
