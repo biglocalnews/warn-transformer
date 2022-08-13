@@ -112,7 +112,9 @@ jobs:
 
       - id: install-python-dependencies
         name: Install Python dependencies
-        run: pipenv install --dev --skip-lock
+        run: |
+          pipenv install --dev --skip-lock
+          pipenv pip install certifi
 
       - id: build
         name: Build release
