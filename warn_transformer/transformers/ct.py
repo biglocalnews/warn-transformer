@@ -57,6 +57,7 @@ class Transformer(BaseTransformer):
         "Not reported on WARN notice": None,
         "Not provided": None,
         "489 - total for CT and other locations": 489,
+        "158 Stamford 81 Branford": 239,
     }
 
     def transform_date(self, value: str) -> typing.Optional[str]:
