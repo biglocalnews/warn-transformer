@@ -10,22 +10,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-
-      - id: install-pipenv
-        name: Install pipenv
-        run: pipx install pipenv
+        uses: actions/checkout@v3
 
       - id: install-python
         name: Install Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: '3.9'
           cache: 'pipenv'
 
+      - id: install-pipenv
+        name: Install pipenv
+        run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
+
       - id: install-python-dependencies
         name: Install Python dependencies
-        run: pipenv install --dev
+        run: pipenv install --dev --skip-lock
 
       - id: lint
         name: Lint
@@ -36,22 +36,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-
-      - id: install-pipenv
-        name: Install pipenv
-        run: pipx install pipenv
+        uses: actions/checkout@v3
 
       - id: install-python
         name: Install Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: '3.9'
           cache: 'pipenv'
 
+      - id: install-pipenv
+        name: Install pipenv
+        run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
+
       - id: install-python-dependencies
         name: Install Python dependencies
-        run: pipenv install --dev
+        run: pipenv install --dev --skip-lock
 
       - id: mypy
         name: Mypy
@@ -65,22 +65,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-
-      - id: install-pipenv
-        name: Install pipenv
-        run: pipx install pipenv
+        uses: actions/checkout@v3
 
       - id: install-python
         name: Install Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python }}
           cache: 'pipenv'
 
+      - id: install-pipenv
+        name: Install pipenv
+        run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
+
       - id: install-python-dependencies
         name: Install Python dependencies
-        run: pipenv install --dev --python `which python`
+        run: |
+          pipenv install --python `which python` --skip-lock pytest pytest-vcr bln marshmallow click jellyfish requests certifi importlib_metadata
+          pipenv run pip install certifi importlib_metadata
+        shell: bash
 
       - id: run
         name: Run tests
@@ -94,22 +97,24 @@ jobs:
     needs: [test-python]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-
-      - id: install-pipenv
-        name: Install pipenv
-        run: pipx install pipenv
+        uses: actions/checkout@v3
 
       - id: install-python
         name: Install Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: '3.9'
           cache: 'pipenv'
 
+      - id: install-pipenv
+        name: Install pipenv
+        run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
+
       - id: install-python-dependencies
         name: Install Python dependencies
-        run: pipenv install --dev
+        run: |
+          pipenv install --dev --skip-lock
+          pipenv run pip install certifi importlib_metadata
 
       - id: build
         name: Build release
@@ -138,7 +143,7 @@ jobs:
       id-token: 'write'
 
     steps:
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.9'
 

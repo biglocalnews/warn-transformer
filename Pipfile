@@ -27,6 +27,8 @@ myst-parser = "*"
 sphinxcontrib-napoleon = "*"
 types-requests = "*"
 sphinx-click = "*"
+zipp = "*"
+certifi = "*"
 
 [requires]
 python_version = "3.9"
