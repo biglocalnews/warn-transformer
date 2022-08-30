@@ -82,4 +82,5 @@ class Transformer(BaseTransformer):
             value = value.strip().split(" to ")[0].strip()
             value = value.strip().split(" through ")[0].strip()
             value = value.strip().split(" & ")[0].strip()
+            value = value.strip().split(" – ")[0].strip()
             return super().transform_date(value)
