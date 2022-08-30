@@ -12,7 +12,7 @@ class Transformer(BaseTransformer):
         effective_date="LAYOFF DATE",
         jobs="TOTAL LAYOFF NUMBER",
     )
-    date_format = ("%d-%b-%Y", "%d-%b-%y", "%m/%d/%Y")
+    date_format = ("%d-%b-%Y", "%d-%b-%y", "%m/%d/%Y", "%m/%d/%y")
     jobs_corrections = {
         "Not Disclosed": None,
         "?": None,
