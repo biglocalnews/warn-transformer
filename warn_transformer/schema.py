@@ -39,6 +39,8 @@ class BaseTransformer:
     date_format: typing.Any = "%m/%d/%Y"
     # Manual date corrections for malformed data
     date_corrections: typing.Dict = {}
+    # How many days in the future are allowed
+    max_future_days: int = 365
     # The minimum year allowed
     minimum_year: int = 1988
 
@@ -255,9 +257,9 @@ class BaseTransformer:
 
         # If the date is more than 365 days in future, fix it
         today = datetime.today()
-        if dt > today + timedelta(days=365):
+        if dt > today + timedelta(days=self.max_future_days):
             logger.debug(
-                f"Date '{dt}' is more than 365 days in the future. Looking up correction"
+                f"Date '{dt}' is more than {self.max_future_days} days in the future. Looking up correction"
             )
             dt = self.date_corrections[value]
 
