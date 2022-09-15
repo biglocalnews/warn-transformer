@@ -27,6 +27,7 @@ class Transformer(BaseTransformer):
         "07/04/2002": datetime(2020, 7, 4),
         "03/09/2121": datetime(2021, 3, 9),
         "03/30/3030": datetime(2020, 3, 30),
+        "09/30/2023": datetime(2022, 9, 30),
     }
 
     def check_if_temporary(self, row: typing.Dict) -> typing.Optional[bool]:
