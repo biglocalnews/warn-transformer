@@ -16,7 +16,7 @@ class Transformer(BaseTransformer):
         jobs="num_employees",
     )
     date_format = "%m/%d/%Y"
-    max_future_days = 365 * 2
+    max_future_days = 365 * 5
     minimum_year = 2014
     jobs_corrections = {
         # This Tesla layoff number large but correct
