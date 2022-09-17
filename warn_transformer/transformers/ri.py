@@ -27,6 +27,7 @@ class Transformer(BaseTransformer):
         "190 company with an additional 100 contracted": 290,
         "60-80": 60,
         "additional 16": 16,
+        "1900-03-17 00:00:00": None,
     }
 
     def transform_company(self, value: str) -> str:
