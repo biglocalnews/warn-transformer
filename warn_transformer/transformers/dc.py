@@ -28,6 +28,7 @@ class Transformer(BaseTransformer):
         "September 15, 2020 and March 18, 2020": datetime(2020, 9, 15),
         "May 31, 2012 June 15, 2012": datetime(2012, 5, 31),
         "June 29, 2012 & August 3, 2012": datetime(2012, 6, 29),
+        "November 15 - December 16, 2022": datetime(2022, 11, 15),
     }
     jobs_corrections = {
         "All": None,
