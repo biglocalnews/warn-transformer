@@ -16,6 +16,9 @@ class Transformer(BaseTransformer):
         jobs="Number Affected",
     )
     date_format = ("%Y-%m-%d %H:%M:%S", "%m/%d/%Y", "%Y-%m-%d")
+    date_corrections = {
+        "929/2022": datetime(2022, 9, 29),
+    }
 
     def prep_row_list(
         self, row_list: typing.List[typing.Dict]
