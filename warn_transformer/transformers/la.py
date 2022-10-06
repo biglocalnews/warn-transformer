@@ -46,6 +46,7 @@ class Transformer(BaseTransformer):
         "74 +1 +21": 96,
         "84 -4 +10": 98,
         "1*": 1,
+        "100 98": 98,
     }
 
     def transform_date(self, value: str) -> typing.Optional[str]:
