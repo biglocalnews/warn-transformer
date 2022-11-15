@@ -23,6 +23,7 @@ class Transformer(BaseTransformer):
     jobs_corrections = {
         "8 in ID": 8,
         "17 in ID": 17,
+        "80-100": 80,
     }
 
     def transform_date(self, value: str) -> typing.Optional[str]:
