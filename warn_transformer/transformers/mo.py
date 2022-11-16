@@ -9,11 +9,11 @@ class Transformer(BaseTransformer):
 
     postal_code = "MO"
     fields = dict(
-        company="COMPANY NAME",
-        location="LOCATION",
-        notice_date="DATE RECEIVED",
-        effective_date="LAYOFF DATE",
-        jobs="# AFFECTED",
+        company="Title",
+        location="Location(s)",
+        notice_date="Received Sort descending",
+        effective_date="Layoff date(s)",
+        jobs="# affected",
     )
     date_format = ("%m/%d/%Y", "%m/%d/%y", "%B %Y", "%B %d, %Y")
     date_corrections = {
@@ -52,4 +52,4 @@ class Transformer(BaseTransformer):
 
         Returns: A boolean or null
         """
-        return "clos" in row["TYPE"].lower() or None
+        return "clos" in row["Type"].lower() or None
