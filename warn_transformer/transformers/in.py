@@ -30,6 +30,7 @@ class Transformer(BaseTransformer):
         "500 Nationwide": None,
         "NA": None,
         "103 (REVISED) 10/22/2020 108": 103,
+        "Entire Plant": None,
     }
     date_corrections = {
         "01/30/1202": datetime(2012, 1, 30),
