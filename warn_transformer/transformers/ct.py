@@ -41,6 +41,7 @@ class Transformer(BaseTransformer):
         "Not Dated Rec'd 4/22/2020": datetime(2020, 4, 22),
         "Not Dated Rec'd 4/13/2020": datetime(2020, 4, 13),
         "3/16 - 12/13/2020": datetime(2020, 3, 16),
+        "february": None,
     }
     jobs_corrections = {
         "up to 703": 703,
