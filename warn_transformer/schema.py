@@ -178,15 +178,15 @@ class BaseTransformer:
         else:
             raise ValueError("The field method your provided is not valid.")
 
-    def get_hash_id(self, dict: typing.Dict) -> str:
+    def get_hash_id(self, data: typing.Dict) -> str:
         """Convert the row into a unique hexdigest to use as a unique identifier.
 
         Args:
-            dict (dict): One raw row of data from the source
+            data (dict): One raw row of data from the source
 
         Returns: A unique hexdigest string computed from the source data.
         """
-        dict_string = json.dumps(dict)
+        dict_string = json.dumps(data)
         hash_obj = hashlib.sha224(dict_string.encode("utf-8"))
         return hash_obj.hexdigest()
 

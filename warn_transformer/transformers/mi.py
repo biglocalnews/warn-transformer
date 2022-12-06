@@ -14,6 +14,10 @@ class Transformer(BaseTransformer):
         jobs="Number of Layoffs",
     )
     date_format = "%m/%d/%Y"
+    jobs_corrections = {
+        "80*": 80,
+        "Unreported": None,
+    }
 
     def check_if_closure(self, row: typing.Dict) -> typing.Optional[bool]:
         """Determine whether a row is a closure or not.
