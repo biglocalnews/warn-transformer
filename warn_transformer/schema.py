@@ -288,10 +288,6 @@ class BaseTransformer:
 
         Returns: An integer number ready for consolidation. Or, if the value is invalid, a None.
         """
-        # If there's nothing there, return None
-        if not value:
-            return None
-
         # Cut whitespace
         value = value.strip()
 
