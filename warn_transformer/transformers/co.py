@@ -14,7 +14,7 @@ class Transformer(BaseTransformer):
         effective_date="begin_date",
         jobs=lambda row: row["permanent_job_losses"] or row["jobs"],
     )
-    date_format = ("%m/%d/%y", "%m/%d/%Y")
+    date_format = ("%m/%d/%y", "%m/%d/%Y", "%m-%d-%y", "%m-%d-%Y")
     date_corrections = {
         "N/A": None,
         "": None,
