@@ -182,7 +182,7 @@ class BaseTransformer:
         """Convert the row into a unique hexdigest to use as a unique identifier.
 
         Args:
-            dict (dict): One raw row of data from the source
+            data (dict): One raw row of data from the source
 
         Returns: A unique hexdigest string computed from the source data.
         """
