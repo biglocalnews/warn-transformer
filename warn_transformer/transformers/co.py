@@ -15,6 +15,7 @@ class Transformer(BaseTransformer):
         jobs=lambda row: row["permanent_job_losses"] or row["jobs"],
     )
     date_format = ("%m/%d/%y", "%m/%d/%Y", "%m-%d-%y", "%m-%d-%Y")
+    max_future_days = 365 * 5
     date_corrections = {
         "N/A": None,
         "": None,
