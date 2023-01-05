@@ -64,6 +64,7 @@ class Transformer(BaseTransformer):
         "05/24/19 - 3/20/2020": datetime(2019, 5, 24),
         "1/7/19 & 4/6/2020": datetime(2019, 1, 7),
         "WARN Date": None,
+        "TOTAL": None,
     }
     jobs_corrections = {
         "-": None,
@@ -76,4 +77,6 @@ class Transformer(BaseTransformer):
         "Layoff Total": None,
         "N/A": None,
         "40-60": 40,
+        "1 (of 72 in CO)": 1,
+        "38 (resigned voluntarily)": None,
     }
