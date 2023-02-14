@@ -1,3 +1,4 @@
+from datetime import datetime
 import typing
 
 from ..schema import BaseTransformer
@@ -14,6 +15,9 @@ class Transformer(BaseTransformer):
         jobs="Jobs Affected",
     )
     date_format = "%m/%d/%Y"
+    date_corrections = {
+        "12/19/2022\xa0\xa0\n\xa0 11/2/2022": datetime(2022, 11, 2),
+    }
     jobs_corrections = {
         "100+": 100,
         "5-9": 5,

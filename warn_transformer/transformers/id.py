@@ -19,11 +19,14 @@ class Transformer(BaseTransformer):
     date_corrections = {
         "2/19/219": datetime(2019, 2, 19),
         "3/7/2010-3/20/2010": datetime(2010, 3, 7),
+        "rting": datetime(2015, 2, 16),
     }
     jobs_corrections = {
         "8 in ID": 8,
         "17 in ID": 17,
         "80-100": 80,
+        "2 5s1ta": 251,
+        "120 (2 in ID)": 2,
     }
 
     def transform_date(self, value: str) -> typing.Optional[str]:
