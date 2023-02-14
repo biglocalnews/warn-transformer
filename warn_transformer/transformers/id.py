@@ -13,7 +13,7 @@ class Transformer(BaseTransformer):
         location="City",
         notice_date="Date of Letter",
         effective_date="Effective or Commencing Date",
-        jobs="No. of Employees Affected",
+        jobs="No. of EmployeesAffected",
     )
     date_format = ("%m/%d/%Y", "%m/%d/%y")
     date_corrections = {
