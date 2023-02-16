@@ -5,6 +5,7 @@ from ..schema import BaseTransformer
 
 
 def transform_jobs(row):
+    """Corrects variations in field names for the number of employees affected."""
     possible_headers = ["No. of EmployeesAffected", "No. of Employees Affected"]
     for field in possible_headers:
         try:
