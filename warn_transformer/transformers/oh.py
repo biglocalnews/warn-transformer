@@ -52,8 +52,11 @@ class Transformer(BaseTransformer):
         # Split double dates
         if len(value) == 20:
             value = value[:10]
+        elif len(value) == 19:
+            value = value[:9]
         value = re.split(r"\s{2,}", value)[0].strip()
         value = value.split("Originated")[0].strip()
+        print(value)
 
         try:
             return super().transform_date(value)

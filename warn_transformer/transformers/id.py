@@ -4,6 +4,19 @@ from datetime import datetime
 from ..schema import BaseTransformer
 
 
+def transform_jobs(row):
+    """Corrects variations in field names for the number of employees affected."""
+    possible_headers = ["No. of EmployeesAffected", "No. of Employees Affected"]
+    for field in possible_headers:
+        try:
+            return row[field]
+        except KeyError:
+            pass
+    raise Exception(
+        f"Unable to find the jobs data using these keys: {possible_headers}"
+    )
+
+
 class Transformer(BaseTransformer):
     """Transform Idaho raw data for consolidation."""
 
@@ -13,7 +26,8 @@ class Transformer(BaseTransformer):
         location="City",
         notice_date="Date of Letter",
         effective_date="Effective or Commencing Date",
-        jobs="No. of EmployeesAffected",
+        # jobs="No. of EmployeesAffected",
+        jobs=transform_jobs,
     )
     date_format = ("%m/%d/%Y", "%m/%d/%y")
     date_corrections = {
