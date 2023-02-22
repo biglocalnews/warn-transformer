@@ -79,4 +79,5 @@ class Transformer(BaseTransformer):
         "40-60": 40,
         "1 (of 72 in CO)": 1,
         "38 (resigned voluntarily)": None,
+        "49 (5 in CO)": 5,
     }
