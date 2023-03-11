@@ -21,4 +21,5 @@ class Transformer(BaseTransformer):
     jobs_corrections = {
         "Not noted": None,
         "MT # unknown": None,
+        "up to 300": 1,
     }
