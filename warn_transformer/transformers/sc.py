@@ -18,4 +18,5 @@ class Transformer(BaseTransformer):
         "4/8/20/20": datetime(2020, 4, 8),
         "12/31//2015": datetime(2015, 12, 31),
         "4/1/2023 - 12/31/2023": datetime(2023, 4, 1),
+        "5/4/2023 - 12/31/2023": datetime(2023, 5, 4),
     }
