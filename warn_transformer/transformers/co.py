@@ -65,6 +65,21 @@ class Transformer(BaseTransformer):
         "1/7/19 & 4/6/2020": datetime(2019, 1, 7),
         "WARN Date": None,
         "TOTAL": None,
+        "P1: 6/1/23 P2: 7/14/23": datetime(2023, 6, 1),
+        "4/3020": datetime(2020, 4, 30),
+        "Not available": None,
+        "Unknown": None,
+        "4/6": datetime(2020, 4, 6),
+        "11/20/20-11/30/20": datetime(2020, 11, 20),
+        "11/20/20-11/30/290": datetime(2020, 11, 20),
+        "6/5/20 to 6/22/20": datetime(2020, 6, 5),
+        "5/22/20, 5/26/20, 5/29/20": datetime(2020, 5, 22),
+        "6/10/20, 6/17/20, 6/22/20, 6/26/20": datetime(2020, 6, 10),
+        "7/18/20-8/11/20": datetime(2020, 7, 18),
+        "4/8/20 - 5/1/20": datetime(2020, 4, 8),
+        "6/17/2020 - 7/1/2020": datetime(2020, 6, 17),
+        "5/26/20-July/22/20": datetime(2020, 5, 26),
+        "4/13/19-5/30/19": datetime(2019, 4, 13),
     }
     jobs_corrections = {
         "-": None,
@@ -80,4 +95,5 @@ class Transformer(BaseTransformer):
         "1 (of 72 in CO)": 1,
         "38 (resigned voluntarily)": None,
         "49 (5 in CO)": 5,
+        "4 (of 178)": 4,
     }
