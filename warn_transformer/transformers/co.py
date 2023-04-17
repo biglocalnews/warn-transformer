@@ -80,6 +80,8 @@ class Transformer(BaseTransformer):
         "6/17/2020 - 7/1/2020": datetime(2020, 6, 17),
         "5/26/20-July/22/20": datetime(2020, 5, 26),
         "4/13/19-5/30/19": datetime(2019, 4, 13),
+        "Multi Phase (See WARN)": None,
+        "Multi phase (see WARN)": None,
     }
     jobs_corrections = {
         "-": None,
@@ -96,4 +98,5 @@ class Transformer(BaseTransformer):
         "38 (resigned voluntarily)": None,
         "49 (5 in CO)": 5,
         "4 (of 178)": 4,
+        "?": None,
     }
