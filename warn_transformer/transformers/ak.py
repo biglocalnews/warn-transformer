@@ -23,9 +23,11 @@ class Transformer(BaseTransformer):
         "Varied": None,
         "March to May 2016": datetime(2016, 3, 1),
         "various": None,
+        "June-August 2023": datetime(2023, 6, 1),
     }
     jobs_corrections = {
         "Up to 300": 300,
+        "TBA": None,
     }
 
     def transform_date(self, value: str) -> typing.Optional[str]:
