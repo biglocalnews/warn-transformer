@@ -42,6 +42,7 @@ class Transformer(BaseTransformer):
         "Not Dated Rec'd 4/13/2020": datetime(2020, 4, 13),
         "3/16 - 12/13/2020": datetime(2020, 3, 16),
         "february": None,
+        "potentially": None,
     }
     jobs_corrections = {
         "up to 703": 703,
@@ -59,6 +60,7 @@ class Transformer(BaseTransformer):
         "Not provided": None,
         "489 - total for CT and other locations": 489,
         "158 Stamford 81 Branford": 239,
+        "?": None,
     }
 
     def transform_date(self, value: str) -> typing.Optional[str]:
