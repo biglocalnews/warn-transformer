@@ -99,4 +99,6 @@ class Transformer(BaseTransformer):
         "49 (5 in CO)": 5,
         "4 (of 178)": 4,
         "?": None,
+        "?*": None,
+        "?* Unclear on the Number in Colorado": None,
     }
