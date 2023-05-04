@@ -16,4 +16,5 @@ class Transformer(BaseTransformer):
     jobs_corrections = {
         "Not Disclosed": None,
         "?": None,
+        "N/A": None,
     }
