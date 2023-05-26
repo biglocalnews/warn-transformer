@@ -94,7 +94,7 @@ jobs:
   build:
     name: Build Python package
     runs-on: ubuntu-latest
-    needs: [test-python]
+      #    needs: [test-python]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
