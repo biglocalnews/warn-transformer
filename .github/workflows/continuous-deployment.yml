@@ -87,7 +87,7 @@ jobs:
 
       - id: run
         name: Run tests
-        run: make test
+        run: make test-on-ci
         env:
             BLN_API_TOKEN: ${{ secrets.BLN_API_TOKEN }}
 
