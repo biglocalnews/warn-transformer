@@ -65,6 +65,8 @@ class Transformer(BaseTransformer):
         "April 22, 2019, May 4, 2019, and August 7, 2019": datetime(2019, 4, 22),
         "March 3, 2019, March 11, 2019,": datetime(2019, 3, 3),
         "June 15, 2018, July 6, 2018, August 3, 2018": datetime(2018, 6, 15),
+        "July 31, 2023; September 30, 2023; December 31, 2023": datetime(2023, 7, 31),
+        "June 12, 2023\xa0– August 11, 2023": datetime(2023, 6, 12),
     }
 
     def transform_date(self, value: str) -> typing.Optional[str]:
