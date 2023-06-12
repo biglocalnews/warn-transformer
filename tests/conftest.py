@@ -14,7 +14,7 @@ def pytest_configure(config):
 
 
 def pytest_collection_modifyitems(config, items):
-    """Tests only run if --runvcr is supplied."""
+    """Function to ensure tests only run if --runvcr is supplied."""
     if config.getoption("--runvcr"):
         # --runvcr given in cli: will run vcr tests
         return
