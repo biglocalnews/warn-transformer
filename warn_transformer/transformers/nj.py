@@ -27,6 +27,7 @@ class Transformer(BaseTransformer):
     }
     date_corrections = {
         "TBA": None,
+        "TBD": None,
         "Temp layoff": None,
         "-": None,
         "3030-08-23 00:00:00": datetime(2020, 8, 23),
