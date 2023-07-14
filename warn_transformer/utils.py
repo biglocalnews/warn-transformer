@@ -18,5 +18,5 @@ def get_all_transformers() -> typing.List[str]:
     this_dir = Path(__file__).parent
     transformers_dir = this_dir / "transformers"
     return sorted(
-        p.stem for p in transformers_dir.glob("*.py") if "__init__.py" not in str(p)
+        p.stem for p in transformers_dir.glob("*.py") if "__init__.py" not in str(p) and "la.py" not in str(p)
     )
