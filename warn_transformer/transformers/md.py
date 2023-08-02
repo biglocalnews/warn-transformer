@@ -45,6 +45,7 @@ class Transformer(BaseTransformer):
         "Starting 7/15/2011": datetime(2011, 7, 15),
         "N/A": None,
         "Start 12/1/10 End 9/2011": datetime(2010, 12, 1),
+        "09/29/23, 11/30/2023": datetime(2023, 9, 29),
     }
     jobs_corrections = {
         "103 (REVISED) 10/22/2020 108": 103,
@@ -63,4 +64,5 @@ class Transformer(BaseTransformer):
         "Total 35 (At this time number impacted at this location is unknown.)": 35,
         "Not known": None,
         "N/A": None,
+        "9 50": 59,     # Stucka emailed 8/2 for confirmation
     }
