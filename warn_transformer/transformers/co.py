@@ -102,4 +102,6 @@ class Transformer(BaseTransformer):
         "?*": None,
         "?* Unclear on the Number in Colorado": None,
         "Unspecified": None,
+        "22,000 (unspecified in CO)": None,
+        "22000": None,
     }
