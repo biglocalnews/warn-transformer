@@ -16,4 +16,3 @@ class Transformer(BaseTransformer):
     jobs_corrections = {
         22000: None,
     }
-s
