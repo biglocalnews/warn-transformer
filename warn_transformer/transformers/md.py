@@ -64,5 +64,5 @@ class Transformer(BaseTransformer):
         "Total 35 (At this time number impacted at this location is unknown.)": 35,
         "Not known": None,
         "N/A": None,
-        "9 50": 59,     # Stucka emailed 8/2 for confirmation
+        "9 50": 59,
     }
