@@ -13,3 +13,6 @@ class Transformer(BaseTransformer):
     )
     date_format = "%b %d, %Y"
     minimum_year = 1998
+    jobs_corrections = {
+        22000: None,
+    }
