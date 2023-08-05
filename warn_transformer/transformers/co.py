@@ -105,4 +105,6 @@ class Transformer(BaseTransformer):
         "22,000 (unspecified in CO)": None,
         "22000": None,
         22000: None,
+        "22000*": None,
+        "*": None,
     }
