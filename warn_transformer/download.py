@@ -37,6 +37,8 @@ def run(
     # If a source is provided, limit the list
     if source:
         file_list = [f for f in file_list if source.lower() in f.lower()]
+        if len(file_list) == 0:
+            logger.debug(f"No source '{source}' found")
 
     # Make the download directory, if it doesn't already exist.
     if not download_dir.exists():
