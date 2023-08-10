@@ -43,8 +43,10 @@ def run(
         download_dir.mkdir(parents=True)
 
     # Download all the files.
-    for f in file_list:
-        logger.debug(f"Download {f} to {download_dir}")
+    for i, f in enumerate(sorted(file_list)):
+        logger.debug(
+            f"Download {f} to {download_dir} as file {i+1:02d} of {len(file_list):02d}"
+        )
         c.download_file(BLN_PROJECT_ID, f, output_dir=download_dir)
 
 
