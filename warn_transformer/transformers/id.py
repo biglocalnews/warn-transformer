@@ -42,6 +42,7 @@ class Transformer(BaseTransformer):
         "2 5s1ta": 251,
         "120 (2 in ID)": 2,
         "106 (17 in ID)": 17,
+        22000: None,
     }
 
     def transform_date(self, value: str) -> typing.Optional[str]:
