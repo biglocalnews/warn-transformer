@@ -25,7 +25,7 @@ jobs:
 
       - id: install-python-dependencies
         name: Install Python dependencies
-        run: pipenv install --dev --skip-lock
+        run: pipenv install --dev
 
       - id: lint
         name: Lint
@@ -51,7 +51,7 @@ jobs:
 
       - id: install-python-dependencies
         name: Install Python dependencies
-        run: pipenv install --dev --skip-lock
+        run: pipenv install --dev
 
       - id: mypy
         name: Mypy
@@ -113,7 +113,7 @@ jobs:
       - id: install-python-dependencies
         name: Install Python dependencies
         run: |
-          pipenv install --dev --skip-lock
+          pipenv install --dev
           pipenv run pip install certifi importlib_metadata
 
       - id: build
