@@ -107,4 +107,5 @@ class Transformer(BaseTransformer):
         22000: None,
         "22000*": None,
         "*": None,
+        "* Unknown total in Colorado": None,
     }
