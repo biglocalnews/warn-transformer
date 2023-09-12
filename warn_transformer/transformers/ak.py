@@ -25,6 +25,7 @@ class Transformer(BaseTransformer):
         "various": None,
         "June-August 2023": datetime(2023, 6, 1),
         "9/6/2023": datetime(2023, 9, 6),
+        "9/5/2023": datetime(2023, 9, 5),
     }
     jobs_corrections = {
         "Up to 300": 300,
