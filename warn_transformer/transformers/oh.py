@@ -12,9 +12,9 @@ class Transformer(BaseTransformer):
     fields = dict(
         company="Company",
         location="City/County",
-        notice_date="DateReceived",
-        effective_date="LayoffDate(s)",
-        jobs="Potential NumberAffected",
+        notice_date="Date Received",
+        effective_date="Layoff Date(s)",
+        jobs="Potential Number Affected",
     )
     date_format = "%m/%d/%Y"
     date_corrections = {
@@ -26,6 +26,7 @@ class Transformer(BaseTransformer):
         "10/2015": datetime(2015, 10, 1),
         "Various": None,
         "Mar‐16": None,
+        "12/23/2015â": datetime(2015, 12, 23),
     }
     jobs_corrections = {
         "13 FT": 13,
@@ -56,7 +57,7 @@ class Transformer(BaseTransformer):
             value = value[:9]
         value = re.split(r"\s{2,}", value)[0].strip()
         value = value.split("Originated")[0].strip()
-        print(value)
+        # print(value)
 
         try:
             return super().transform_date(value)
