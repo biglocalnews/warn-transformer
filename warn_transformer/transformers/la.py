@@ -54,6 +54,7 @@ class Transformer(BaseTransformer):
         "1 (Louisiana)": 1,
         "100 98 9087": 87,
         "100 98 90 87": 87,
+        "TBD": None,
     }
 
     def transform_date(self, value: str) -> typing.Optional[str]:
