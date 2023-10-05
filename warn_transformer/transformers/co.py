@@ -108,4 +108,7 @@ class Transformer(BaseTransformer):
         "22000*": None,
         "*": None,
         "* Unknown total in Colorado": None,
+        "2 employees extended until 10/15/23": None,  # Layoff date change
+        "Not stated (researching)": None,
+        "Not Stated": None,
     }
