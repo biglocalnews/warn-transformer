@@ -18,6 +18,8 @@ class Transformer(BaseTransformer):
     date_format = ("%Y-%m-%d %H:%M:%S", "%m/%d/%Y", "%Y-%m-%d")
     date_corrections = {
         "929/2022": datetime(2022, 9, 29),
+        "3/6/3023": datetime(2023, 3, 6),
+        "2": datetime(2021, 2, 12),
     }
 
     def prep_row_list(
