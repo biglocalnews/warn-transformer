@@ -17,9 +17,11 @@ class Transformer(BaseTransformer):
     date_format = ("%Y-%m-%d %H:%M:%S", "%Y-%m-%d")
     date_corrections = {
         "3/1620 to 4/30/20": datetime(2020, 3, 16),
+        "Sept-April": None,
     }
     jobs_corrections = {
         "Not noted": None,
         "MT # unknown": None,
         "up to 300": 1,
+        "Over 100": 100,
     }
