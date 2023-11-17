@@ -27,6 +27,7 @@ class Transformer(BaseTransformer):
         "Various": None,
         "Mar‐16": None,
         "12/23/2015â": datetime(2015, 12, 23),
+        "01/152024": datetime(2024, 1, 15),
     }
     jobs_corrections = {
         "13 FT": 13,
