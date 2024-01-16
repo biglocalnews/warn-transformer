@@ -111,4 +111,5 @@ class Transformer(BaseTransformer):
         "2 employees extended until 10/15/23": None,  # Layoff date change
         "Not stated (researching)": None,
         "Not Stated": None,
+        "125 (4 in CO)": 4,
     }
