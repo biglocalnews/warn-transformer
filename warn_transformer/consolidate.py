@@ -39,6 +39,12 @@ def run(
 
         # Transform the data
         source_list = module.Transformer(input_dir).transform()
+        if len(source_list) <= 3:
+            logger.warning(
+                f"{t.upper()} data quality problem: {len(source_list):,} items found."
+            )
+        else:
+            logger.debug(f"{t.upper()} data {len(source_list):,} items found.")
 
         # Add it to the master list
         obj_list += source_list
