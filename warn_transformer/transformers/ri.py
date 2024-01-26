@@ -29,6 +29,7 @@ class Transformer(BaseTransformer):
         "additional 16": 16,
         "1900-03-17 00:00:00": None,
         "309 *updated 10/26/23": 309,
+        "1900-01-01 00:00:00": 1,
     }
 
     def transform_company(self, value: str) -> str:
