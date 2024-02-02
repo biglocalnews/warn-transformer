@@ -20,6 +20,7 @@ class Transformer(BaseTransformer):
         "929/2022": datetime(2022, 9, 29),
         "3/6/3023": datetime(2023, 3, 6),
         "2": datetime(2021, 2, 12),
+        "2/2/2024`": datetime(2024, 2, 2),
     }
 
     def prep_row_list(
