@@ -24,6 +24,7 @@ class Transformer(BaseTransformer):
         "4/10/23 (Updated 7/12/23)": datetime(2023, 4, 10),
         "2/26/25": datetime(2025, 2, 26),
         "12/31/25": datetime(2025, 12, 31),
+        "Various": None,
     }
     jobs_corrections = {
         "700 *exact number pending relocation to other departments": 700,
@@ -59,6 +60,10 @@ class Transformer(BaseTransformer):
         "TBD": None,
         "144 56": 56,
         "125* *Only one employee affected in Louisiana.": 1,
+        "8*": 8,
+        "51*": 51,
+        "83*": 83,
+        "38*": 38,
     }
 
     def transform_date(self, value: str) -> typing.Optional[str]:
