@@ -9,7 +9,7 @@ class Transformer(BaseTransformer):
 
     postal_code = "RI"
     fields = dict(
-        company="Company Name (* Denotes Covid 19 Related WARN)",
+        company="Company Name",
         location="Location of Layoffs",
         date="WARN Date",
         effective_date="Effective Date",
