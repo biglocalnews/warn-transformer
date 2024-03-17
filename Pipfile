@@ -8,6 +8,7 @@ bln = "*"
 marshmallow = "*"
 click = "8.1.3"       # https://github.com/pallets/click/issues/2558
 jellyfish = "*"
+great_expectations = "0.18.19" # 1.0, now in prelease, might not be compatible with 0.18.19
 
 [dev-packages]
 flake8 = "*"
