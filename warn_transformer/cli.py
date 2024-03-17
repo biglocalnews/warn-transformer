@@ -133,7 +133,7 @@ def integrate(input_dir: Path, init: bool = False, log_level: str = "INFO"):
     help="Set the logging level",
 )
 def validate(input_dir: Path, stage: str = "raw", log_level: str = "INFO"):
-    """Validate the specified data"""
+    """Validate the specified data."""
     logging.getLogger("urllib3").setLevel(logging.ERROR)
     logging.basicConfig(level=log_level, format="%(asctime)s - %(name)s - %(message)s")
     logger = logging.getLogger(__name__)
