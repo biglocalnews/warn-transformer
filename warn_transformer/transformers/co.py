@@ -112,4 +112,5 @@ class Transformer(BaseTransformer):
         "Not stated (researching)": None,
         "Not Stated": None,
         "125 (4 in CO)": 4,
+        "154 (1 in CO)": 1,
     }
