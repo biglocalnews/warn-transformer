@@ -233,7 +233,9 @@ class BaseTransformer:
             try:
                 dt = datetime.strptime(value, self.date_format)
             except ValueError:
-                logger.debug(f"Could not parse '{value}'. Looking up correction")
+                logger.debug(
+                    f"{self.postal_code} - Could not parse '{value}'. Looking up correction"
+                )
                 dt = self.date_corrections[value]
 
         # If it's a list, try them one by one
@@ -245,7 +247,9 @@ class BaseTransformer:
                     continue
             # If there's nothing at the end of the loop, try the correction
             if not dt:
-                logger.debug(f"Could not parse '{value}'. Looking up correction")
+                logger.debug(
+                    f"{self.postal_code} - Could not parse '{value}'. Looking up correction"
+                )
                 dt = self.date_corrections[value]
 
         # If the date parses as None, return that
@@ -259,14 +263,14 @@ class BaseTransformer:
         today = datetime.today()
         if dt > today + timedelta(days=self.max_future_days):
             logger.debug(
-                f"Date '{dt}' is more than {self.max_future_days} days in the future. Looking up correction"
+                f"{self.postal_code} - Date '{dt}' is more than {self.max_future_days} days in the future. Looking up correction"
             )
             dt = self.date_corrections[value]
 
         # If the date is below the minimum year, fix it
         if dt.year < self.minimum_year:
             logger.debug(
-                f"Year {dt.year} below minimum of {self.minimum_year}. Looking up correction"
+                f"{self.postal_code} - Year {dt.year} below minimum of {self.minimum_year}. Looking up correction"
             )
             dt = self.date_corrections[value]
 
@@ -306,7 +310,9 @@ class BaseTransformer:
             clean_value = int(float(value))
         except ValueError:
             # If it won't convert, look for a manual correction
-            logger.debug(f"Could not parse '{value}'. Looking up correction")
+            logger.debug(
+                f"{self.postal_code} - Could not parse '{value}'. Looking up correction"
+            )
             clean_value = self.jobs_corrections[value]
 
         # If it's None, return it now
@@ -315,11 +321,13 @@ class BaseTransformer:
 
         # Now validate it
         if clean_value < 0:
-            logger.debug("Jobs must be greater than 0. Looking up correction")
+            logger.debug(
+                "{self.postal_code} - Jobs must be greater than 0. Looking up correction"
+            )
             clean_value = self.jobs_corrections[clean_value]
         if clean_value > self.maximum_jobs:
             logger.debug(
-                f"Jobs greater than {self.maximum_jobs} are probably wrong. Looking up correction"
+                f"{self.postal_code} - Jobs greater than {self.maximum_jobs} are probably wrong. Looking up correction"
             )
             clean_value = self.jobs_corrections[clean_value]
 
