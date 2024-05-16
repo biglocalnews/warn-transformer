@@ -114,4 +114,5 @@ class Transformer(BaseTransformer):
         "125 (4 in CO)": 4,
         "154 (1 in CO)": 1,
         "75 (1 in CO)": 1,
+        "Not specified": 0,
     }
