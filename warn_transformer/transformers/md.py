@@ -48,6 +48,7 @@ class Transformer(BaseTransformer):
         "09/29/23, 11/30/2023": datetime(2023, 9, 29),
         "10/230/2023": datetime(2023, 10, 23),
         "6/30/204": datetime(2024, 6, 30),
+        "7/24/1969": datetime(2024, 7, 24),
     }
     jobs_corrections = {
         "103 (REVISED) 10/22/2020 108": 103,
