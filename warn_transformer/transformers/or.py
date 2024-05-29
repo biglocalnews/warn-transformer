@@ -1,4 +1,5 @@
 import typing
+from datetime import datetime
 
 from ..schema import BaseTransformer
 
@@ -21,7 +22,10 @@ class Transformer(BaseTransformer):
         # https://www.nytimes.com/1998/09/03/us/northwest-lays-off-27000-increasing-pressure-on-strike.html
         27500: 27500,
     }
-    date_corrections = {"1899-12-29 00:00:00": None}
+    date_corrections = {
+        "1899-12-29 00:00:00": None,
+        "2026-07-26 00:00:00": datetime(2026, 7, 26),  # legit
+    }
 
     def check_if_temporary(self, row: typing.Dict) -> typing.Optional[bool]:
         """Determine whether a row is a temporary or not.
