@@ -81,6 +81,14 @@ class Transformer(BaseTransformer):
         "8/1/24, 11/1/24, 1/1/25, 3/1/25,4/1/25": datetime(2024, 8, 1),
         "6/21/24, 9/30/24, 12/31,24": datetime(2024, 6, 21),
         "5/20/2024, 5/21/24, 5/22/24": datetime(2024, 5, 20),
+        "8/14/24,11/1/24,1/31/24": datetime(
+            2024, 8, 14
+        ),  # Third date seems likely a typo out of order
+        "6/17/24,6/21/24,6/26/24, 7/2/24,7/9/24, 7/10/24, 7/15/24, 7/18/24, 7/19/24, 8/1/24, 8/7/24, 8/21/24": datetime(
+            2024, 6, 17
+        ),
+        "8/21/24 - 9/3/24": datetime(2024, 8, 21),
+        "8/22/24,10/22/24": datetime(2024, 8, 22),
     }
 
     def transform_jobs(self, value: str) -> typing.Optional[int]:
