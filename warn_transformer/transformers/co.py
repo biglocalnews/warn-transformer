@@ -115,4 +115,5 @@ class Transformer(BaseTransformer):
         "154 (1 in CO)": 1,
         "75 (1 in CO)": 1,
         "Not specified": 0,
+        "*Note: Only 49 not 71 were affected as previously reported which is under the count for WARN.": 49,
     }
