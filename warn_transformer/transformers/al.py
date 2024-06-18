@@ -13,7 +13,7 @@ class Transformer(BaseTransformer):
         location="City",
         notice_date="Initial Report Date",
         effective_date="Planned Starting Date",
-        jobs="Planned # Affected Employees",
+        jobs="Planned # of Affected Employees",
     )
     date_format = "%m/%d/%Y"
     date_corrections = {"01/01/0001": datetime(2020, 1, 1)}
