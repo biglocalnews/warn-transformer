@@ -25,6 +25,7 @@ class Transformer(BaseTransformer):
         "2021-04-30 00:00:00": datetime(2021, 4, 30),
         "7/14/21": datetime(2021, 7, 14),
         "7/12/21": datetime(2021, 7, 12),
+        "2027-07-27 00:00:00": datetime(2024, 7, 27),
     }
 
     def check_if_amendment(self, row: typing.Dict) -> bool:
