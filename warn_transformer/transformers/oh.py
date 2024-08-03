@@ -33,6 +33,8 @@ class Transformer(BaseTransformer):
         "10/31/2024;": datetime(2024, 10, 31),
         "07/1309/12/2024": datetime(2024, 7, 13),
         "07/13-09/12/2024": datetime(2024, 7, 13),
+        "10/1/2024;": datetime(10, 1, 2024),
+        "10/1/2024; 10/31/2024; 12/31/2024": datetime(10, 1, 2024),
     }
     jobs_corrections = {
         "13 FT": 13,
