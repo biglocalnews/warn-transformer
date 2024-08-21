@@ -82,6 +82,7 @@ class Transformer(BaseTransformer):
         "4/13/19-5/30/19": datetime(2019, 4, 13),
         "Multi Phase (See WARN)": None,
         "Multi phase (see WARN)": None,
+        "?": None,
     }
     jobs_corrections = {
         "-": None,
