@@ -44,6 +44,7 @@ class Transformer(BaseTransformer):
         "february": None,
         "potentially": None,
         "not": None,
+        "9/92024": datetime(2024, 9, 9),
     }
     jobs_corrections = {
         "up to 703": 703,
