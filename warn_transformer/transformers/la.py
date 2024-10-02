@@ -72,6 +72,7 @@ class Transformer(BaseTransformer):
         "3* *located in Louisiana": 3,
         "*508 *Only sixty-three (63) employees affected in Louisiana.": 63,
         "139* *Only 3 employees are affected in Louisiana.": 3,
+        "58* *Only 1 employee is affected in Louisiana.": 1,
     }
 
     def transform_date(self, value: str) -> typing.Optional[str]:
