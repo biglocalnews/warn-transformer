@@ -24,6 +24,9 @@ class Transformer(BaseTransformer):
         "%B %d. %Y",
         "%B %d,%Y",
     )
+    jobs_corrections = {
+        "147 (69 Tennessee residents)": 69,
+    }
     date_corrections = {
         "2018/4/ 27": datetime(2018, 4, 27),
         "start of layoff -\xa0March 13, 2020": datetime(2020, 3, 13),
