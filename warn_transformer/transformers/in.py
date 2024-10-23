@@ -66,6 +66,8 @@ class Transformer(BaseTransformer):
         "2/29/2013": datetime(2013, 2, 28),
         "LO-1/14/2011 CL-End of 2012": datetime(2011, 1, 14),
         "3rd quarter of 2009": datetime(2009, 6, 1),
+        "3/27/2026": datetime(2026, 3, 27),
+        "3/27/2025": datetime(2025, 3, 27),
     }
 
     def prep_row_list(
