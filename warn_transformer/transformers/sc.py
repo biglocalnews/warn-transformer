@@ -36,4 +36,5 @@ class Transformer(BaseTransformer):
         "9/1/2024 - 3/1/2025": datetime(2024, 9, 1),
         "8/19/24 - 9/20/24": datetime(2024, 8, 19),
         "11/11/24 - 12/20/24": datetime(2024, 11, 11),
+        "01/31/25 - 02/28/25": datetime(2025, 1, 31),
     }
