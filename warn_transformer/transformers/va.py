@@ -8,8 +8,8 @@ class Transformer(BaseTransformer):
 
     postal_code = "VA"
     fields = dict(
-        company="Company Name",
-        location="Location City",
+        company="Company",
+        location="Location",
         notice_date="Notice Date",
         effective_date="Impact Date",
         jobs="Employees Affected",
@@ -27,4 +27,4 @@ class Transformer(BaseTransformer):
 
         Returns: A boolean or null
         """
-        return "yes" in row["Closure"].lower() or None
+        return "closure" in row["Reduction in Force"].lower() or None
