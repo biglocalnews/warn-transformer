@@ -71,6 +71,7 @@ class Transformer(BaseTransformer):
         "42: 30 Remote workers": 12,
         "164 Remote workers": 164,
         "13 total: 2 CT residents": 2,
+        "22 total: 10 CT residents": 10,
     }
 
     def transform_date(self, value: str) -> typing.Optional[str]:
