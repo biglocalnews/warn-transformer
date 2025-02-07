@@ -26,6 +26,7 @@ class Transformer(BaseTransformer):
     )
     jobs_corrections = {
         "147 (69 Tennessee residents)": 69,
+        "135 (7 in Tennessee)": 7,
     }
     date_corrections = {
         "2018/4/ 27": datetime(2018, 4, 27),
