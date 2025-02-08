@@ -54,6 +54,14 @@ class Transformer(BaseTransformer):
         "*Errata to Amended WARN": None,
         "September 10. 2021 He-Man Landscaping, LLC": datetime.datetime(2021, 9, 21),
         "September 10. 2021": datetime.datetime(2021, 9, 21),
+        "February 7, 2024 –   Ginshari, Inc. – KuruKuru Sushi": datetime.datetime(
+            2025, 2, 7
+        ),
+        "February 7, 2025 –   Ginshari, Inc. – KuruKuru Sushi": datetime.datetime(
+            2025, 2, 7
+        ),
+        "February 7, 2024 –   Territorial Savings Bank": datetime.datetime(2025, 2, 7),
+        "February 7, 2025 –   Territorial Savings Bank": datetime.datetime(2025, 2, 7),
     }
 
     jobs_corrections = {
