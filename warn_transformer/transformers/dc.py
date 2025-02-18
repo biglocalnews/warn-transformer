@@ -30,6 +30,7 @@ class Transformer(BaseTransformer):
         "June 29, 2012 & August 3, 2012": datetime(2012, 6, 29),
         "November 15 - December 16, 2022": datetime(2022, 11, 15),
         "December 3 - December 17, 2022": datetime(2022, 12, 3),
+        "Februart 14, 2025": datetime(2025, 2, 14),
     }
     jobs_corrections = {
         "All": None,
