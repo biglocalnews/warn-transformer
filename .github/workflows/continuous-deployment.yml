@@ -46,7 +46,7 @@ jobs:
       - id: install-python-dependencies
         name: Install Python dependencies
         run: |
-          pipenv install --python `which python` pytest pytest-vcr bln marshmallow click jellyfish requests certifi importlib_metadata
+          pipenv install --python `which python` pytest pytest-vcr bln click jellyfish requests certifi importlib_metadata
           pipenv run pip install certifi importlib_metadata
         shell: bash
 
