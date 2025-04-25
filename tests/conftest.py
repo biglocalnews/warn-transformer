@@ -1,5 +1,7 @@
 import pytest
 
+# from urllib3.connection import HTTPSConnection
+
 
 def pytest_addoption(parser):
     """Add an argument to run the download and integrate tests."""

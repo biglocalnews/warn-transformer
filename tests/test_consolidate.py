@@ -4,6 +4,8 @@ import pytest
 
 from warn_transformer import consolidate
 
+# from urllib3.connection import HTTPSConnection
+
 
 @pytest.mark.vcr()
 def test_consolidate():

@@ -33,7 +33,7 @@ isort = "==5.11.5"
 blacken-docs = "==1.15.0"
 pytest = "*"
 urllib3 = "<2.0.0"
-vcrpy = "==4.2.0"
+vcrpy = "==4.1.1"
 
 [requires]
 python_version = "3.9"
