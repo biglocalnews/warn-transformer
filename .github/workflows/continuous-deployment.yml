@@ -25,7 +25,7 @@ jobs:
   test-python:
     strategy:
       matrix:
-        python: ["3.8", "3.9", "3.10",]
+        python: ["3.9", "3.10",]
     name: Test Python code
     runs-on: ubuntu-latest
     steps:
@@ -46,7 +46,8 @@ jobs:
       - id: install-python-dependencies
         name: Install Python dependencies
         run: |
-          pipenv install --python `which python` pytest pytest-vcr bln click jellyfish requests certifi importlib_metadata
+          # pipenv install --python `which python` pytest pytest-vcr bln click jellyfish requests certifi importlib_metadata
+          pipenv install --python `which python`
           pipenv run pip install certifi importlib_metadata
         shell: bash
 
