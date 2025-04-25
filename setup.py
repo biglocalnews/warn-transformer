@@ -59,7 +59,7 @@ setup(
     include_package_data=True,
     install_requires=[
         "bln>=2.3.11",
-        "marshmallow",
+        "marshmallow==3.26.1",
         "click",
         "jellyfish",
     ],
