@@ -9,6 +9,7 @@ jellyfish = "*"
 marshmallow = "==3.26.1"     # https://github.com/biglocalnews/warn-github-flow/issues/31
 bln = "==2.3.11"
 retry2 = "*"
+vcrpy = "==7.0.0"
 
 [dev-packages]
 flake8 = "==6.1.0"
