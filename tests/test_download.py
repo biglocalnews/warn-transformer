@@ -5,6 +5,8 @@ import pytest
 
 from warn_transformer import download
 
+# from urllib3.connection import HTTPSConnection
+
 
 @pytest.mark.runvcr
 @pytest.mark.vcr()
