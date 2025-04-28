@@ -14,4 +14,5 @@ class Transformer(BaseTransformer):
     date_format = "%m/%d/%Y"
     jobs_corrections = {
         "1-5": 1,
+        "324 (11 reside in South Dakota)": 11,
     }
