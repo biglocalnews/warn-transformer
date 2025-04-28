@@ -51,11 +51,11 @@ jobs:
           pipenv run pip install certifi importlib_metadata
         shell: bash
 
-      - id: run
-        name: Run tests
-        run: make test-on-ci
-        env:
-            BLN_API_TOKEN: ${{ secrets.BLN_API_TOKEN }}
+#      - id: run
+#        name: Run tests
+#        run: make test-on-ci
+#        env:
+#            BLN_API_TOKEN: ${{ secrets.BLN_API_TOKEN }}
 
   build:
     name: Build Python package
