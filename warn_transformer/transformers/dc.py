@@ -41,6 +41,7 @@ class Transformer(BaseTransformer):
         "Various Dates through May 16, 2026": datetime(2025, 5, 16),
         "Various Dates through May 16, 2025": datetime(2025, 5, 16),
         "May 2, 2025 through May 16, 2026": datetime(2025, 5, 2),
+        "May 9 through September 30, 2025": datetime(2025, 5, 9),
     }
     jobs_corrections = {
         "All": None,
