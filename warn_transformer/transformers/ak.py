@@ -27,6 +27,9 @@ class Transformer(BaseTransformer):
         "9/6/2023": datetime(2023, 9, 6),
         "9/5/2023": datetime(2023, 9, 5),
         "12/10/2024": datetime(2024, 12, 10),
+        "Begins 7/7/25 and will be staggered until official closure on 11/30/25": datetime(
+            2025, 7, 7
+        ),
     }
     jobs_corrections = {
         "Up to 300": 300,
