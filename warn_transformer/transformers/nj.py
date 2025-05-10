@@ -147,6 +147,9 @@ class Transformer(BaseTransformer):
             2025, 5, 9
         ),
         "Rolling basis beginning on 6/4/25": datetime(2025, 6, 4),
+        "5/1/25, 5/3/25, 5/8/25, 6/1/25/ 6/16/25, 8/1/25, 8/22/25, 9/1/25, 10/1/25, 12/1/25, 1/1/26": datetime(
+            2025, 5, 1
+        ),
     }
 
     def transform_jobs(self, value: str) -> typing.Optional[int]:
