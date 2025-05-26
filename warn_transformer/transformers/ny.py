@@ -9,11 +9,13 @@ class Transformer(BaseTransformer):
 
     postal_code = "NY"
     fields = dict(
-        company=lambda row: row["company_name"] or row["Company"] or None,
-        location="City",
-        notice_date=lambda row: row["notice_dated"] or row["Notice Date"] or None,
-        effective_date="Layoff Date",
-        jobs="Number Affected",
+        company=lambda row: row["Business Legal Name"] or row["Company"] or None,
+        location="Impacted Site County",
+        notice_date=lambda row: row["Date of WARN Notice "]
+        or row["Date of WARN Notice"]
+        or None,
+        effective_date="Date Layoff/Closure Starts",
+        jobs="Number of Affected Workers ",
     )
     date_format = ("%Y-%m-%d %H:%M:%S", "%m/%d/%Y", "%Y-%m-%d")
     date_corrections = {
@@ -27,40 +29,6 @@ class Transformer(BaseTransformer):
         "9/24/24": datetime(2024, 9, 24),
         "2/12/24": datetime(2024, 12, 12),  # Note date shift
     }
-
-    def prep_row_list(
-        self, row_list: typing.List[typing.Dict]
-    ) -> typing.List[typing.Dict]:
-        """Make necessary transformations to the raw row list prior to transformation.
-
-        Args:
-            row_list (list): A list of raw rows of data from the source.
-
-        Returns: The row list minus empty records
-        """
-        # Do the standard stuff
-        row_list = super().prep_row_list(row_list)
-
-        # Split records from scrape from those in the archival set
-        scraped_list = [r for r in row_list if r["notice_url"]]
-        archival_list = [r for r in row_list if not r["notice_url"]]
-        assert len(scraped_list) + len(archival_list) == len(row_list)
-
-        # Remove records from the scrape that are covered by the more detailed archival file
-        cutoff = datetime(2021, 6, 30)
-        keep_list = []
-        for r in scraped_list:
-            dt_str = self.transform_date(r["notice_dated"])
-            assert isinstance(dt_str, str)
-            dt = datetime.strptime(dt_str, "%Y-%m-%d")
-            if dt > cutoff:
-                keep_list.append(r)
-
-        # Add them back together
-        prepped_list = keep_list + archival_list
-
-        # Return it
-        return prepped_list
 
     def transform_date(self, value: str) -> typing.Optional[str]:
         """Transform a raw date string into a date object.
@@ -83,10 +51,13 @@ class Transformer(BaseTransformer):
 
         Returns: A boolean or null
         """
-        value = row["Dislocation Type"].lower()
-        if "possible" in value or "potential" in value:
+        value = row["Permanent or Temporary Layoff?"].lower()
+        if "permanent" in value:
+            return False
+        elif "temporary" in value:
+            return True
+        else:
             return None
-        return "temp" in value or None
 
     def check_if_closure(self, row: typing.Dict) -> typing.Optional[bool]:
         """Determine whether a row is a closure or not.
@@ -96,7 +67,10 @@ class Transformer(BaseTransformer):
 
         Returns: A boolean or null
         """
-        value = row["Dislocation Type"].lower()
-        if "possible" in value or "potential" in value or "temp" in value:
+        value = row["Layoff or Closure?"].lower()
+        if "closure" in value:
+            return True
+        elif "layoff" in value:
+            return False
+        else:
             return None
-        return "clos" in value or None
