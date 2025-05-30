@@ -22,6 +22,10 @@ class Transformer(BaseTransformer):
         # This Tesla layoff number large but correct
         # https://www.cnbc.com/2020/05/13/coronavirus-latest-updates.html
         11083: 11083,
+        # This large number is for a Tend layofff. Stucka found a tweet
+        # suggesting about half the number are losing jobs in California.
+        # Number thus unclear. Records request sent 5/30/2025.
+        16132: None,
     }
     date_corrections = {
         "09/04/2008": datetime(2018, 9, 4),
