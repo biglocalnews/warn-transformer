@@ -35,6 +35,7 @@ class Transformer(BaseTransformer):
         "3/7/2010-3/20/2010": datetime(2010, 3, 7),
         "rting": datetime(2015, 2, 16),
         "3/7/2010-3/20/2": datetime(2010, 3, 7),
+        "2/19/219 (rec'd 2/26/19)": datetime(2019, 2, 19),
     }
     jobs_corrections = {
         "8 in ID": 8,
@@ -47,6 +48,7 @@ class Transformer(BaseTransformer):
         "22000 (102 in ID)": 102,
         "TBD": None,
         "135 (1 in ID)": 1,
+        "324 (32 in ID)": 32,
     }
 
     def transform_date(self, value: str) -> typing.Optional[str]:
@@ -61,7 +63,8 @@ class Transformer(BaseTransformer):
         if not value:
             value = ""
         value = value.replace("starting", "")
-        value = value.strip().split()[0].replace(",", "").strip()
+        if value.strip():
+            value = value.strip().split()[0].replace(",", "").strip()
 
         # The same old stuff
         return super().transform_date(value)
