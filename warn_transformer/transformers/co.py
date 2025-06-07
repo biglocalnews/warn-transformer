@@ -85,6 +85,7 @@ class Transformer(BaseTransformer):
         "?": None,
         "12012024": datetime(2024, 12, 1),
         "012/31/24": datetime(2024, 12, 31),
+        "8/25": datetime(2025, 8, 1),
     }
     jobs_corrections = {
         "-": None,
