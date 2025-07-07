@@ -18,6 +18,7 @@ class Transformer(BaseTransformer):
     date_corrections = {
         "12/19/2022\xa0\xa0\n\xa0 11/2/2022": datetime(2022, 11, 2),
         "12/19/2022\xa0\xa0\n\xa0 11/02/2022": datetime(2022, 11, 2),
+        "04/25/25": datetime(2025, 4, 25),
     }
     jobs_corrections = {
         "100+": 100,
