@@ -158,6 +158,7 @@ class Transformer(BaseTransformer):
         ),
         "10/10/25, 12/19/25": datetime(2025, 10, 10),
         "9/25/25, 10/24/25, 12/19/25, 1/15/26": datetime(2025, 9, 25),
+        "8/1/25, 8/29/25, 9/30/25": datetime(2025, 8, 1),
     }
 
     def transform_jobs(self, value: str) -> typing.Optional[int]:
