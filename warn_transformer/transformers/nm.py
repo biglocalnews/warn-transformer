@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from ..schema import BaseTransformer
 
 
@@ -15,6 +17,7 @@ class Transformer(BaseTransformer):
     date_format = ("%d-%b-%Y", "%d-%b-%y", "%m/%d/%Y", "%m/%d/%y")
     date_corrections = {
         "1/0/00": None,
+        "July-September 2025": datetime(2025, 7, 15),
     }
     jobs_corrections = {
         "Not Disclosed": None,
