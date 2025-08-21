@@ -69,4 +69,5 @@ class Transformer(BaseTransformer):
         "Not known": None,
         "N/A": None,
         "9 50": 59,
+        "3 (remote workers from MD)": 3,
     }
