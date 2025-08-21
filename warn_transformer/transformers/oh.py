@@ -59,6 +59,7 @@ class Transformer(BaseTransformer):
         "323‐500": 323,
         "98 Part-time Workers": 98,
         "56 part time": 56,
+        "39 part time": 39,
     }
 
     def transform_date(self, value: str) -> typing.Optional[str]:
