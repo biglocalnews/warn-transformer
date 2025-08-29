@@ -28,6 +28,9 @@ class Transformer(BaseTransformer):
         "8/2/24": datetime(2024, 8, 2),
         "9/24/24": datetime(2024, 9, 24),
         "2/12/24": datetime(2024, 12, 12),  # Note date shift
+        "2026-12-31": datetime(
+            2026, 12, 31
+        ),  # Everything on the state web site begins 2026 and ends 2026.
     }
 
     def transform_date(self, value: str) -> typing.Optional[str]:
