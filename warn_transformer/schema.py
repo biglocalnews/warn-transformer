@@ -176,7 +176,7 @@ class BaseTransformer:
         elif isinstance(method, typing.Callable):
             return method(row)
         else:
-            raise ValueError("The field method your provided is not valid.")
+            raise ValueError("The field method you provided is not valid.")
 
     def get_hash_id(self, data: typing.Dict) -> str:
         """Convert the row into a unique hexdigest to use as a unique identifier.
