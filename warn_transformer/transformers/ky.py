@@ -10,11 +10,11 @@ class Transformer(BaseTransformer):
 
     postal_code = "KY"
     fields = dict(
-        company="Company Name",
-        location="County",
-        notice_date="Date Received",
-        effective_date="Projected Date",
-        jobs="Employees",
+        company="company",
+        location="county",
+        notice_date="date_effective",
+        effective_date="date_received",
+        jobs="employees",
     )
     date_format = "%Y-%m-%d %H:%M:%S"
     minimum_year = 1997
@@ -174,6 +174,7 @@ class Transformer(BaseTransformer):
         "03/19/2012 - 04/01/2012": datetime.datetime(2012, 3, 19),
         "2041-06-04 00:00:00": datetime.datetime(2014, 6, 4),
         "04/05/2015": datetime.datetime(2015, 4, 5),
+        "2026-12-31 00:00:00": datetime.datetime(2026, 12, 31),
     }
     jobs_corrections = {
         "?": None,
@@ -279,7 +280,7 @@ class Transformer(BaseTransformer):
 
         Returns: A boolean or null
         """
-        if "closure" in row["Closure or Layoff?"].lower():
+        if "closure" in row["closure_or_layoff"].lower():
             return True
         else:
             return None
