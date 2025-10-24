@@ -16,7 +16,7 @@ class Transformer(BaseTransformer):
         effective_date="date_received",
         jobs="employees",
     )
-    date_format = "%Y-%m-%d %H:%M:%S"
+    date_format = ["%Y-%m-%d %H:%M:%S", "%m/%d/%Y"]
     minimum_year = 1997
     date_corrections = {
         "43490.0": None,
@@ -175,6 +175,9 @@ class Transformer(BaseTransformer):
         "2041-06-04 00:00:00": datetime.datetime(2014, 6, 4),
         "04/05/2015": datetime.datetime(2015, 4, 5),
         "2026-12-31 00:00:00": datetime.datetime(2026, 12, 31),
+        "1/8/2026": datetime.datetime(2026, 1, 8),
+        "10/20/2025": datetime.datetime(2025, 10, 20),
+        "12/31/2026": datetime.datetime(2026, 12, 31),
     }
     jobs_corrections = {
         "?": None,
