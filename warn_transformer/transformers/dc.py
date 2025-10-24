@@ -45,8 +45,17 @@ class Transformer(BaseTransformer):
         "Various dates through June 30, 2025": datetime(2025, 6, 30),
         "July 31 through August 28, 2025": datetime(2025, 7, 31),
         "September 30 through December 30, 2025": datetime(2025, 9, 30),
+        "Various Dates through June 29, 2025": datetime(2025, 6, 29),
+        "Various Dates through September 28, 2025": datetime(2025, 9, 28),
+        "Various Dates through November2, 2025": datetime(2025, 11, 2),
+        "Various Dates through November 2, 2025": datetime(2025, 11, 2),
+        "September 30 through September 28, 2025": datetime(2025, 9, 30),  # What?
     }
     jobs_corrections = {
         "All": None,
         "TBD": None,
+        "45 (amended)": 45,
+        "63 (amended)": 63,
+        "54 (amended)": 54,
+        "46 (amended)": 46,
     }
