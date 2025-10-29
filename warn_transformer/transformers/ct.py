@@ -120,6 +120,7 @@ class Transformer(BaseTransformer):
         "0025-05-16": datetime(2025, 5, 16),
         "0024-05-31": datetime(2024, 5, 31),
         "0005-02-04": datetime(2025, 2, 4),
+        "12/28/22025": datetime(2025, 12, 28),
     }
     jobs_corrections = {
         "up to 703": 703,
