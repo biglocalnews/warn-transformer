@@ -19,6 +19,7 @@ class Transformer(BaseTransformer):
         "3/1620 to 4/30/20": datetime(2020, 3, 16),
         "Sept-April": None,
         "5/22/2025, 5/29/2025, 6/5/2025": datetime(2025, 5, 22),
+        "12/31/202": datetime(2025, 12, 31),
     }
     jobs_corrections = {
         "Not noted": None,
