@@ -71,4 +71,5 @@ class Transformer(BaseTransformer):
         "N/A": None,
         "9 50": 59,
         "3 (remote workers from MD)": 3,
+        "50 - 60": 50,
     }
