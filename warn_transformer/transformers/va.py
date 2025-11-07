@@ -27,4 +27,4 @@ class Transformer(BaseTransformer):
 
         Returns: A boolean or null
         """
-        return "closure" in row["Reduction in Force"].lower() or None
+        return "closure" in row["Notice Type"].lower() or None
