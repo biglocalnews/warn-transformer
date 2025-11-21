@@ -16,8 +16,7 @@ class Transformer(BaseTransformer):
         effective_date="layoff_dates",
         jobs="number_of_impacted_workers",
     )
-    date_format = ["%Y-%m-%d", "%Y-%m-%dT%H:%M:%S+00.00", "%m/%d/%Y"]
-    # date_format = ["%m/%d/%Y", "%m/%d/%y", "%m-%d-%y", "%Y"]
+    date_format = ["%Y-%m-%d", "%Y-%m-%dT%H:%M:%S+00.00", "%m/%d/%Y", "%m-%d-%Y"]
     date_corrections = {
         "12/31/16-1/13/17": datetime(2016, 12, 31),
         "12/4/15-tbd": datetime(2015, 12, 4),
