@@ -179,6 +179,7 @@ class Transformer(BaseTransformer):
         "Beginning 1/31/2026; Ending 2/28/2026": datetime(2026, 1, 31),
         "Beginning 1/12/2026; Ending 1/26/2026": datetime(2026, 1, 12),
         "Beginning 1/12/2026; Ending 5/30/2026": datetime(2026, 1, 12),
+        "beginning 2/13/2026; ending 12/31/2026": datetime(2026, 2, 13),
     }
 
     jobs_corrections = {
