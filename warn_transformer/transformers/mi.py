@@ -447,6 +447,9 @@ class Transformer(BaseTransformer):
         "https://www.michigan.gov/leo/-/media/Project/Websites/leo/Documents/WD-DATA_PUBLIC_WARN_NOTICES4/2020b/20200730_Spirit_WARN_Notice.pdf?rev=d4225ac67e144dfea9434518c976ac35": datetime(
             2020, 10, 1
         ),
+        "https://www.michigan.gov/leo/-/media/Project/Websites/leo/Documents/WD-DATA_PUBLIC_WARN_NOTICES4/2025/2025-12-15_WARN-Notice_C3-Industries-Inc.pdf?rev=2124411748d9487ab84dbb26a2d19947": datetime(
+            2026, 2, 14
+        ),
     }
     jobs_corrections = {
         "80*": 80,
