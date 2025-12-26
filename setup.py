@@ -45,10 +45,9 @@ def local_version(version):
 
 
 setup(
-    setup_requires=["setuptools_scm"],
-    use_scm_version={"version_scheme": version_scheme, "local_scheme": local_version},
-    entry_points="""
-        [console_scripts]
-        warn-transformer=warn_transformer.cli:cli
-    """,
+    test_suite="tests",
+    tests_require=[
+        "pytest",
+        "pytest-vcr",
+    ],
 )
