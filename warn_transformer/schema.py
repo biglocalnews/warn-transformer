@@ -6,7 +6,7 @@ import typing
 from datetime import datetime, timedelta
 from pathlib import Path
 
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, validate
 
 logger = logging.getLogger(__name__)
 
@@ -15,15 +15,15 @@ class WarnNoticeSchema(Schema):
     """An standardized instance of a WARN Act Notice."""
 
     hash_id = fields.Str(required=True)
-    postal_code = fields.Str(max_length=2, required=True)
+    postal_code = fields.Str(validate=validate.Length(max=2), required=True)
     company = fields.Str(required=True)
     location = fields.Str(required=True, allow_none=True)
     notice_date = fields.Date(required=True, allow_none=True)
     effective_date = fields.Date(required=True, allow_none=True)
     jobs = fields.Int(required=True, allow_none=True)
-    is_temporary = fields.Boolean(required=True, allow_none=True, default=None)
-    is_closure = fields.Boolean(required=True, allow_none=True, default=None)
-    is_amendment = fields.Boolean(required=True, default=False)
+    is_temporary = fields.Boolean(required=True, allow_none=True, dump_default=None)
+    is_closure = fields.Boolean(required=True, allow_none=True, dump_default=None)
+    is_amendment = fields.Boolean(required=True, dump_default=False)
 
 
 class BaseTransformer:
@@ -33,19 +33,19 @@ class BaseTransformer:
 
     # The base attributes that need to be defined on all subclasses.
     postal_code: str = "xx"
-    fields: typing.Dict = dict()
+    fields: dict = dict()
 
     # The default date format. It will need to be customized by source.
     date_format: typing.Any = "%m/%d/%Y"
     # Manual date corrections for malformed data
-    date_corrections: typing.Dict = {}
+    date_corrections: dict = {}
     # How many days in the future are allowed
     max_future_days: int = 365
     # The minimum year allowed
     minimum_year: int = 1988
 
     # Manual jobs corrections for malformed data
-    jobs_corrections: typing.Dict = {}
+    jobs_corrections: dict = {}
     # The max jobs we allow without throwing an error
     maximum_jobs: int = 10000
 
@@ -58,7 +58,7 @@ class BaseTransformer:
         self.input_dir = input_dir
         self.raw_data = self.get_raw_data()
 
-    def get_raw_data(self) -> typing.List[typing.Dict]:
+    def get_raw_data(self) -> list[dict]:
         """Get the raw data from our scraper for this source.
 
         Returns: A list of raw rows of data from the source.
@@ -71,7 +71,7 @@ class BaseTransformer:
             # Return it as a list
             return list(reader)
 
-    def transform(self) -> typing.List[typing.Dict]:
+    def transform(self) -> list[dict]:
         """Transform prepared rows into a form that's ready for consolidation.
 
         Returns: A validated list of dictionaries that conform to our schema
@@ -93,9 +93,7 @@ class BaseTransformer:
         # Return the result, which should be ready for consolidation
         return amended_list
 
-    def prep_row_list(
-        self, row_list: typing.List[typing.Dict]
-    ) -> typing.List[typing.Dict]:
+    def prep_row_list(self, row_list: list[dict]) -> list[dict]:
         """Make necessary transformations to the raw row list prior to transformation.
 
         Args:
@@ -114,7 +112,7 @@ class BaseTransformer:
             prepped_list.append(row)
         return prepped_list
 
-    def transform_row(self, row: typing.Dict) -> typing.Dict:
+    def transform_row(self, row: dict) -> dict:
         """Transform a row into a form that's ready for consolidation.
 
         Args:
@@ -178,7 +176,7 @@ class BaseTransformer:
         else:
             raise ValueError("The field method you provided is not valid.")
 
-    def get_hash_id(self, data: typing.Dict) -> str:
+    def get_hash_id(self, data: dict) -> str:
         """Convert the row into a unique hexdigest to use as a unique identifier.
 
         Args:
@@ -210,7 +208,7 @@ class BaseTransformer:
         """
         return value.strip()
 
-    def transform_date(self, value: str) -> typing.Optional[str]:
+    def transform_date(self, value: str) -> str | None:
         """Transform a raw date string into a date object.
 
         Args:
@@ -284,7 +282,7 @@ class BaseTransformer:
         # If we have a datetime, return the result as a string
         return str(dt.date())
 
-    def transform_jobs(self, value: str) -> typing.Optional[int]:
+    def transform_jobs(self, value: str) -> int | None:
         """Transform a raw jobs number into an integer.
 
         Args:
@@ -334,7 +332,7 @@ class BaseTransformer:
         # Pass it out
         return clean_value
 
-    def check_if_temporary(self, row: typing.Dict) -> typing.Optional[bool]:
+    def check_if_temporary(self, row: dict) -> bool | None:
         """Determine whether a row is a temporary or not.
 
         Args:
@@ -344,7 +342,7 @@ class BaseTransformer:
         """
         return None
 
-    def check_if_closure(self, row: typing.Dict) -> typing.Optional[bool]:
+    def check_if_closure(self, row: dict) -> bool | None:
         """Determine whether a row is a closure or not.
 
         Args:
@@ -354,7 +352,7 @@ class BaseTransformer:
         """
         return None
 
-    def check_if_amendment(self, row: typing.Dict) -> bool:
+    def check_if_amendment(self, row: dict) -> bool:
         """Determine whether a row is an amendment or not.
 
         Args:
@@ -364,9 +362,7 @@ class BaseTransformer:
         """
         return False
 
-    def handle_amendments(
-        self, row_list: typing.List[typing.Dict]
-    ) -> typing.List[typing.Dict]:
+    def handle_amendments(self, row_list: list[dict]) -> list[dict]:
         """Remove amended filings from the provided list of records.
 
         Args:
