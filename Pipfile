@@ -10,6 +10,7 @@ jellyfish = "*"
 marshmallow = "*"
 retry2 = "*"
 exceptiongroup = "*"
+tomli = "*"
 
 [dev-packages]
 black = "*"
