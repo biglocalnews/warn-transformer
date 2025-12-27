@@ -9,6 +9,7 @@ click = "*"
 jellyfish = "*"
 marshmallow = "*"
 retry2 = "*"
+exceptiongroup = "*"
 
 [dev-packages]
 black = "*"
