@@ -96,7 +96,7 @@ mypy: ## run mypy type checks
 
 test: ## run all tests
 	$(call banner,       🤖 Running tests 🤖)
-	@$(PIPENV) pytest tests --runvcr
+	@$(PIPENV) pytest --cov=warn_transformer tests/ --runvcr
 
 
 test-on-ci: ## test invocation for CI on GH Actions
