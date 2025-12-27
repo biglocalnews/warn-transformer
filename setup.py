@@ -44,10 +44,4 @@ def local_version(version):
     return ""
 
 
-setup(
-    test_suite="tests",
-    tests_require=[
-        "pytest",
-        "pytest-vcr",
-    ],
-)
+setup()
