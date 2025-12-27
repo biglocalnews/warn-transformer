@@ -30,6 +30,10 @@ dynamic = ["version"]
 "Source" = "https://github.com/biglocalnews/warn-transformer"
 "Tracker" = "https://github.com/biglocalnews/warn-transformer/issues"
 
+
+[project.scripts]
+warn-transformer = "warn_transformer.cli:main"
+
 # [project.authors]
 
 
