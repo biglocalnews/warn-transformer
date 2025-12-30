@@ -1,6 +1,6 @@
 [build-system]
-# requires = ["setuptools", "setuptools-scm"]
-# build-backend == "setuptools.build_meta"
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "warn-transformer"
@@ -9,7 +9,7 @@ authors = [
     {name = "Big Local News", email = "biglocalnews@stanford.edu"}
 ]
 readme = "README.md"
-# requires-python = ">=3.10"
+requires-python = ">= 3.10"
 keywords = ["WARN Act", "scrapers", "WARN Act data", "WARN Act scrapers"]
 license = "Apache-2.0"
 classifiers = [
@@ -29,6 +29,10 @@ dynamic = ["version"]
 "Maintainer" = "https://github.com/biglocalnews"
 "Source" = "https://github.com/biglocalnews/warn-transformer"
 "Tracker" = "https://github.com/biglocalnews/warn-transformer/issues"
+
+
+[project.scripts]
+warn-transformer = "warn_transformer.cli:main"
 
 # [project.authors]
 
