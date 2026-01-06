@@ -32,7 +32,7 @@ dynamic = ["version"]
 
 
 [project.scripts]
-warn-transformer = "warn_transformer.cli:main"
+warn-transformer = "warn_transformer.cli:cli"
 
 # [project.authors]
 
