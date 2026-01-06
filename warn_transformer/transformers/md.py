@@ -52,6 +52,7 @@ class Transformer(BaseTransformer):
         "517112": None,
         "01/301/2026": datetime(2026, 1, 31),
         "11/24/2025 - 12/01/2025 & 12/14/202 - 01/05/2026": datetime(2025, 11, 24),
+        "03/02/2026 - 04/02/2026": datetime(2026, 3, 2),
     }
     jobs_corrections = {
         "103 (REVISED) 10/22/2020 108": 103,
