@@ -72,6 +72,7 @@ class Transformer(BaseTransformer):
         "July 31, 2023; September 30, 2023; December 31, 2023": datetime(2023, 7, 31),
         "June 12, 2023\xa0– August 11, 2023": datetime(2023, 6, 12),
         "1021/2024": datetime(2024, 10, 21),
+        "2-28-2026": datetime(2026, 2, 28),
     }
 
     def transform_date(self, value: str) -> typing.Optional[str]:
