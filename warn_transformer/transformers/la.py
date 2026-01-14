@@ -26,6 +26,7 @@ class Transformer(BaseTransformer):
         "12/31/25": datetime(2025, 12, 31),
         "Various": None,
         "10/3124": datetime(2024, 10, 31),
+        "Not": None,
     }
     jobs_corrections = {
         "700 *exact number pending relocation to other departments": 700,
