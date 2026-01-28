@@ -23,6 +23,7 @@ class Transformer(BaseTransformer):
         "%B%d, %Y",
         "%B %d. %Y",
         "%B %d,%Y",
+        "%m-%d-%Y",
     )
     jobs_corrections = {
         "147 (69 Tennessee residents)": 69,
@@ -74,6 +75,7 @@ class Transformer(BaseTransformer):
         "1021/2024": datetime(2024, 10, 21),
         "2-28-2026": datetime(2026, 2, 28),
         "3-20-2026 - 7-24-2026/7-31-2026": datetime(2026, 3, 20),
+        "3-24-2026": datetime(2026, 3, 24),
     }
 
     def transform_date(self, value: str) -> typing.Optional[str]:
