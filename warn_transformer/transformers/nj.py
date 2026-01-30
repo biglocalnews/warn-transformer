@@ -24,6 +24,7 @@ class Transformer(BaseTransformer):
         # The United airlines number is legimate, though nationwide
         # https://abcnews.go.com/Politics/united-airlines-furlough-16000-employees/story?id=72771897
         16000: 16000,
+        "240 (Passaic) 417 (Bergen) 141 (Monmouth) 44 (Hudson) 29 (Statewide)": 871,
     }
     date_corrections = {
         "TBA": None,
