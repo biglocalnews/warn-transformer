@@ -27,6 +27,8 @@ class Transformer(BaseTransformer):
         "Various": None,
         "10/3124": datetime(2024, 10, 31),
         "Not": None,
+        "601": datetime(2026, 3, 26),  # HEY! Stucka really needs to fix this
+        "330": datetime(2026, 12, 14),
     }
     jobs_corrections = {
         "700 *exact number pending relocation to other departments": 700,
@@ -75,6 +77,8 @@ class Transformer(BaseTransformer):
         "139* *Only 3 employees are affected in Louisiana.": 3,
         "58* *Only 1 employee is affected in Louisiana.": 1,
         "65* 4*": 4,
+        "3/16/26": 101,  # HEY! Stucka really needs to lose this.
+        "12/14/26": 121,
     }
 
     def transform_date(self, value: str) -> typing.Optional[str]:
