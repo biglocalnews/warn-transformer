@@ -15,7 +15,7 @@ class Transformer(BaseTransformer):
         effective_date="date_start",
         jobs="jobs",
     )
-    date_format = ["%m/%d/%Y", "%B %d, %Y", "%B %d, %y"]
+    date_format = ["%m/%d/%Y", "%m/%d/%y", "%B %d, %Y", "%B %d, %y"]
     date_corrections = {
         "June 17, 2024 - July 31, 2024": datetime(2024, 6, 17),
         "Commencing June 2025": datetime(2025, 6, 1),
