@@ -33,6 +33,7 @@ warn-transformer = "warn_transformer.cli:cli"
 "Tracker" = "https://github.com/biglocalnews/warn-transformer/issues"
 
 [tool.setuptools_scm]
+local_scheme = "no-local-version"
 
 # ... other project metadata fields as listed in:
 # https://packaging.python.org/en/latest/guides/writing-pyproject-toml/
