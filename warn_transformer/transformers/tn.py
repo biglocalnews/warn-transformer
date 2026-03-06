@@ -77,6 +77,8 @@ class Transformer(BaseTransformer):
         "3-20-2026 - 7-24-2026/7-31-2026": datetime(2026, 3, 20),
         "3-24-2026": datetime(2026, 3, 24),
         "4/3/2026 - 5/31/2026": datetime(2026, 4, 3),
+        "3-20-2026 /\n7-24-2026": datetime(2026, 3, 20),
+        "5-9-2026 /\n8-8-2026": datetime(2026, 5, 9),
     }
 
     def transform_date(self, value: str) -> typing.Optional[str]:
