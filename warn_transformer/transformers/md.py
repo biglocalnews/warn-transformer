@@ -60,9 +60,10 @@ class Transformer(BaseTransformer):
         "04/19/2026 - 05/01/2026": datetime(2026, 4, 19),
         "04/13/2026- 09/30/2026": datetime(2026, 4, 13),
         "05/15/2026 - 10/31/2026": datetime(2026, 5, 15),
+        "05/06/2026 - 05/31/2026": datetime(2026, 5, 6),
     }
     jobs_corrections = {
-        "103 (REVISED) 10/22/2020 108": 103,
+        ",103 (REVISED) 10/22/2020 108": 103,
         "1100-1200 (MDDCVA)": 1100,
         "TBD": None,
         "approx. 150": 150,
@@ -82,4 +83,5 @@ class Transformer(BaseTransformer):
         "3 (remote workers from MD)": 3,
         "50 - 60": 50,
         "5 (Remote workers in MD)": 5,
+        "103 (REVISED) 10/22/2020 108": 103,
     }
