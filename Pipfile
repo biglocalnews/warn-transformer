@@ -4,13 +4,13 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-bln = ">= 2.3.14"
 click = "*"
 jellyfish = "*"
 marshmallow = "*"
 retry2 = "*"
 exceptiongroup = "*"
 tomli = "*"
+bln = "==2.3.18"
 
 [dev-packages]
 black = "*"
