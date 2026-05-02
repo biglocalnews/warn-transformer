@@ -13,7 +13,6 @@ tomli = "*"
 bln = "==2.3.18"
 
 [dev-packages]
-black = "*"
 blacken-docs = "*"
 certifi = "*"
 flake8 = "*"
@@ -35,6 +34,7 @@ urllib3 = "*"
 vcrpy = "*"
 zipp = "*"
 pytest-cov = "*"
+black = "==26.3.1"
 
 [requires]
 python_version = "3.14"
