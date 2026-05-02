@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Configure the package for distribution."""
+
 import os
 
 from setuptools import setup
