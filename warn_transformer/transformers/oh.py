@@ -50,6 +50,31 @@ class Transformer(BaseTransformer):
         "4/15/2025;": datetime(2025, 4, 15),
         "7/18/2025;": datetime(2025, 7, 18),
         "02/27/202": datetime(2026, 2, 27),
+        "2/27/20265/31/2026": datetime(2026, 2, 27),
+        "2/27/2026; 5/31/2026": datetime(2026, 2, 27),
+        "6/19/20267/02/2026": datetime(2026, 6, 19),
+        "6/19/2026; 7/02/2026": datetime(2026, 6, 19),
+        "5/2/20268/1/2026": datetime(2026, 5, 2),
+        "5/2/2026; 8/1/2026": datetime(2026, 5, 2),
+        "4/22/20266/20/2026": datetime(2026, 4, 22),
+        "4/22/2026; 6/20/2026": datetime(2026, 4, 22),
+        "4/15/20267/01/2026": datetime(2026, 4, 15),
+        "4/15/2026; 7/01/2026": datetime(2026, 4, 15),
+        "5/15/20269/30/2026": datetime(2026, 5, 15),
+        "5/15/2026; 9/30/2026": datetime(2026, 5, 15),
+        "5/11/20265/29/2026": datetime(2026, 5, 11),
+        "5/11/2026; 5/29/2026": datetime(2026, 5, 11),
+        "5/6/20265/31/2026": datetime(2026, 5, 6),
+        "5/6/2026; 5/31/2026": datetime(2026, 5, 6),
+        "2/24/20264/24/2026": datetime(2026, 2, 24),
+        "2/24/2026; 4/24/2026": datetime(2026, 2, 24),
+        "4/19/20265/01/2026": datetime(2026, 4, 19),
+        "4/19/2026; 5/01/2026": datetime(2026, 4, 19),
+        "4/11/20264/30/2026": datetime(2026, 4, 11),
+        "4/11/2026; 4/30/2026": datetime(2026, 4, 11),
+        "3/19/20269/15/2026": datetime(2026, 3, 19),
+        "3/19/2026; 9/15/2026": datetime(2026, 3, 19),
+        "01/30/201": datetime(2017, 1, 30),
     }
     jobs_corrections = {
         "13 FT": 13,
@@ -74,9 +99,12 @@ class Transformer(BaseTransformer):
         Returns: A date object ready for consolidation. Or, if the date string is invalid, a None.
         """
         # Cut out cruft
+        value = value.strip()
         value = value.replace("Updated", "")
         value = value.replace("Revised", "")
-        value = value.replace("-", "").strip()
+        value = value.replace("-", " ").strip()
+        if " " in value:
+            value = value.split()[0]
 
         # Split double dates
         if len(value) == 20:
