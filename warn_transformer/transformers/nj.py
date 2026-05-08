@@ -25,6 +25,7 @@ class Transformer(BaseTransformer):
         # https://abcnews.go.com/Politics/united-airlines-furlough-16000-employees/story?id=72771897
         16000: 16000,
         "240 (Passaic) 417 (Bergen) 141 (Monmouth) 44 (Hudson) 29 (Statewide)": 871,
+        "80 - 100": 80,
     }
     date_corrections = {
         "TBA": None,
@@ -239,6 +240,10 @@ class Transformer(BaseTransformer):
         "6/27/26 - 7/27/26": datetime(2026, 6, 27),
         "3/2/26 - 3/18/27": datetime(2026, 3, 2),
         "7/31/26 and 10/2/26": datetime(2026, 7, 31),
+        "5/5/26 and 5/8/26": datetime(2026, 5, 5),
+        "8/3/26 - 12/31/26": datetime(2026, 8, 3),
+        "8/4/26 and 11/2/26": datetime(2026, 8, 4),
+        "8/1/26 - 8/5/26": datetime(2026, 8, 1),
     }
 
     def transform_jobs(self, value: str) -> typing.Optional[int]:
