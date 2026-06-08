@@ -11,6 +11,7 @@ retry2 = "*"
 exceptiongroup = "*"
 tomli = "*"
 bln = "==2.3.18"
+requests = "*"
 
 [dev-packages]
 blacken-docs = "*"
