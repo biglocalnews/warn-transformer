@@ -220,6 +220,7 @@ class Transformer(BaseTransformer):
         "179 (80 Marsden Employees and 99 Temporary Employees from both Express Labor & Integrated Staffing Agencies)": 179,
         "9236 Nationwide; PA total pending verification": None,
         "81 Total -- 13 of which reside in PA": 81,
+        "5 (within PA)": 5,
     }
 
     def transform_date(self, value: str) -> typing.Optional[str]:
