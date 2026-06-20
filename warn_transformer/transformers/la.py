@@ -9,11 +9,11 @@ class Transformer(BaseTransformer):
 
     postal_code = "LA"
     fields = dict(
-        company="Company Name",
-        location="Location",
-        notice_date="Notice Date",
-        effective_date="Layoff Date",
-        jobs="Employees Affected",
+        company="company",
+        location="address",
+        notice_date="date_notice",
+        effective_date="date_action",
+        jobs="affected",
     )
     date_format = ["%m/%d/%Y", "%m/%d/%y"]
     date_corrections = {
@@ -103,14 +103,18 @@ class Transformer(BaseTransformer):
             pass
 
         # A little custom clean up based on the weird stuff from this source
-        value = value.replace("starting", "")
-        value = value.strip().split(" and ")[0].strip()
-        value = value.strip().split(" to ")[0].strip()
-        value = value.strip().split(" - ")[0].strip()
-        value = value.strip().split(" & ")[0].strip()
-        value = value.strip().split(" – ")[0].strip()
-        value = value.strip().split("-")[0].strip()
-        value = value.strip().split()[0].strip()
+
+        if len(value) == 0:
+            return None
+        else:
+            value = value.replace("starting", "")
+            value = value.strip().split(" and ")[0].strip()
+            value = value.strip().split(" to ")[0].strip()
+            value = value.strip().split(" - ")[0].strip()
+            value = value.strip().split(" & ")[0].strip()
+            value = value.strip().split(" – ")[0].strip()
+            value = value.strip().split("-")[0].strip()
+            value = value.strip().split()[0].strip()
 
         # The same old stuff
         return super().transform_date(value)
