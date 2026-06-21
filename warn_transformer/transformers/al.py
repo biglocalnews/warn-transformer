@@ -9,11 +9,11 @@ class Transformer(BaseTransformer):
 
     postal_code = "AL"
     fields = dict(
-        company="Company",
-        location="City",
-        notice_date="Initial Report Date",
-        effective_date="Planned Starting Date",
-        jobs="Planned # of Affected Employees",
+        company="company",
+        location="location",
+        notice_date="date_notice",
+        effective_date="date_action",
+        jobs="affected",
     )
     date_format = "%m/%d/%Y"
     date_corrections = {"01/01/0001": datetime(2020, 1, 1)}
@@ -26,4 +26,9 @@ class Transformer(BaseTransformer):
 
         Returns: A boolean or null
         """
-        return "closing" in row["Closing or Layoff"].lower() or None
+        if "los" in row["action_type"].lower():
+            return True
+        elif "ayoff" in row["action_type"].lower():
+            return False
+        else:
+            return None
