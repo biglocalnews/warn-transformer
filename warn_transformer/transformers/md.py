@@ -89,6 +89,5 @@ class Transformer(BaseTransformer):
         "3 (remote workers from MD)": 3,
         "50 - 60": 50,
         "5 (Remote workers in MD)": 5,
-        "103 (REVISED) 10/22/2020 108": 103,
         "3 (Remote workers in MD)": 3,
     }

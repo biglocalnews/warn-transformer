@@ -482,7 +482,6 @@ class Transformer(BaseTransformer):
         "Approximately 95": 95,
         "1 Michigan remote worker": 1,
         "6 impacted Michigan workers": 6,
-        "1 Michigan remote worker": 1,
         "132 (approximately)": 132,
         "2,458": 2458,
         "1 remote worker": 1,
