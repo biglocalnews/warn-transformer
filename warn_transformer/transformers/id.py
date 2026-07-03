@@ -49,6 +49,7 @@ class Transformer(BaseTransformer):
         "TBD": None,
         "135 (1 in ID)": 1,
         "324 (32 in ID)": 32,
+        "(1 in ID)": 1,
     }
 
     def transform_date(self, value: str) -> typing.Optional[str]:
