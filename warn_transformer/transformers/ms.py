@@ -61,6 +61,11 @@ class Transformer(BaseTransformer):
         "6/24/2025 Non-WARN- This is a": datetime(2025, 6, 24),
         "02/06/2025 Enviva Pellets": datetime(2025, 2, 6),
         "7/31/ 2023": datetime(2023, 7, 31),
+        "Pending": None,
+        "4/17/2026 Aramark": datetime(2026, 4, 17),
+        "6/15/2026 WARN – Due": datetime(2026, 6, 15),
+        "05/11/2026 Leggett &": datetime(2026, 5, 11),
+        "6/11/2026 WARN-Plant": datetime(2026, 6, 11),
     }
     jobs_corrections = {
         "1,000": 1000,
