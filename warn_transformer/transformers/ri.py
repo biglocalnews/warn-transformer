@@ -33,6 +33,7 @@ class Transformer(BaseTransformer):
         "16 (additional)": 16,
         "1900-02-07 00:00:00": 38,
         "9891 Remote Workers (2 from RI)": 2,
+        "1 (Remote worker)": 1,
     }
 
     def transform_company(self, value: str) -> str:
