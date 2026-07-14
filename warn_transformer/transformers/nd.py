@@ -34,5 +34,7 @@ class Transformer(BaseTransformer):
         "starts 8/30/2022": datetime(2022, 8, 30),
     }
     jobs_corrections = {
+        "approx. 2200 nationwide (14 reported in ND)": 14,
         "approx. 22,00 nationwide (14 reported in ND)": 14,
+        "25+": 25,
     }
