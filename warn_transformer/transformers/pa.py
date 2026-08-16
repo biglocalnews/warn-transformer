@@ -222,6 +222,7 @@ class Transformer(BaseTransformer):
         "9236 Nationwide; PA total pending verification": None,
         "81 Total -- 13 of which reside in PA": 81,
         "5 (within PA)": 5,
+        "7 -- PA Remote Employees": 7,
     }
 
     def transform_date(self, value: str) -> typing.Optional[str]:
