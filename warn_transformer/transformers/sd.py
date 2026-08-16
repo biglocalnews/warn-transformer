@@ -17,4 +17,5 @@ class Transformer(BaseTransformer):
         "324 (11 reside in South Dakota)": 11,
         "n/a": None,
         "173 (nationwide)": None,
+        "2 (South Dakota)": 2,
     }
