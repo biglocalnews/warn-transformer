@@ -570,6 +570,7 @@ class Transformer(BaseTransformer):
         "https://www.michigan.gov/documents/leo/2020.04.15_The_Tile_Company_Layoffs_Permanent_WARN_Notice_687530_7.pdf": None,
         "138 (133 Zeeland 5 Traverse City)": 138,
         "163 204 130 191": 688,
+        "1 (Michigan remote worker)": 1,
     }
 
     def check_if_closure(self, row: typing.Dict) -> typing.Optional[bool]:
