@@ -28,6 +28,7 @@ class Transformer(BaseTransformer):
     jobs_corrections = {
         "147 (69 Tennessee residents)": 69,
         "135 (7 in Tennessee)": 7,
+        "Company did not disclose": None,
     }
     date_corrections = {
         "2018/4/ 27": datetime(2018, 4, 27),
@@ -82,6 +83,7 @@ class Transformer(BaseTransformer):
         "7-4-2026 / 9-30-2026": datetime(2026, 7, 4),
         "5-12-2026\nto 6-5-2026": datetime(2026, 5, 12),
         "8-28-2026/ 10-30-2026/\n12/31-2026": datetime(2026, 8, 28),
+        "Company did not disclose": None,
     }
 
     def transform_date(self, value: str) -> typing.Optional[str]:
