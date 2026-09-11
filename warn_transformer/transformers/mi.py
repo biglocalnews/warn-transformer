@@ -572,6 +572,7 @@ class Transformer(BaseTransformer):
         "138 (133 Zeeland 5 Traverse City)": 138,
         "163 204 130 191": 688,
         "1 (Michigan remote worker)": 1,
+        "637 (updated)": 637,
     }
 
     def check_if_closure(self, row: typing.Dict) -> typing.Optional[bool]:
