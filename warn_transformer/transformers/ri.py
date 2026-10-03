@@ -11,7 +11,7 @@ class Transformer(BaseTransformer):
     fields = dict(
         company="Company Name",
         location="Location of Layoffs",
-        date="WARN Date",
+        notice_date="WARN Date",
         effective_date="Effective Date",
         jobs="Number Affected",
     )
@@ -20,6 +20,7 @@ class Transformer(BaseTransformer):
         "2108-10-23 00:00:00": datetime(2018, 10, 23),
         "2108-11-01 00:00:00": datetime(2018, 11, 1),
         "Staggered": None,
+        "5/4/204": datetime(2024, 5, 4),
     }
     jobs_corrections = {
         "---": None,
