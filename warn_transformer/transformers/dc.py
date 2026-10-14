@@ -54,6 +54,10 @@ class Transformer(BaseTransformer):
         "May 19 - June 2, 2026": datetime(2026, 5, 19),
         "September 11 - 23, 2026": datetime(2026, 9, 11),
         "October 2, 2026 - July 31, 2027": datetime(2026, 10, 2),
+        "July 1, 2026 - September 30, 2026": datetime(2026, 7, 1),
+        "October 1, 2026 - December 31, 2026": datetime(2026, 10, 1),
+        "November 13, 2026 - December 31, 2026": datetime(2026, 11, 13),
+        "November 17, 2026 - December 1, 2026": datetime(2026, 11, 17),
     }
     jobs_corrections = {
         "All": None,
