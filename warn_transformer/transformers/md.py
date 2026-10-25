@@ -70,6 +70,7 @@ class Transformer(BaseTransformer):
         "07/08/2026 - 08/17/2026": datetime(2026, 7, 8),
         "10/23/2026 - 03/26/2027": datetime(2026, 10, 23),
         "10/15/2026 - 12/31/2026": datetime(2026, 10, 15),
+        "12/20/2026 - 01/04/2027": datetime(2026, 12, 20),
     }
     jobs_corrections = {
         "103 (REVISED) 10/22/2020 108": 103,
