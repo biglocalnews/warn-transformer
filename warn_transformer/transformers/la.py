@@ -30,6 +30,7 @@ class Transformer(BaseTransformer):
         "601": datetime(2026, 3, 26),  # HEY! Stucka really needs to fix this
         "330": datetime(2026, 12, 14),
         "560": datetime(2026, 4, 1),
+        "2/31/26": datetime(2026, 12, 31),
     }
     jobs_corrections = {
         "700 *exact number pending relocation to other departments": 700,
