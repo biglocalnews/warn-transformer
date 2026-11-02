@@ -201,6 +201,7 @@ class Transformer(BaseTransformer):
         "beginning 11/16/2026, ending 4/1/2027": datetime(2026, 11, 16),
         "12/31/26-2/19/27": datetime(2026, 12, 31),
         "beginning 3/1/2027; ending 6/15/2027": datetime(2027, 3, 1),
+        "beginning 12/31/2026; ending 12/31/2027": datetime(2026, 12, 31),
     }
 
     jobs_corrections = {
@@ -229,6 +230,7 @@ class Transformer(BaseTransformer):
         "81 Total -- 13 of which reside in PA": 81,
         "5 (within PA)": 5,
         "7 -- PA Remote Employees": 7,
+        "15 (PA based employees)": 15,
     }
 
     def transform_date(self, value: str) -> typing.Optional[str]:
