@@ -84,6 +84,9 @@ class Transformer(BaseTransformer):
         "5-12-2026\nto 6-5-2026": datetime(2026, 5, 12),
         "8-28-2026/ 10-30-2026/\n12/31-2026": datetime(2026, 8, 28),
         "Company did not disclose": None,
+        "2027-12-17 00:00:00": datetime(2026, 12, 17),  # Year changed
+        "2027-12-17": datetime(2026, 12, 17),  # Year changed
+        "12-17-2027": datetime(2026, 12, 17),  # Year changed, really
     }
 
     def transform_date(self, value: str) -> typing.Optional[str]:

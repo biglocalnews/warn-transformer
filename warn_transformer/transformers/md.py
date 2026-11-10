@@ -97,4 +97,5 @@ class Transformer(BaseTransformer):
         "4(Remote workers in MD)": 4,
         "2 (Remote workers in MD)": 2,
         "39 (Remote service workers in Maryland)": 39,
+        "1 (Remote worker in MD)": 1,
     }
