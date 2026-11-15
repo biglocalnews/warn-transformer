@@ -29,6 +29,15 @@ class Transformer(BaseTransformer):
     jobs_corrections = {
         "Unknown": None,
         "TBD": None,
+        "69 (0)": 69,
+        "71 (+2)": 71,
+        "77 (+77)": 77,
+        "74 (-3)": 74,
+        "24 (-33)": 24,
+        "3 (-22)": 3,
+        "54 (0)": 54,
+        "TBD (0)": 0,
+        "126 (+126)": 126,
     }
 
     def transform_company(self, value: str) -> str:
